@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00cfff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Collabo">
+<meta name="description" content="The creator marketplace">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.svg">
 <title>Collabo</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -1067,7 +1074,5844 @@ ar:{dir:'rtl',l:'ar',
 'T.save-settings':'حفظ الإعدادات','T.toast-sub':'اضغط Messages للبدء','lang-cycle':'🇸🇦 عر'}
 };
 
-let lang='he', role='', matches=[], chatMsgs=[], NOTIFS=[], curCreator=null, activeThr=0, ofFormOpen=false, isDark=true, CREATORS=[];
+let lang='he', role='', matches=[], chatMsgs=[], NOTIFS=[], curCreator=null, activeThr=0, ofFormOpen=false, isDark=true;
+const CREATORS=[
+  {
+    "id": 1,
+    "name": "מאיה לוי",
+    "handle": "@מאיהלוי",
+    "emoji": "📸",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "אוכל",
+      "לייפסטייל",
+      "UGC"
+    ],
+    "fol": "20K",
+    "eng": "4.0%",
+    "rating": 4.2,
+    "price": "₪800-3,000",
+    "priceRange": "₪800-3,000",
+    "bio": "",
+    "verified": true,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 3,
+    "name": "נועם כהן",
+    "handle": "@נועםכהן",
+    "emoji": "🎬",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "הרצליה",
+    "cats": [
+      "כושר",
+      "ספורט"
+    ],
+    "fol": "30K",
+    "eng": "5.1%",
+    "rating": 4.3,
+    "price": "₪800-3,000",
+    "priceRange": "₪800-3,000",
+    "bio": "",
+    "verified": false,
+    "collabs": "6",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 5,
+    "name": "שירה אביב",
+    "handle": "@שירהאביב",
+    "emoji": "✨",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "תל אביב",
+    "cats": [
+      "אופנה",
+      "יופי"
+    ],
+    "fol": "40K",
+    "eng": "6.2%",
+    "rating": 4.4,
+    "price": "₪800-3,000",
+    "priceRange": "₪800-3,000",
+    "bio": "",
+    "verified": false,
+    "collabs": "7",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אופנה",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 10,
+    "name": "נועה כהן",
+    "handle": "@noakitchen",
+    "emoji": "📸",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "אוכל",
+      "בישול",
+      "מתכונים"
+    ],
+    "fol": "84K",
+    "eng": "6.2%",
+    "rating": 4.5,
+    "price": "₪800-3,500",
+    "priceRange": "₪800-3,500",
+    "bio": "שפית אוכל ביתי 🍳",
+    "verified": true,
+    "collabs": "8",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 11,
+    "name": "יואב לוי",
+    "handle": "@yoavfood",
+    "emoji": "🎬",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "אוכל",
+      "מסעדות"
+    ],
+    "fol": "120K",
+    "eng": "5.8%",
+    "rating": 4.6,
+    "price": "₪1,200-5,000",
+    "priceRange": "₪1,200-5,000",
+    "bio": "מבקר מסעדות ✨",
+    "verified": true,
+    "collabs": "9",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 12,
+    "name": "מיכל דוד",
+    "handle": "@michalvegan",
+    "emoji": "✨",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "תל אביב",
+    "cats": [
+      "אוכל",
+      "טבעוני"
+    ],
+    "fol": "67K",
+    "eng": "7.1%",
+    "rating": 4.7,
+    "price": "₪700-2,800",
+    "priceRange": "₪700-2,800",
+    "bio": "חיים טבעוניים 🌱",
+    "verified": true,
+    "collabs": "10",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 13,
+    "name": "אורי ברק",
+    "handle": "@uribbq",
+    "emoji": "🌟",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "ראשון לציון",
+    "cats": [
+      "אוכל",
+      "גריל"
+    ],
+    "fol": "95K",
+    "eng": "5.4%",
+    "rating": 4.8,
+    "price": "₪900-3,800",
+    "priceRange": "₪900-3,800",
+    "bio": "מלך הגריל 🔥",
+    "verified": true,
+    "collabs": "11",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 14,
+    "name": "שני אברהם",
+    "handle": "@shanibakes",
+    "emoji": "💫",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "חיפה",
+    "cats": [
+      "אוכל",
+      "אפייה"
+    ],
+    "fol": "52K",
+    "eng": "8.3%",
+    "rating": 4.9,
+    "price": "₪600-2,200",
+    "priceRange": "₪600-2,200",
+    "bio": "אופה חובבת 🎂",
+    "verified": false,
+    "collabs": "12",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "90K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 15,
+    "name": "דניאל מזרחי",
+    "handle": "@daniellife",
+    "emoji": "🎨",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "לייפסטייל",
+      "נסיעות"
+    ],
+    "fol": "210K",
+    "eng": "4.9%",
+    "rating": 4.2,
+    "price": "₪2,000-8,000",
+    "priceRange": "₪2,000-8,000",
+    "bio": "חיים יפים 📸",
+    "verified": true,
+    "collabs": "13",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "100K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין לייפסטייל",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 16,
+    "name": "רוני שפירא",
+    "handle": "@ronishapira",
+    "emoji": "🎵",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "הרצליה",
+    "cats": [
+      "לייפסטייל",
+      "בית"
+    ],
+    "fol": "78K",
+    "eng": "6.7%",
+    "rating": 4.3,
+    "price": "₪800-3,200",
+    "priceRange": "₪800-3,200",
+    "bio": "עיצוב בית 🏠",
+    "verified": true,
+    "collabs": "14",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "110K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין לייפסטייל",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 17,
+    "name": "גלית עוז",
+    "handle": "@galitoz",
+    "emoji": "🏃",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "רמת גן",
+    "cats": [
+      "לייפסטייל",
+      "אמהות"
+    ],
+    "fol": "143K",
+    "eng": "5.2%",
+    "rating": 4.4,
+    "price": "₪1,400-5,500",
+    "priceRange": "₪1,400-5,500",
+    "bio": "אמא, אישה, יזמית 💪",
+    "verified": true,
+    "collabs": "15",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "120K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין לייפסטייל",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 18,
+    "name": "עמית כץ",
+    "handle": "@amitlife",
+    "emoji": "🧘",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "לייפסטייל",
+      "גברים"
+    ],
+    "fol": "89K",
+    "eng": "5.9%",
+    "rating": 4.5,
+    "price": "₪900-3,600",
+    "priceRange": "₪900-3,600",
+    "bio": "לייפסטייל גברי 🕶️",
+    "verified": true,
+    "collabs": "16",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "130K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין לייפסטייל",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 19,
+    "name": "יעל גרין",
+    "handle": "@yaelgreen",
+    "emoji": "🌿",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "לייפסטייל",
+      "קיימות"
+    ],
+    "fol": "61K",
+    "eng": "7.4%",
+    "rating": 4.6,
+    "price": "₪700-2,600",
+    "priceRange": "₪700-2,600",
+    "bio": "חיים ירוקים 🌿",
+    "verified": true,
+    "collabs": "17",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "140K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין לייפסטייל",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 20,
+    "name": "שירה בן דוד",
+    "handle": "@shirafashion",
+    "emoji": "💄",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "תל אביב",
+    "cats": [
+      "אופנה",
+      "סטייל"
+    ],
+    "fol": "185K",
+    "eng": "5.1%",
+    "rating": 4.7,
+    "price": "₪1,800-7,000",
+    "priceRange": "₪1,800-7,000",
+    "bio": "סטייל ישראלי 👗",
+    "verified": false,
+    "collabs": "18",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "150K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אופנה",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 21,
+    "name": "רז אלון",
+    "handle": "@razstyle",
+    "emoji": "👗",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "אופנה",
+      "גברים"
+    ],
+    "fol": "97K",
+    "eng": "5.6%",
+    "rating": 4.8,
+    "price": "₪1,000-4,200",
+    "priceRange": "₪1,000-4,200",
+    "bio": "אופנת גברים 🎩",
+    "verified": true,
+    "collabs": "19",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "160K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אופנה",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 22,
+    "name": "נטע רוזן",
+    "handle": "@netafashion",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "הרצליה",
+    "cats": [
+      "אופנה",
+      "יוקרה"
+    ],
+    "fol": "230K",
+    "eng": "4.7%",
+    "rating": 4.9,
+    "price": "₪2,500-9,000",
+    "priceRange": "₪2,500-9,000",
+    "bio": "לוקסוס נגיש 💎",
+    "verified": true,
+    "collabs": "20",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אופנה",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 23,
+    "name": "אלה שמש",
+    "handle": "@ellastyle",
+    "emoji": "☕",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "אופנה",
+      "טרנדים"
+    ],
+    "fol": "74K",
+    "eng": "6.8%",
+    "rating": 4.2,
+    "price": "₪800-3,000",
+    "priceRange": "₪800-3,000",
+    "bio": "טרנדים עכשיו 🔥",
+    "verified": true,
+    "collabs": "21",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אופנה",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 24,
+    "name": "תומר נגל",
+    "handle": "@tomernagel",
+    "emoji": "✈️",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "אופנה",
+      "נעליים"
+    ],
+    "fol": "112K",
+    "eng": "5.5%",
+    "rating": 4.3,
+    "price": "₪1,100-4,500",
+    "priceRange": "₪1,100-4,500",
+    "bio": "סניקרס 👟",
+    "verified": true,
+    "collabs": "22",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אופנה",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 25,
+    "name": "רם שלום",
+    "handle": "@ramfitness",
+    "emoji": "💪",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "תל אביב",
+    "cats": [
+      "כושר",
+      "תזונה"
+    ],
+    "fol": "156K",
+    "eng": "6.3%",
+    "rating": 4.4,
+    "price": "₪1,500-6,000",
+    "priceRange": "₪1,500-6,000",
+    "bio": "מאמן כושר 💪",
+    "verified": false,
+    "collabs": "23",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 26,
+    "name": "לירון כהן",
+    "handle": "@lironyoga",
+    "emoji": "🎮",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "כושר",
+      "יוגה"
+    ],
+    "fol": "88K",
+    "eng": "7.2%",
+    "rating": 4.5,
+    "price": "₪900-3,500",
+    "priceRange": "₪900-3,500",
+    "bio": "יוגה כדרך חיים 🧘",
+    "verified": true,
+    "collabs": "24",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 27,
+    "name": "אבי גל",
+    "handle": "@avigal_sport",
+    "emoji": "📚",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "ירושלים",
+    "cats": [
+      "כושר",
+      "ריצה"
+    ],
+    "fol": "64K",
+    "eng": "6.9%",
+    "rating": 4.6,
+    "price": "₪700-2,800",
+    "priceRange": "₪700-2,800",
+    "bio": "רץ מרתון 🏃",
+    "verified": false,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 28,
+    "name": "נדב ברון",
+    "handle": "@nadavfit",
+    "emoji": "🔬",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "תל אביב",
+    "cats": [
+      "כושר",
+      "קרוספיט"
+    ],
+    "fol": "103K",
+    "eng": "5.8%",
+    "rating": 4.7,
+    "price": "₪1,000-4,200",
+    "priceRange": "₪1,000-4,200",
+    "bio": "קרוספיט 🏋️",
+    "verified": true,
+    "collabs": "6",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 29,
+    "name": "מור לוי",
+    "handle": "@morfitlife",
+    "emoji": "🚀",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "נתניה",
+    "cats": [
+      "כושר",
+      "בריאות"
+    ],
+    "fol": "71K",
+    "eng": "7.5%",
+    "rating": 4.8,
+    "price": "₪750-2,900",
+    "priceRange": "₪750-2,900",
+    "bio": "בריאות = השקעה 🌟",
+    "verified": true,
+    "collabs": "7",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "90K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 30,
+    "name": "איתי מור",
+    "handle": "@itaytravel",
+    "emoji": "📸",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "תל אביב",
+    "cats": [
+      "טיולים",
+      "הרפתקאות"
+    ],
+    "fol": "198K",
+    "eng": "5.3%",
+    "rating": 4.9,
+    "price": "₪2,000-8,500",
+    "priceRange": "₪2,000-8,500",
+    "bio": "60 מדינות ✈️",
+    "verified": false,
+    "collabs": "8",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "100K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טיולים",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 31,
+    "name": "מיה פרץ",
+    "handle": "@miyaexplores",
+    "emoji": "🎬",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "טיולים",
+      "אסיה"
+    ],
+    "fol": "134K",
+    "eng": "5.7%",
+    "rating": 4.2,
+    "price": "₪1,300-5,500",
+    "priceRange": "₪1,300-5,500",
+    "bio": "מגלה עולם 🗺️",
+    "verified": true,
+    "collabs": "9",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "110K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טיולים",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 32,
+    "name": "גיל אדר",
+    "handle": "@giladventure",
+    "emoji": "✨",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "חיפה",
+    "cats": [
+      "טיולים",
+      "טבע"
+    ],
+    "fol": "76K",
+    "eng": "6.4%",
+    "rating": 4.3,
+    "price": "₪800-3,200",
+    "priceRange": "₪800-3,200",
+    "bio": "טבע ושקט ⛺",
+    "verified": true,
+    "collabs": "10",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "120K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טיולים",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 33,
+    "name": "טל שגיא",
+    "handle": "@taltrip",
+    "emoji": "🌟",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "באר שבע",
+    "cats": [
+      "טיולים",
+      "תקציב"
+    ],
+    "fol": "58K",
+    "eng": "7.8%",
+    "rating": 4.4,
+    "price": "₪600-2,400",
+    "priceRange": "₪600-2,400",
+    "bio": "לטייל בזול 💰",
+    "verified": true,
+    "collabs": "11",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "130K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טיולים",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 34,
+    "name": "אנה סמית",
+    "handle": "@anabeauty",
+    "emoji": "💫",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "יופי",
+      "מייקאפ"
+    ],
+    "fol": "167K",
+    "eng": "5.5%",
+    "rating": 4.5,
+    "price": "₪1,600-6,500",
+    "priceRange": "₪1,600-6,500",
+    "bio": "מייקאפ ארטיסט 💄",
+    "verified": true,
+    "collabs": "12",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "140K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין יופי",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 35,
+    "name": "הדר לוי",
+    "handle": "@hadarskinn",
+    "emoji": "🎨",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "יופי",
+      "עור"
+    ],
+    "fol": "92K",
+    "eng": "6.1%",
+    "rating": 4.6,
+    "price": "₪950-3,800",
+    "priceRange": "₪950-3,800",
+    "bio": "טיפוח עור 🧴",
+    "verified": false,
+    "collabs": "13",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "150K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין יופי",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 36,
+    "name": "ספיר גולן",
+    "handle": "@sapirnails",
+    "emoji": "🎵",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "רמת גן",
+    "cats": [
+      "יופי",
+      "ציפורניים"
+    ],
+    "fol": "83K",
+    "eng": "7.6%",
+    "rating": 4.7,
+    "price": "₪850-3,200",
+    "priceRange": "₪850-3,200",
+    "bio": "ציפורניים כאמנות 💅",
+    "verified": true,
+    "collabs": "14",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "160K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין יופי",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 37,
+    "name": "אלינה בר",
+    "handle": "@alinahair",
+    "emoji": "🏃",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "יופי",
+      "שיער"
+    ],
+    "fol": "119K",
+    "eng": "5.9%",
+    "rating": 4.8,
+    "price": "₪1,200-4,800",
+    "priceRange": "₪1,200-4,800",
+    "bio": "שיער מושלם 💇",
+    "verified": false,
+    "collabs": "15",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין יופי",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 38,
+    "name": "רחל מוסרי",
+    "handle": "@rachelbeauty",
+    "emoji": "🧘",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "ירושלים",
+    "cats": [
+      "יופי",
+      "טבעי"
+    ],
+    "fol": "55K",
+    "eng": "8.1%",
+    "rating": 4.9,
+    "price": "₪600-2,300",
+    "priceRange": "₪600-2,300",
+    "bio": "יופי טבעי 🌸",
+    "verified": false,
+    "collabs": "16",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין יופי",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 39,
+    "name": "אלון ביטון",
+    "handle": "@alontech",
+    "emoji": "🌿",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "טכנולוגיה",
+      "AI"
+    ],
+    "fol": "145K",
+    "eng": "5.2%",
+    "rating": 4.2,
+    "price": "₪1,400-5,800",
+    "priceRange": "₪1,400-5,800",
+    "bio": "טכנולוגיה לכולם 📱",
+    "verified": true,
+    "collabs": "17",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טכנולוגיה",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 40,
+    "name": "יונתן סגל",
+    "handle": "@yonisegal",
+    "emoji": "💄",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "טכנולוגיה",
+      "סייבר"
+    ],
+    "fol": "87K",
+    "eng": "5.7%",
+    "rating": 4.3,
+    "price": "₪900-3,600",
+    "priceRange": "₪900-3,600",
+    "bio": "אבטחת מידע 🔒",
+    "verified": true,
+    "collabs": "18",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טכנולוגיה",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 41,
+    "name": "רות שרון",
+    "handle": "@ruthtech",
+    "emoji": "👗",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "תל אביב",
+    "cats": [
+      "טכנולוגיה",
+      "קריירה"
+    ],
+    "fol": "73K",
+    "eng": "6.5%",
+    "rating": 4.4,
+    "price": "₪750-3,000",
+    "priceRange": "₪750-3,000",
+    "bio": "הייטק וקריירה 💻",
+    "verified": true,
+    "collabs": "19",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טכנולוגיה",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 42,
+    "name": "בן אורן",
+    "handle": "@benugc",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "UGC",
+      "מוצרים"
+    ],
+    "fol": "38K",
+    "eng": "9.2%",
+    "rating": 4.5,
+    "price": "₪400-1,800",
+    "priceRange": "₪400-1,800",
+    "bio": "UGC creator 📦",
+    "verified": true,
+    "collabs": "20",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין UGC",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 43,
+    "name": "מאיה זיו",
+    "handle": "@mayaugc",
+    "emoji": "☕",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "פתח תקווה",
+    "cats": [
+      "UGC",
+      "בית"
+    ],
+    "fol": "29K",
+    "eng": "10.1%",
+    "rating": 4.6,
+    "price": "₪350-1,500",
+    "priceRange": "₪350-1,500",
+    "bio": "UGC מהבית 🏠",
+    "verified": true,
+    "collabs": "21",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין UGC",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 44,
+    "name": "ליאור גל",
+    "handle": "@liaorugc",
+    "emoji": "✈️",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "חיפה",
+    "cats": [
+      "UGC",
+      "מזון"
+    ],
+    "fol": "34K",
+    "eng": "9.8%",
+    "rating": 4.7,
+    "price": "₪380-1,600",
+    "priceRange": "₪380-1,600",
+    "bio": "UGC מזון 🍕",
+    "verified": false,
+    "collabs": "22",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "90K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין UGC",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 45,
+    "name": "אריאל כץ",
+    "handle": "@arielfinance",
+    "emoji": "💪",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "פיננסים",
+      "השקעות"
+    ],
+    "fol": "178K",
+    "eng": "5.4%",
+    "rating": 4.8,
+    "price": "₪1,700-7,000",
+    "priceRange": "₪1,700-7,000",
+    "bio": "כסף זה לא טאבו 💸",
+    "verified": true,
+    "collabs": "23",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "100K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין פיננסים",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 46,
+    "name": "נועם זוהר",
+    "handle": "@noamzohar",
+    "emoji": "🎮",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "הרצליה",
+    "cats": [
+      "פיננסים",
+      "נדלן"
+    ],
+    "fol": "124K",
+    "eng": "5.1%",
+    "rating": 4.9,
+    "price": "₪1,200-5,000",
+    "priceRange": "₪1,200-5,000",
+    "bio": "בונה עושר 🏦",
+    "verified": false,
+    "collabs": "24",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "110K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין פיננסים",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 47,
+    "name": "ליאב שחר",
+    "handle": "@liavfilm",
+    "emoji": "📚",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "וידאו",
+      "קולנוע"
+    ],
+    "fol": "93K",
+    "eng": "6.3%",
+    "rating": 4.2,
+    "price": "₪950-4,000",
+    "priceRange": "₪950-4,000",
+    "bio": "מספר סיפורים 🎬",
+    "verified": true,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "120K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין וידאו",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 48,
+    "name": "הילה אמדי",
+    "handle": "@hilafilm",
+    "emoji": "🔬",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "וידאו",
+      "ריילס"
+    ],
+    "fol": "158K",
+    "eng": "5.6%",
+    "rating": 4.3,
+    "price": "₪1,500-6,200",
+    "priceRange": "₪1,500-6,200",
+    "bio": "ריילס שאנשים שומרים 🎥",
+    "verified": true,
+    "collabs": "6",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "130K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין וידאו",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 49,
+    "name": "טלי כהן",
+    "handle": "@talidogs",
+    "emoji": "🚀",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "תל אביב",
+    "cats": [
+      "חיות מחמד",
+      "כלבים"
+    ],
+    "fol": "112K",
+    "eng": "7.8%",
+    "rating": 4.4,
+    "price": "₪1,100-4,300",
+    "priceRange": "₪1,100-4,300",
+    "bio": "3 כלבים מדהימים 🐕",
+    "verified": false,
+    "collabs": "7",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "140K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין חיות מחמד",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 50,
+    "name": "רועי עמר",
+    "handle": "@royicats",
+    "emoji": "📸",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "ירושלים",
+    "cats": [
+      "חיות מחמד",
+      "חתולים"
+    ],
+    "fol": "78K",
+    "eng": "8.4%",
+    "rating": 4.5,
+    "price": "₪800-3,100",
+    "priceRange": "₪800-3,100",
+    "bio": "חתולים הם החיים 🐱",
+    "verified": true,
+    "collabs": "8",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "150K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין חיות מחמד",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 51,
+    "name": "עדן הרוש",
+    "handle": "@edengoal",
+    "emoji": "🎬",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "ספורט",
+      "כדורגל"
+    ],
+    "fol": "203K",
+    "eng": "4.8%",
+    "rating": 4.6,
+    "price": "₪2,000-8,000",
+    "priceRange": "₪2,000-8,000",
+    "bio": "כדורגל זו לא משחק ⚽",
+    "verified": true,
+    "collabs": "9",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "160K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ספורט",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 52,
+    "name": "שחר ביטון",
+    "handle": "@shaharsurf",
+    "emoji": "✨",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "תל אביב",
+    "cats": [
+      "ספורט",
+      "גלישה"
+    ],
+    "fol": "87K",
+    "eng": "6.6%",
+    "rating": 4.7,
+    "price": "₪900-3,500",
+    "priceRange": "₪900-3,500",
+    "bio": "חיים על הגלים 🏄",
+    "verified": false,
+    "collabs": "10",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ספורט",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 53,
+    "name": "נועא קירל",
+    "handle": "@noamusic",
+    "emoji": "🌟",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "מוזיקה",
+      "שירה"
+    ],
+    "fol": "312K",
+    "eng": "4.5%",
+    "rating": 4.8,
+    "price": "₪3,500-12,000",
+    "priceRange": "₪3,500-12,000",
+    "bio": "מוזיקה היא הנשמה 🎵",
+    "verified": true,
+    "collabs": "11",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין מוזיקה",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 54,
+    "name": "אסף אוחיון",
+    "handle": "@asafbeats",
+    "emoji": "💫",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "תל אביב",
+    "cats": [
+      "מוזיקה",
+      "DJ"
+    ],
+    "fol": "134K",
+    "eng": "5.3%",
+    "rating": 4.9,
+    "price": "₪1,300-5,500",
+    "priceRange": "₪1,300-5,500",
+    "bio": "מפיק ו-DJ 🎧",
+    "verified": false,
+    "collabs": "12",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין מוזיקה",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 55,
+    "name": "דינה אזולאי",
+    "handle": "@dinahealth",
+    "emoji": "🎨",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "בריאות",
+      "תזונה"
+    ],
+    "fol": "96K",
+    "eng": "6.7%",
+    "rating": 4.2,
+    "price": "₪1,000-4,000",
+    "priceRange": "₪1,000-4,000",
+    "bio": "דיאטנית קלינית 🥗",
+    "verified": true,
+    "collabs": "13",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין בריאות",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 56,
+    "name": "יורם בן נון",
+    "handle": "@yoramwellness",
+    "emoji": "🎵",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "בריאות",
+      "מדיטציה"
+    ],
+    "fol": "67K",
+    "eng": "7.3%",
+    "rating": 4.3,
+    "price": "₪700-2,800",
+    "priceRange": "₪700-2,800",
+    "bio": "בריאות הנפש 🧠",
+    "verified": true,
+    "collabs": "14",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין בריאות",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 57,
+    "name": "ורד שמחון",
+    "handle": "@veredmom",
+    "emoji": "🏃",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "רעננה",
+    "cats": [
+      "הורות",
+      "ילדים"
+    ],
+    "fol": "145K",
+    "eng": "5.9%",
+    "rating": 4.4,
+    "price": "₪1,400-5,600",
+    "priceRange": "₪1,400-5,600",
+    "bio": "אמא ל4 ✨",
+    "verified": true,
+    "collabs": "15",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין הורות",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 58,
+    "name": "עמרי גבע",
+    "handle": "@omridad",
+    "emoji": "🧘",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "כפר סבא",
+    "cats": [
+      "הורות",
+      "אבות"
+    ],
+    "fol": "82K",
+    "eng": "6.8%",
+    "rating": 4.5,
+    "price": "₪850-3,300",
+    "priceRange": "₪850-3,300",
+    "bio": "אבא מודרני 👨‍👧",
+    "verified": true,
+    "collabs": "16",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין הורות",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 59,
+    "name": "מאיה ארט",
+    "handle": "@mayaart",
+    "emoji": "🌿",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "אמנות",
+      "ציור"
+    ],
+    "fol": "74K",
+    "eng": "7.9%",
+    "rating": 4.6,
+    "price": "₪800-3,200",
+    "priceRange": "₪800-3,200",
+    "bio": "צייר ואמן 🎨",
+    "verified": true,
+    "collabs": "17",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "90K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אמנות",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 60,
+    "name": "בן גרפיק",
+    "handle": "@bengraphic",
+    "emoji": "💄",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "תל אביב",
+    "cats": [
+      "אמנות",
+      "גרפיקה"
+    ],
+    "fol": "59K",
+    "eng": "8.6%",
+    "rating": 4.7,
+    "price": "₪650-2,600",
+    "priceRange": "₪650-2,600",
+    "bio": "עיצוב שמספר סיפור 🖌️",
+    "verified": true,
+    "collabs": "18",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "100K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אמנות",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 61,
+    "name": "ניר הומור",
+    "handle": "@nirhumor",
+    "emoji": "👗",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "קומדי",
+      "סטנדאפ"
+    ],
+    "fol": "267K",
+    "eng": "4.6%",
+    "rating": 4.8,
+    "price": "₪2,800-10,000",
+    "priceRange": "₪2,800-10,000",
+    "bio": "גורם לאנשים לצחוק 😂",
+    "verified": false,
+    "collabs": "19",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "110K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין קומדי",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 62,
+    "name": "יובל קומי",
+    "handle": "@yuvalcomedy",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "תל אביב",
+    "cats": [
+      "קומדי",
+      "פרודיה"
+    ],
+    "fol": "189K",
+    "eng": "5.1%",
+    "rating": 4.9,
+    "price": "₪1,900-7,500",
+    "priceRange": "₪1,900-7,500",
+    "bio": "פרודיות ויראליות 🤣",
+    "verified": false,
+    "collabs": "20",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "120K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין קומדי",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 63,
+    "name": "שיר ישראל",
+    "handle": "@shirtravel_il",
+    "emoji": "☕",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "ירושלים",
+    "cats": [
+      "טיולים",
+      "ישראל"
+    ],
+    "fol": "91K",
+    "eng": "6.5%",
+    "rating": 4.2,
+    "price": "₪950-3,800",
+    "priceRange": "₪950-3,800",
+    "bio": "ישראל יפה 🇮🇱",
+    "verified": true,
+    "collabs": "21",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "130K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טיולים",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 64,
+    "name": "לילי דיזיין",
+    "handle": "@lilydesign",
+    "emoji": "✈️",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "עיצוב פנים",
+      "ריהוט"
+    ],
+    "fol": "138K",
+    "eng": "5.8%",
+    "rating": 4.3,
+    "price": "₪1,350-5,400",
+    "priceRange": "₪1,350-5,400",
+    "bio": "הבית הוא הביטוי שלך 🏡",
+    "verified": false,
+    "collabs": "22",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "140K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין עיצוב פנים",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 65,
+    "name": "גולן עיצוב",
+    "handle": "@golandesign",
+    "emoji": "💪",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "הרצליה",
+    "cats": [
+      "עיצוב",
+      "ארכיטקטורה"
+    ],
+    "fol": "86K",
+    "eng": "6.2%",
+    "rating": 4.4,
+    "price": "₪900-3,600",
+    "priceRange": "₪900-3,600",
+    "bio": "פחות זה יותר 🏛️",
+    "verified": false,
+    "collabs": "23",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "150K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין עיצוב",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 66,
+    "name": "ירון קפה",
+    "handle": "@yaroncoffee",
+    "emoji": "🎮",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "קפה",
+      "בריסטה"
+    ],
+    "fol": "72K",
+    "eng": "7.4%",
+    "rating": 4.5,
+    "price": "₪750-3,000",
+    "priceRange": "₪750-3,000",
+    "bio": "קפה כאמנות ☕",
+    "verified": true,
+    "collabs": "24",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "160K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין קפה",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 67,
+    "name": "עדי גורמה",
+    "handle": "@adigourmet",
+    "emoji": "📚",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "אוכל",
+      "גורמה"
+    ],
+    "fol": "104K",
+    "eng": "5.9%",
+    "rating": 4.6,
+    "price": "₪1,050-4,200",
+    "priceRange": "₪1,050-4,200",
+    "bio": "גסטרונומיה ישראלית 🍽️",
+    "verified": true,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין אוכל",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 68,
+    "name": "מיטל ספרים",
+    "handle": "@mitalbooks",
+    "emoji": "🔬",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "ירושלים",
+    "cats": [
+      "ספרים",
+      "תרבות"
+    ],
+    "fol": "63K",
+    "eng": "8.7%",
+    "rating": 4.7,
+    "price": "₪650-2,600",
+    "priceRange": "₪650-2,600",
+    "bio": "ספר ביום 📚",
+    "verified": false,
+    "collabs": "6",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ספרים",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 69,
+    "name": "יניב גיימר",
+    "handle": "@yanivgamer",
+    "emoji": "🚀",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "גיימינג",
+      "ספורט אלקטרוני"
+    ],
+    "fol": "178K",
+    "eng": "5.3%",
+    "rating": 4.8,
+    "price": "₪1,700-6,800",
+    "priceRange": "₪1,700-6,800",
+    "bio": "גיימר מקצועי 🎮",
+    "verified": false,
+    "collabs": "7",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין גיימינג",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 70,
+    "name": "דר עדי",
+    "handle": "@dradi_edu",
+    "emoji": "📸",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "תל אביב",
+    "cats": [
+      "חינוך",
+      "פסיכולוגיה"
+    ],
+    "fol": "124K",
+    "eng": "5.6%",
+    "rating": 4.9,
+    "price": "₪1,200-5,000",
+    "priceRange": "₪1,200-5,000",
+    "bio": "פסיכולוג ומחנך 🧑‍🏫",
+    "verified": false,
+    "collabs": "8",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין חינוך",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 71,
+    "name": "תמר עשה זאת",
+    "handle": "@tamardiy",
+    "emoji": "🎬",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "נתניה",
+    "cats": [
+      "DIY",
+      "יצירה"
+    ],
+    "fol": "79K",
+    "eng": "7.1%",
+    "rating": 4.2,
+    "price": "₪820-3,300",
+    "priceRange": "₪820-3,300",
+    "bio": "עשה זאת בעצמך 🔨",
+    "verified": false,
+    "collabs": "9",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין DIY",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 72,
+    "name": "ניצן חתונות",
+    "handle": "@nitzanwedding",
+    "emoji": "✨",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "חתונות",
+      "אירועים"
+    ],
+    "fol": "168K",
+    "eng": "5.4%",
+    "rating": 4.3,
+    "price": "₪1,600-6,500",
+    "priceRange": "₪1,600-6,500",
+    "bio": "היום הכי יפה 💒",
+    "verified": false,
+    "collabs": "10",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין חתונות",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 73,
+    "name": "אלכס לוקסוס",
+    "handle": "@alexluxury",
+    "emoji": "🌟",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "הרצליה",
+    "cats": [
+      "יוקרה",
+      "מלונות"
+    ],
+    "fol": "221K",
+    "eng": "4.9%",
+    "rating": 4.4,
+    "price": "₪2,300-9,000",
+    "priceRange": "₪2,300-9,000",
+    "bio": "חיים ברמה גבוהה ✈️",
+    "verified": false,
+    "collabs": "11",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין יוקרה",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 74,
+    "name": "אור אקסטרים",
+    "handle": "@oradventure",
+    "emoji": "💫",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "חיפה",
+    "cats": [
+      "ספורט אתגרי",
+      "טיפוס"
+    ],
+    "fol": "93K",
+    "eng": "6.7%",
+    "rating": 4.5,
+    "price": "₪950-3,800",
+    "priceRange": "₪950-3,800",
+    "bio": "גבולות לשבור 🧗",
+    "verified": true,
+    "collabs": "12",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "90K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ספורט אתגרי",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 75,
+    "name": "טכנו ביתי",
+    "handle": "@techno_home",
+    "emoji": "🎨",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "טכנולוגיה",
+      "בית חכם"
+    ],
+    "fol": "84K",
+    "eng": "6.1%",
+    "rating": 4.6,
+    "price": "₪860-3,400",
+    "priceRange": "₪860-3,400",
+    "bio": "הבית החכם 🏠",
+    "verified": false,
+    "collabs": "13",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "100K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טכנולוגיה",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 76,
+    "name": "דר מדע",
+    "handle": "@drscience_il",
+    "emoji": "🎵",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "ירושלים",
+    "cats": [
+      "מדע",
+      "חינוך"
+    ],
+    "fol": "156K",
+    "eng": "5.7%",
+    "rating": 4.7,
+    "price": "₪1,500-6,000",
+    "priceRange": "₪1,500-6,000",
+    "bio": "מדע לכולם 🔬",
+    "verified": false,
+    "collabs": "14",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "110K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין מדע",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 77,
+    "name": "רן מכוניות",
+    "handle": "@rancars",
+    "emoji": "🏃",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "רכב",
+      "מירוצים"
+    ],
+    "fol": "147K",
+    "eng": "5.4%",
+    "rating": 4.8,
+    "price": "₪1,400-5,800",
+    "priceRange": "₪1,400-5,800",
+    "bio": "אוהב מכוניות 🚗",
+    "verified": false,
+    "collabs": "15",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "120K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין רכב",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 78,
+    "name": "עמית פודקאסט",
+    "handle": "@amitpodcast",
+    "emoji": "🧘",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "תל אביב",
+    "cats": [
+      "פודקאסט",
+      "עסקים"
+    ],
+    "fol": "98K",
+    "eng": "6.4%",
+    "rating": 4.9,
+    "price": "₪1,000-4,100",
+    "priceRange": "₪1,000-4,100",
+    "bio": "שיחות שמשנות 🎙️",
+    "verified": false,
+    "collabs": "16",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "130K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "10K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין פודקאסט",
+        "reach": "45K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 79,
+    "name": "ים ושמש",
+    "handle": "@seaandsun_il",
+    "emoji": "🌿",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "תל אביב",
+    "cats": [
+      "ים",
+      "ספורט ים"
+    ],
+    "fol": "118K",
+    "eng": "5.8%",
+    "rating": 4.2,
+    "price": "₪1,150-4,600",
+    "priceRange": "₪1,150-4,600",
+    "bio": "חיים על החוף 🌊",
+    "verified": false,
+    "collabs": "17",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "140K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "15K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ים",
+        "reach": "60K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 80,
+    "name": "סטארטאפ ישראל",
+    "handle": "@startup_il",
+    "emoji": "💄",
+    "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+    "loc": "תל אביב",
+    "cats": [
+      "עסקים",
+      "יזמות"
+    ],
+    "fol": "187K",
+    "eng": "5.2%",
+    "rating": 4.3,
+    "price": "₪1,850-7,500",
+    "priceRange": "₪1,850-7,500",
+    "bio": "עולם הסטארטאפ 🚀",
+    "verified": true,
+    "collabs": "18",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "150K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "20K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין עסקים",
+        "reach": "75K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 81,
+    "name": "עולם הילד",
+    "handle": "@kidworld_il",
+    "emoji": "👗",
+    "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+    "loc": "רמת גן",
+    "cats": [
+      "ילדים",
+      "צעצועים"
+    ],
+    "fol": "94K",
+    "eng": "6.9%",
+    "rating": 4.4,
+    "price": "₪960-3,800",
+    "priceRange": "₪960-3,800",
+    "bio": "כל מה שלילדים 👶",
+    "verified": true,
+    "collabs": "19",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "160K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "25K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ילדים",
+        "reach": "90K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 82,
+    "name": "פיט גרלז",
+    "handle": "@fitgirlz_il",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "כושר",
+      "נשים"
+    ],
+    "fol": "163K",
+    "eng": "5.5%",
+    "rating": 4.5,
+    "price": "₪1,600-6,300",
+    "priceRange": "₪1,600-6,300",
+    "bio": "כושר לנשים 💪",
+    "verified": true,
+    "collabs": "20",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "30K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין כושר",
+        "reach": "105K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 83,
+    "name": "רועי ריצות",
+    "handle": "@roirunning",
+    "emoji": "☕",
+    "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+    "loc": "תל אביב",
+    "cats": [
+      "ריצה",
+      "מרתון",
+      "כושר"
+    ],
+    "fol": "54K",
+    "eng": "8.2%",
+    "rating": 4.6,
+    "price": "₪580-2,300",
+    "priceRange": "₪580-2,300",
+    "bio": "ריצה שמשנה חיים 🏃",
+    "verified": false,
+    "collabs": "21",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "35K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#2e000a,#4d0019)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין ריצה",
+        "reach": "120K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 84,
+    "name": "לי צמחוני",
+    "handle": "@leivegan",
+    "emoji": "✈️",
+    "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+    "loc": "תל אביב",
+    "cats": [
+      "טבעוני",
+      "מתכונים"
+    ],
+    "fol": "76K",
+    "eng": "7.6%",
+    "rating": 4.7,
+    "price": "₪780-3,100",
+    "priceRange": "₪780-3,100",
+    "bio": "טבעוני ומאושר 🥑",
+    "verified": true,
+    "collabs": "22",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "40K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a1a2e,#16213e)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טבעוני",
+        "reach": "135K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 85,
+    "name": "אדם צילום",
+    "handle": "@adamphoto",
+    "emoji": "💪",
+    "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+    "loc": "תל אביב",
+    "cats": [
+      "צילום",
+      "פורטרט"
+    ],
+    "fol": "108K",
+    "eng": "6.0%",
+    "rating": 4.8,
+    "price": "₪1,080-4,300",
+    "priceRange": "₪1,080-4,300",
+    "bio": "צלם שמספר סיפורים 📷",
+    "verified": true,
+    "collabs": "23",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "45K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#2e2e00,#4d4d00)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 110,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין צילום",
+        "reach": "150K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 86,
+    "name": "נגה מוזיקה",
+    "handle": "@nogamusic",
+    "emoji": "🎮",
+    "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+    "loc": "תל אביב",
+    "cats": [
+      "מוזיקה",
+      "ריקוד"
+    ],
+    "fol": "142K",
+    "eng": "5.4%",
+    "rating": 4.9,
+    "price": "₪1,400-5,600",
+    "priceRange": "₪1,400-5,600",
+    "bio": "מוזיקה וריקוד 💃",
+    "verified": true,
+    "collabs": "24",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "50K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#002e2e,#004d4d)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 145,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין מוזיקה",
+        "reach": "165K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  },
+  {
+    "id": 87,
+    "name": "יהל טבע",
+    "handle": "@yahelnature",
+    "emoji": "📚",
+    "bg": "linear-gradient(135deg,#001a2e,#003040)",
+    "loc": "הרצליה",
+    "cats": [
+      "טבע",
+      "אקולוגיה"
+    ],
+    "fol": "69K",
+    "eng": "7.2%",
+    "rating": 4.2,
+    "price": "₪710-2,800",
+    "priceRange": "₪710-2,800",
+    "bio": "שומר הטבע 🌳",
+    "verified": true,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🎵",
+        "name": "TikTok",
+        "count": "5K"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📸",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#001a2e,#003040)",
+        "type": "Reel"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0533,#0d1b4b)",
+        "type": "Post"
+      },
+      {
+        "emoji": "🎬",
+        "h": 140,
+        "bg": "linear-gradient(135deg,#0a2e0a,#1a4d1a)",
+        "type": "Story"
+      },
+      {
+        "emoji": "🌟",
+        "h": 180,
+        "bg": "linear-gradient(135deg,#2e1a00,#4d3300)",
+        "type": "UGC"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "מותג A",
+        "desc": "קמפיין טבע",
+        "reach": "30K views",
+        "logo": "🏢",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "מנהל שיווק · 01/2025",
+      "stars": "⭐⭐⭐⭐",
+      "text": "עבודה מצוינת! יוצר תוכן מקצועי עם engagement גבוה. ממליץ בחום."
+    }
+  }
+];
 
 /* ══ LANG ══ */
 function setLang(l){
@@ -1866,6 +7710,15 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Tab'){document.body.classList.add('keyboard-nav');}
 });
 document.addEventListener('mousedown',()=>document.body.classList.remove('keyboard-nav'));
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('✓ SW registered'))
+      .catch(e => console.log('SW error:', e));
+  });
+}
 </script>
 </body>
 </html>
