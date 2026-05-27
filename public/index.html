@@ -1075,6 +1075,1438 @@ ar:{dir:'rtl',l:'ar',
 };
 
 let lang='he', role='', matches=[], chatMsgs=[], NOTIFS=[], curCreator=null, activeThr=0, ofFormOpen=false, isDark=true;
+const BUSINESSES=[
+  {
+    "id": 2,
+    "name": "Urban Eats TLV",
+    "handle": "@urbaneatstlv",
+    "emoji": "🏢",
+    "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+    "loc": "תל אביב",
+    "cats": [
+      "מסעדה ואוכל"
+    ],
+    "fol": "10K followers",
+    "eng": "3.0%",
+    "rating": 4.3,
+    "price": "₪5,000-20,000",
+    "priceRange": "₪5,000-20,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מסעדה ואוכל",
+    "verified": true,
+    "collabs": "3",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "10K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מסעדה ואוכל",
+        "reach": "20K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Café Roma",
+    "handle": "@caféroma",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#001a1a,#003333)",
+    "loc": "רמת גן",
+    "cats": [
+      "קפה"
+    ],
+    "fol": "15K followers",
+    "eng": "4.1%",
+    "rating": 4.4,
+    "price": "₪5,000-20,000",
+    "priceRange": "₪5,000-20,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: קפה",
+    "verified": true,
+    "collabs": "4",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין קפה",
+        "reach": "40K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 100,
+    "name": "קפה נמרוד",
+    "handle": "@קפהנמרוד",
+    "emoji": "🏢",
+    "bg": "linear-gradient(135deg,#1a001a,#330033)",
+    "loc": "תל אביב",
+    "cats": [
+      "קפה"
+    ],
+    "fol": "20K followers",
+    "eng": "5.2%",
+    "rating": 4.5,
+    "price": "₪5,000-15,000",
+    "priceRange": "₪5,000-15,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: קפה",
+    "verified": true,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין קפה",
+        "reach": "60K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 101,
+    "name": "פיצה רומא",
+    "handle": "@פיצהרומא",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "מסעדה ואוכל"
+    ],
+    "fol": "25K followers",
+    "eng": "6.3%",
+    "rating": 4.6,
+    "price": "₪8,000-20,000",
+    "priceRange": "₪8,000-20,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מסעדה ואוכל",
+    "verified": true,
+    "collabs": "6",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מסעדה ואוכל",
+        "reach": "80K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 102,
+    "name": "גימנסיה פרו",
+    "handle": "@גימנסיהפרו",
+    "emoji": "☕",
+    "bg": "linear-gradient(135deg,#001a0a,#003320)",
+    "loc": "הרצליה",
+    "cats": [
+      "חדר כושר"
+    ],
+    "fol": "30K followers",
+    "eng": "3.4%",
+    "rating": 4.7,
+    "price": "₪6,000-18,000",
+    "priceRange": "₪6,000-18,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: חדר כושר",
+    "verified": true,
+    "collabs": "7",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין חדר כושר",
+        "reach": "100K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 103,
+    "name": "ביוטי סטור",
+    "handle": "@ביוטיסטור",
+    "emoji": "💪",
+    "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+    "loc": "תל אביב",
+    "cats": [
+      "יופי וקוסמטיקה"
+    ],
+    "fol": "35K followers",
+    "eng": "4.5%",
+    "rating": 4.8,
+    "price": "₪10,000-30,000",
+    "priceRange": "₪10,000-30,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: יופי וקוסמטיקה",
+    "verified": true,
+    "collabs": "8",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין יופי וקוסמטיקה",
+        "reach": "120K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 104,
+    "name": "פאשן אאוטלט",
+    "handle": "@פאשןאאוטלט",
+    "emoji": "💄",
+    "bg": "linear-gradient(135deg,#00001a,#000033)",
+    "loc": "תל אביב",
+    "cats": [
+      "אופנה"
+    ],
+    "fol": "40K followers",
+    "eng": "5.6%",
+    "rating": 4.9,
+    "price": "₪12,000-40,000",
+    "priceRange": "₪12,000-40,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: אופנה",
+    "verified": true,
+    "collabs": "9",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין אופנה",
+        "reach": "140K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 105,
+    "name": "טק גאדג'טס",
+    "handle": "@טקגאדג'טס",
+    "emoji": "👗",
+    "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+    "loc": "תל אביב",
+    "cats": [
+      "טכנולוגיה"
+    ],
+    "fol": "45K followers",
+    "eng": "6.7%",
+    "rating": 4.3,
+    "price": "₪7,000-22,000",
+    "priceRange": "₪7,000-22,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: טכנולוגיה",
+    "verified": true,
+    "collabs": "10",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין טכנולוגיה",
+        "reach": "160K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 106,
+    "name": "ספא דלוקס",
+    "handle": "@ספאדלוקס",
+    "emoji": "🏨",
+    "bg": "linear-gradient(135deg,#001a1a,#003333)",
+    "loc": "הרצליה",
+    "cats": [
+      "בריאות"
+    ],
+    "fol": "50K followers",
+    "eng": "3.8%",
+    "rating": 4.4,
+    "price": "₪9,000-25,000",
+    "priceRange": "₪9,000-25,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: בריאות",
+    "verified": true,
+    "collabs": "11",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "10K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין בריאות",
+        "reach": "20K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 107,
+    "name": "מלון בוטיק",
+    "handle": "@מלוןבוטיק",
+    "emoji": "🥗",
+    "bg": "linear-gradient(135deg,#1a001a,#330033)",
+    "loc": "תל אביב",
+    "cats": [
+      "מלון ואירוח"
+    ],
+    "fol": "55K followers",
+    "eng": "4.0%",
+    "rating": 4.5,
+    "price": "₪15,000-50,000",
+    "priceRange": "₪15,000-50,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מלון ואירוח",
+    "verified": true,
+    "collabs": "12",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מלון ואירוח",
+        "reach": "40K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 108,
+    "name": "סופרפוד",
+    "handle": "@סופרפוד",
+    "emoji": "🛍️",
+    "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+    "loc": "תל אביב",
+    "cats": [
+      "מסעדה ואוכל"
+    ],
+    "fol": "10K followers",
+    "eng": "5.1%",
+    "rating": 4.6,
+    "price": "₪5,500-16,000",
+    "priceRange": "₪5,500-16,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מסעדה ואוכל",
+    "verified": true,
+    "collabs": "13",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מסעדה ואוכל",
+        "reach": "60K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 109,
+    "name": "ספורט פלוס",
+    "handle": "@ספורטפלוס",
+    "emoji": "🚗",
+    "bg": "linear-gradient(135deg,#001a0a,#003320)",
+    "loc": "ראשון לציון",
+    "cats": [
+      "חדר כושר"
+    ],
+    "fol": "15K followers",
+    "eng": "6.2%",
+    "rating": 4.7,
+    "price": "₪4,000-12,000",
+    "priceRange": "₪4,000-12,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: חדר כושר",
+    "verified": true,
+    "collabs": "14",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין חדר כושר",
+        "reach": "80K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 110,
+    "name": "עיצוב הבית",
+    "handle": "@עיצובהבית",
+    "emoji": "🧖",
+    "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+    "loc": "תל אביב",
+    "cats": [
+      "ריטייל"
+    ],
+    "fol": "20K followers",
+    "eng": "3.3%",
+    "rating": 4.8,
+    "price": "₪8,000-24,000",
+    "priceRange": "₪8,000-24,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: ריטייל",
+    "verified": true,
+    "collabs": "15",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין ריטייל",
+        "reach": "100K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 111,
+    "name": "אורגני מרקט",
+    "handle": "@אורגנימרקט",
+    "emoji": "🍣",
+    "bg": "linear-gradient(135deg,#00001a,#000033)",
+    "loc": "תל אביב",
+    "cats": [
+      "מסעדה ואוכל"
+    ],
+    "fol": "25K followers",
+    "eng": "4.4%",
+    "rating": 4.9,
+    "price": "₪6,000-18,000",
+    "priceRange": "₪6,000-18,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מסעדה ואוכל",
+    "verified": true,
+    "collabs": "16",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מסעדה ואוכל",
+        "reach": "120K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 112,
+    "name": "קידס פאן",
+    "handle": "@קידספאן",
+    "emoji": "🐾",
+    "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+    "loc": "פתח תקווה",
+    "cats": [
+      "ריטייל"
+    ],
+    "fol": "30K followers",
+    "eng": "5.5%",
+    "rating": 4.3,
+    "price": "₪5,000-15,000",
+    "priceRange": "₪5,000-15,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: ריטייל",
+    "verified": true,
+    "collabs": "17",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "70K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין ריטייל",
+        "reach": "140K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 113,
+    "name": "וינו בר",
+    "handle": "@וינובר",
+    "emoji": "🍷",
+    "bg": "linear-gradient(135deg,#001a1a,#003333)",
+    "loc": "תל אביב",
+    "cats": [
+      "מסעדה ואוכל"
+    ],
+    "fol": "35K followers",
+    "eng": "6.6%",
+    "rating": 4.4,
+    "price": "₪7,000-20,000",
+    "priceRange": "₪7,000-20,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מסעדה ואוכל",
+    "verified": true,
+    "collabs": "3",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "80K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מסעדה ואוכל",
+        "reach": "160K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 114,
+    "name": "רנט א קאר",
+    "handle": "@רנטאקאר",
+    "emoji": "🦷",
+    "bg": "linear-gradient(135deg,#1a001a,#330033)",
+    "loc": "תל אביב",
+    "cats": [
+      "אחר"
+    ],
+    "fol": "40K followers",
+    "eng": "3.7%",
+    "rating": 4.5,
+    "price": "₪9,000-28,000",
+    "priceRange": "₪9,000-28,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: אחר",
+    "verified": true,
+    "collabs": "4",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "10K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין אחר",
+        "reach": "20K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 115,
+    "name": "דנטל קליניק",
+    "handle": "@דנטלקליניק",
+    "emoji": "🏢",
+    "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+    "loc": "הרצליה",
+    "cats": [
+      "בריאות"
+    ],
+    "fol": "45K followers",
+    "eng": "4.8%",
+    "rating": 4.6,
+    "price": "₪5,000-14,000",
+    "priceRange": "₪5,000-14,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: בריאות",
+    "verified": true,
+    "collabs": "5",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "20K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#0a1a00,#1a3300)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין בריאות",
+        "reach": "40K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 116,
+    "name": "פט שופ",
+    "handle": "@פטשופ",
+    "emoji": "🍕",
+    "bg": "linear-gradient(135deg,#001a0a,#003320)",
+    "loc": "תל אביב",
+    "cats": [
+      "ריטייל"
+    ],
+    "fol": "50K followers",
+    "eng": "5.0%",
+    "rating": 4.7,
+    "price": "₪4,500-13,000",
+    "priceRange": "₪4,500-13,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: ריטייל",
+    "verified": true,
+    "collabs": "6",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "30K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#001a0a,#003320)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין ריטייל",
+        "reach": "60K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 03/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 117,
+    "name": "סושי בר",
+    "handle": "@סושיבר",
+    "emoji": "☕",
+    "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+    "loc": "תל אביב",
+    "cats": [
+      "מסעדה ואוכל"
+    ],
+    "fol": "55K followers",
+    "eng": "6.1%",
+    "rating": 4.8,
+    "price": "₪6,500-19,000",
+    "priceRange": "₪6,500-19,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: מסעדה ואוכל",
+    "verified": true,
+    "collabs": "7",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "40K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 160,
+        "bg": "linear-gradient(135deg,#1a1a00,#333300)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 190,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין מסעדה ואוכל",
+        "reach": "80K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 04/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 118,
+    "name": "יוגה סטודיו",
+    "handle": "@יוגהסטודיו",
+    "emoji": "💪",
+    "bg": "linear-gradient(135deg,#00001a,#000033)",
+    "loc": "תל אביב",
+    "cats": [
+      "חדר כושר"
+    ],
+    "fol": "10K followers",
+    "eng": "3.2%",
+    "rating": 4.9,
+    "price": "₪3,500-10,000",
+    "priceRange": "₪3,500-10,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: חדר כושר",
+    "verified": true,
+    "collabs": "8",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "50K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 200,
+        "bg": "linear-gradient(135deg,#00001a,#000033)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 100,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין חדר כושר",
+        "reach": "100K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 01/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  },
+  {
+    "id": 119,
+    "name": "ברבר שופ",
+    "handle": "@ברברשופ",
+    "emoji": "💄",
+    "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+    "loc": "תל אביב",
+    "cats": [
+      "יופי וקוסמטיקה"
+    ],
+    "fol": "15K followers",
+    "eng": "4.3%",
+    "rating": 4.3,
+    "price": "₪4,000-12,000",
+    "priceRange": "₪4,000-12,000",
+    "bio": "מחפשים יוצרי תוכן מקצועיים לשיתוף פעולה. תחום: יופי וקוסמטיקה",
+    "verified": true,
+    "collabs": "9",
+    "socials": [
+      {
+        "icon": "📸",
+        "name": "Instagram",
+        "count": "60K"
+      },
+      {
+        "icon": "🌐",
+        "name": "Website",
+        "count": "Active"
+      }
+    ],
+    "portfolio": [
+      {
+        "emoji": "📢",
+        "h": 120,
+        "bg": "linear-gradient(135deg,#1a0a00,#3d2200)",
+        "type": "קמפיין"
+      },
+      {
+        "emoji": "✨",
+        "h": 130,
+        "bg": "linear-gradient(135deg,#001a1a,#003333)",
+        "type": "פרסום"
+      },
+      {
+        "emoji": "🎯",
+        "h": 155,
+        "bg": "linear-gradient(135deg,#1a001a,#330033)",
+        "type": "שיתוף פעולה"
+      }
+    ],
+    "pastCollabs": [
+      {
+        "brand": "יוצר תוכן",
+        "desc": "קמפיין יופי וקוסמטיקה",
+        "reach": "120K views",
+        "logo": "📸",
+        "logoBg": "rgba(0,207,255,0.15)"
+      }
+    ],
+    "review": {
+      "from": "יוצר תוכן · 02/2025",
+      "stars": "⭐⭐⭐⭐⭐",
+      "text": "עסק מקצועי, תקציב הוגן ותקשורת מעולה. ממליץ בחום!"
+    }
+  }
+];
 const CREATORS=[
   {
     "id": 1,
@@ -6932,7 +8364,7 @@ function setLang(l){
     const b=document.getElementById(id);
     if(b)b.classList.toggle('active',id==='lp-'+l);
   });
-  buildCards(); buildCGrid(CREATORS); buildMatches();
+  buildCards(); buildCGrid(window.DISPLAY_LIST||CREATORS); buildMatches();
 }
 function cycleLang(){const o=['he','en','ar'];setLang(o[(o.indexOf(lang)+1)%3]);}
 function t(k){return(TR[lang]||TR.he)[k]||(TR.he[k]||k);}
@@ -7169,20 +8601,24 @@ function applyRoleUI(isCreator){
 
   if(isCreator){
     // יוצר — מחפש עסקים
-    if(discTitle) discTitle.innerHTML='מצא <span style="color:var(--ac)">מותגים</span>';
-    if(browseTitle) browseTitle.textContent='עיין במותגים';
+    if(discTitle) discTitle.innerHTML='מצא <span style="color:var(--ac)">עסקים</span>';
+    if(browseTitle) browseTitle.textContent='עיין בעסקים';
     if(userAvatar) userAvatar.textContent='📸';
-    // יוצר לא שולח הצעות — הוא מקבל אותן
     if(sendCollab) sendCollab.style.display='none';
     if(saveCreator) saveCreator.style.display='none';
+    // החלף את DISPLAY_LIST לעסקים
+    window.DISPLAY_LIST = BUSINESSES;
+    cardIdx=0;
   } else {
     // עסק — מחפש יוצרים
     if(discTitle) discTitle.innerHTML='מצא <span style="color:var(--ac)">יוצרים</span>';
     if(browseTitle) browseTitle.textContent='עיין ביוצרים';
     if(userAvatar) userAvatar.textContent='🏢';
-    // עסק שולח הצעות ושומר יוצרים
     if(sendCollab) sendCollab.style.display='block';
     if(saveCreator) saveCreator.style.display='block';
+    // החלף את DISPLAY_LIST ליוצרים
+    window.DISPLAY_LIST = CREATORS;
+    cardIdx=0;
   }
 }
 
@@ -7316,11 +8752,13 @@ function openChat(i){activeThr=i;showPg('messages');}
 
 /* ══ CARDS ══ */
 let cardIdx=0;
+function getList(){return window.DISPLAY_LIST||CREATORS;}
 function buildCards(){
   const stack=document.getElementById('cstack');
   const rem=document.getElementById('crem');
   stack.innerHTML='';
-  const left=CREATORS.length-cardIdx;
+  const list=window.DISPLAY_LIST||CREATORS;
+  const left=list.length-cardIdx;
   if(left<=0){
     stack.innerHTML=`<div style="width:320px;height:460px;border-radius:22px;border:1px solid var(--bd2);background:var(--sf);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--mu)" role="status"><div style="font-size:48px">🌟</div><div style="font-family:var(--fn);font-size:16px;font-weight:700;color:var(--tx)">${t('T.disc-title')}</div></div>`;
     rem.textContent='';return;
@@ -7328,7 +8766,7 @@ function buildCards(){
   const countLabel=left+' יוצרים';
   rem.textContent=countLabel;
   document.getElementById('T.disc-count').textContent=left+' '+t('T.sort-fol').replace('הכי ','');
-  CREATORS.slice(cardIdx,cardIdx+3).forEach((c,i)=>{
+  getList().slice(cardIdx,cardIdx+3).forEach((c,i)=>{
     const cls=['c1','c2','c3'][i];
     const el=document.createElement('div');
     el.className='ccard '+cls;
@@ -7367,11 +8805,12 @@ function setupDrag(card){
 }
 function swipe(action){
   const card=document.querySelector('.c1');if(!card)return;
-  const c=CREATORS[cardIdx];
+  const list=window.DISPLAY_LIST||CREATORS;
+  const c=list[cardIdx];
   if(action==='like'){card.classList.add('an-swr');addMatch(c);logAct('♥ '+c.name,'var(--ac)');}
   else if(action==='save'){card.classList.add('an-swl');addSaved(c);logAct('🔖 '+c.name,'var(--ac2)');}
   else{card.classList.add('an-swl');}
-  setTimeout(()=>{cardIdx=(cardIdx+1)%Math.max(1,CREATORS.length);buildCards();},370);
+  setTimeout(()=>{cardIdx=(cardIdx+1)%Math.max(1,getList().length);buildCards();},370);
 }
 function addSaved(c){
   const sl=document.getElementById('saved-list');
@@ -7407,9 +8846,9 @@ function buildCGrid(data){
   g.style.display='grid';
   g.innerHTML=data.map(c=>`<div class="ct" tabindex="0" role="button" aria-label="${c.name}, ${c.cats[0]}" onclick="openProfile(${JSON.stringify(c).replace(/"/g,'&quot;')})"><div class="th" style="background:${c.bg}">${c.verified?'<div class="tv">✓ '+t('T.verified')+'</div>':''}<span style="font-size:40px">${c.emoji}</span></div><div class="tb"><div class="t-name">${c.name}</div><div class="t-hdl">${c.handle} · ${c.loc}</div><div class="t-cats">${c.cats.map(x=>'<span class="t-cat">'+x+'</span>').join('')}</div><div class="t-stats"><svg style="font-size:12px" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg> <span>${c.fol}</span> · <span>${c.eng}</span></div><div class="t-foot"><span class="t-price">${c.price}</span><span class="t-rat">★ ${c.rating}</span></div></div></div>`).join('');
 }
-function filterC(q){buildCGrid(CREATORS.filter(c=>(c.name+c.handle+c.cats.join('')).toLowerCase().includes(q.toLowerCase())));}
+function filterC(q){buildCGrid((window.DISPLAY_LIST||CREATORS).filter(c=>(c.name+c.handle+c.cats.join('')).toLowerCase().includes(q.toLowerCase())));}
 function sortC(by){
-  const d=[...CREATORS];
+  const d=[...(window.DISPLAY_LIST||CREATORS)];
   if(by==='followers')d.sort((a,b)=>parseInt(b.fol)-parseInt(a.fol));
   else if(by==='engagement')d.sort((a,b)=>parseFloat(b.eng)-parseFloat(a.eng));
   else if(by==='rating')d.sort((a,b)=>b.rating-a.rating);
@@ -7519,7 +8958,7 @@ function buildChart(){
 function buildTopCr(){
   const el=document.getElementById('top-cr');
   if(!CREATORS.length){el.innerHTML=`<div style="font-size:12px;color:var(--mu);text-align:center;padding:16px 0">אין יוצרים עדיין</div>`;return;}
-  el.innerHTML=CREATORS.slice(0,5).map((c,i)=>`<div class="tcr"><div class="tc-rk">${i+1}</div><div class="tc-av" style="background:${c.bg}">${c.emoji}</div><div style="flex:1"><div class="tc-nm">${c.name}</div><div class="tc-ct">${c.cats[0]}</div></div><div class="tc-st">${c.eng}</div></div>`).join('');
+  el.innerHTML=(window.DISPLAY_LIST||CREATORS).slice(0,5).map((c,i)=>`<div class="tcr"><div class="tc-rk">${i+1}</div><div class="tc-av" style="background:${c.bg}">${c.emoji}</div><div style="flex:1"><div class="tc-nm">${c.name}</div><div class="tc-ct">${c.cats[0]}</div></div><div class="tc-st">${c.eng}</div></div>`).join('');
 }
 function setPer(el){document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));el.classList.add('on');buildChart();}
 
@@ -7607,8 +9046,10 @@ function copyExport(){
 
 /* ══ INIT ══ */
 function initApp(){
+  // default — עסק רואה יוצרים
+  if(!window.DISPLAY_LIST) window.DISPLAY_LIST = CREATORS;
   buildCards();
-  buildCGrid(CREATORS);
+  buildCGrid(window.DISPLAY_LIST);
   buildThreads();
   buildMsgs();
   buildChart();
