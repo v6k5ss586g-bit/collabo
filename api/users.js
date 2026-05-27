@@ -1,924 +1,1982 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Collabo Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+export const config = { api: { bodyParser: true } };
 
-<style>
-:root{
-  --bg:#07070f;--surface:#0e0e1c;--surface2:#161628;--surface3:#1e1e35;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --text:#f0f0fa;--muted:#6b7280;--dim:#2a2a40;
-  --blue:#00cfff;--blue-dim:rgba(0,207,255,0.1);--blue-glow:rgba(0,207,255,0.25);
-  --gold:#ffd700;--gold-dim:rgba(255,215,0,0.1);
-  --green:#00e5a0;--green-dim:rgba(0,229,160,0.1);
-  --red:#ff4d4d;--red-dim:rgba(255,77,77,0.1);
-  --amber:#f5a623;--amber-dim:rgba(245,166,35,0.1);
-  --font:'Syne',sans-serif;--body:'DM Sans',sans-serif;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
-
-/* ── LOGIN ── */
-#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:0}
-.login-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:40px 36px;width:380px}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-logo-text{font-family:var(--font);font-size:36px;font-weight:800;letter-spacing:-2px}
-.login-logo-text .b{color:var(--blue);text-shadow:0 0 20px rgba(0,207,255,0.6)}
-.login-logo-text .g{color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,0.5)}
-.login-sub{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;text-transform:uppercase}
-.login-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;padding:4px 10px;border-radius:20px;background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,77,0.25);margin-bottom:24px}
-.login-field{margin-bottom:14px}
-.login-label{font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.login-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;transition:border-color .15s}
-.login-input:focus{border-color:var(--blue)}
-.login-btn{width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#0099cc);color:#07070f;font-family:var(--font);font-size:14px;font-weight:700;border:none;cursor:pointer;margin-top:6px;letter-spacing:.3px;transition:opacity .15s}
-.login-btn:hover{opacity:.88}
-.login-err{font-size:12px;color:var(--red);text-align:center;margin-top:10px;display:none}
-.login-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:14px}
-.login-hint code{background:var(--surface3);padding:2px 6px;border-radius:4px;color:var(--blue);font-size:11px}
-
-/* ── APP LAYOUT ── */
-#admin-app{display:none;height:100vh;flex-direction:column}
-.admin-topbar{height:56px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px}
-.admin-logo{font-family:var(--font);font-size:18px;font-weight:800;letter-spacing:-1px}
-.admin-logo .b{color:var(--blue)}.admin-logo .g{color:var(--gold)}
-.admin-logo-tag{font-size:9px;background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,77,0.25);padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin-right:4px}
-.topbar-right{margin-right:auto;display:flex;align-items:center;gap:12px}
-.topbar-admin-info{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.topbar-admin-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
-.topbar-logout{font-size:11px;padding:5px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .15s;font-family:var(--body)}
-.topbar-logout:hover{color:var(--red);border-color:rgba(255,77,77,0.3)}
-
-.admin-body{display:flex;flex:1;overflow:hidden}
-
-/* ── SIDEBAR ── */
-.admin-sidebar{width:210px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:16px 0;overflow-y:auto}
-.sidebar-section{font-size:10px;color:var(--muted);padding:14px 18px 6px;letter-spacing:1px;text-transform:uppercase;font-weight:500}
-.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .15s;border-right:2px solid transparent;position:relative}
-.sidebar-item:hover{background:rgba(255,255,255,0.03);color:var(--text)}
-.sidebar-item.active{color:var(--blue);background:var(--blue-dim);border-right-color:var(--blue)}
-.sidebar-item i{font-size:17px}
-.sidebar-badge{margin-right:auto;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600}
-.sb-red{background:var(--red-dim);color:var(--red)}
-.sb-blue{background:var(--blue-dim);color:var(--blue)}
-.sb-gold{background:var(--gold-dim);color:var(--gold)}
-
-/* ── MAIN CONTENT ── */
-.admin-main{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px}
-.page{display:none;flex-direction:column;gap:20px}
-.page.active{display:flex}
-
-/* ── SHARED COMPONENTS ── */
-.page-title{font-family:var(--font);font-size:20px;font-weight:700;letter-spacing:-.5px}
-.page-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%}
-.kpi-blue::before{background:var(--blue)}.kpi-gold::before{background:var(--gold)}
-.kpi-green::before{background:var(--green)}.kpi-red::before{background:var(--red)}
-.kpi-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.kpi-val{font-family:var(--font);font-size:26px;font-weight:700;line-height:1;margin-bottom:6px}
-.kpi-change{font-size:11px;display:flex;align-items:center;gap:4px}
-.up{color:var(--green)}.down{color:var(--red)}.neu{color:var(--muted)}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
-.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.panel-title{font-family:var(--font);font-size:13px;font-weight:700}
-.panel-action{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--body)}
-.two-col{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-
-/* ── TABLE ── */
-.data-table{width:100%;border-collapse:collapse;font-size:12px}
-.data-table th{text-align:right;padding:8px 12px;font-size:10px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.5px}
-.data-table td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text)}
-.data-table tr:last-child td{border-bottom:none}
-.data-table tr:hover td{background:rgba(255,255,255,0.02)}
-.td-muted{color:var(--muted)}
-.status-pill{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600;display:inline-block}
-.pill-green{background:var(--green-dim);color:var(--green)}
-.pill-red{background:var(--red-dim);color:var(--red)}
-.pill-amber{background:var(--amber-dim);color:var(--amber)}
-.pill-blue{background:var(--blue-dim);color:var(--blue)}
-.pill-muted{background:rgba(255,255,255,0.05);color:var(--muted)}
-.action-icon{width:28px;height:28px;border-radius:7px;background:var(--surface2);border:1px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;transition:all .15s;vertical-align:middle}
-.action-icon:hover{color:var(--text);border-color:var(--border2)}
-.action-icon.danger:hover{color:var(--red);border-color:rgba(255,77,77,0.3)}
-
-/* ── USER AVATAR ── */
-.u-avatar{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;vertical-align:middle;margin-left:8px;flex-shrink:0}
-
-/* ── BAR CHART ── */
-.bar-chart{display:flex;align-items:flex-end;gap:6px;height:110px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
-.bar-track{flex:1;width:100%;display:flex;align-items:flex-end}
-.bar-fill{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height .5s}
-.bar-lbl{font-size:9px;color:var(--muted)}
-
-/* ── TOGGLE ── */
-.toggle{position:relative;width:36px;height:20px;cursor:pointer;flex-shrink:0}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;inset:0;background:var(--dim);border-radius:10px;transition:.25s}
-.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;right:3px;top:3px;background:#fff;border-radius:50%;transition:.25s}
-.toggle input:checked+.toggle-slider{background:var(--blue)}
-.toggle input:checked+.toggle-slider::before{transform:translateX(-16px)}
-
-/* ── SEARCH ── */
-.search-wrap{position:relative;flex:1;max-width:320px}
-.search-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:8px 12px 8px 34px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:border-color .15s}
-.search-input:focus{border-color:var(--blue)}
-.search-input::placeholder{color:var(--muted)}
-.search-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
-
-/* ── MODAL ── */
-.modal-bg{position:fixed;inset:0;background:rgba(7,7,15,0.8);z-index:500;display:none;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
-.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:28px;width:440px;max-height:80vh;overflow-y:auto}
-.modal-box-title{font-family:var(--font);font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-.modal-close{cursor:pointer;color:var(--muted);font-size:18px}
-.modal-close:hover{color:var(--text)}
-.form-field{margin-bottom:12px}
-.form-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.form-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:12px;outline:none;transition:border-color .15s}
-.form-input:focus{border-color:var(--blue)}
-.form-btn{padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,var(--blue),#0099cc);color:#07070f;font-family:var(--font);font-size:12px;font-weight:700;border:none;cursor:pointer}
-.form-btn-ghost{padding:10px 20px;border-radius:8px;background:transparent;color:var(--muted);font-family:var(--body);font-size:12px;border:1px solid var(--border2);cursor:pointer;margin-right:8px}
-
-/* activity feed */
-.activity-feed{display:flex;flex-direction:column;gap:10px}
-.activity-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:10px}
-.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.act-text{font-size:12px;flex:1;line-height:1.5}
-.act-time{font-size:10px;color:var(--muted);white-space:nowrap}
-
-/* notification row */
-.notif-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
-.notif-row:last-child{border-bottom:none}
-.notif-label{font-size:13px}
-.notif-desc{font-size:11px;color:var(--muted);margin-top:2px}
-
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.page.active{animation:fadeIn .2s ease}
-</style>
-</head>
-<body>
-
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="login-logo-text"><span class="b">colla</span><span class="g">bo</span></div>
-      <div class="login-sub">Admin Panel</div>
-    </div>
-    <div style="text-align:center;margin-bottom:20px">
-      <span class="login-badge"><svg style="font-size:11px" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><rect x="9" y="11" width="6" height="5" rx="1"/><circle cx="12" cy="11" r="1"/></svg> גישת מנהל בלבד</span>
-    </div>
-    <div class="login-field">
-      <div class="login-label">אימייל</div>
-      <input class="login-input" type="email" id="login-email" placeholder="admin@collabo.io" value="admin@collabo.io">
-    </div>
-    <div class="login-field">
-      <div class="login-label">סיסמה</div>
-      <input class="login-input" type="password" id="login-pass" placeholder="••••••••" value="" onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
-    <button class="login-btn" onclick="doLogin()">כניסה למשרד →</button>
-    <div class="login-err" id="login-err">סיסמה שגויה. נסה שוב.</div>
-    <div class="login-hint">סיסמת demo: <code>admin123</code></div>
-  </div>
-</div>
-
-<!-- ADMIN APP -->
-<div id="admin-app">
-  <!-- Topbar -->
-  <div class="admin-topbar">
-    <div class="admin-logo"><span class="b">colla</span><span class="g">bo</span></div>
-    <span class="admin-logo-tag">ADMIN</span>
-    <div class="topbar-right">
-      <div class="topbar-admin-info">
-        <div class="topbar-admin-dot"></div>
-        <span>מחובר כ-<strong>admin@collabo.io</strong></span>
-      </div>
-      <span id="sync-badge" style="font-size:11px;padding:4px 10px;border-radius:8px;background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,0.25);display:none">● מסונכרן עם Collabo</span>
-      <button onclick="openImport()" style="font-size:11px;padding:5px 12px;border-radius:8px;background:var(--blue-dim);border:1px solid var(--blue-glow);color:var(--blue);cursor:pointer;font-family:var(--body)">📥 ייבא מ-Collabo</button>
-      <button onclick="clearAllUsers()" style="font-size:11px;padding:5px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);cursor:pointer;font-family:var(--body)">נקה Demo</button>
-      <button class="topbar-logout" onclick="doLogout()"><svg style="font-size:13px;vertical-align:-2px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> יציאה</button>
-    </div>
-  </div>
-
-  <div class="admin-body">
-    <!-- Sidebar -->
-    <nav class="admin-sidebar">
-      <div class="sidebar-section">ראשי</div>
-      <div class="sidebar-item active" data-page="dashboard"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Dashboard</div>
-      <div class="sidebar-item" data-page="users"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg> משתמשים <span class="sidebar-badge sb-blue" id="sb-users">0</span></div>
-      <div class="sidebar-item" data-page="pending"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ממתינים לאישור <span class="sidebar-badge sb-red" id="sb-pending">0</span></div>
-      <div class="sidebar-item" data-page="collabs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V7a2 2 0 0 1 2-2h2l3 3h4l3-3h2a2 2 0 0 1 2 2v4"/><path d="M4 11l4 4 4-4 4 4 4-4"/><path d="M4 15v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> שיתופי פעולה</div>
-      <div class="sidebar-section">כספים</div>
-      <div class="sidebar-item" data-page="revenue"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg> הכנסות</div>
-      <div class="sidebar-item" data-page="subscriptions"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> מנויים</div>
-      <div class="sidebar-section">תוכן</div>
-      <div class="sidebar-item" data-page="reports"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> דיווחים <span class="sidebar-badge sb-red" id="sb-reports">0</span></div>
-      <div class="sidebar-item" data-page="featured"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Featured creators</div>
-      <div class="sidebar-section">מערכת</div>
-      <div class="sidebar-item" data-page="settings"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> הגדרות</div>
-      <div class="sidebar-item" data-page="logs"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg> Logs</div>
-    </nav>
-
-    <!-- Main -->
-    <main class="admin-main">
-
-      <!-- ══ DASHBOARD ══ -->
-      <div class="page active" id="page-dashboard">
-        <div>
-          <div class="page-title">Dashboard</div>
-          <div class="page-sub" id="dash-date">טוען...</div>
-        </div>
-        <div class="kpi-row">
-          <div class="kpi kpi-blue">
-            <div class="kpi-label"><svg style="font-size:13px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg> סה"כ משתמשים</div>
-            <div class="kpi-val" id="kpi-total-users">0</div>
-            <div class="kpi-change up"><svg style="font-size:12px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> +0 השבוע</div>
-          </div>
-          <div class="kpi kpi-gold">
-            <div class="kpi-label"><svg style="font-size:13px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg> הכנסה החודש</div>
-            <div class="kpi-val" id="kpi-revenue">₪0</div>
-            <div class="kpi-change neu">אין נתונים עדיין</div>
-          </div>
-          <div class="kpi kpi-green">
-            <div class="kpi-label"><svg style="font-size:13px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V7a2 2 0 0 1 2-2h2l3 3h4l3-3h2a2 2 0 0 1 2 2v4"/><path d="M4 11l4 4 4-4 4 4 4-4"/><path d="M4 15v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> שיתופי פעולה</div>
-            <div class="kpi-val" id="kpi-collabs">0</div>
-            <div class="kpi-change neu">אין נתונים עדיין</div>
-          </div>
-          <div class="kpi kpi-red">
-            <div class="kpi-label"><svg style="font-size:13px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ממתינים לאישור</div>
-            <div class="kpi-val" id="kpi-pending">0</div>
-            <div class="kpi-change neu" id="kpi-pending-sub">אין ממתינים</div>
-          </div>
-        </div>
-        <div class="two-col">
-          <div class="panel">
-            <div class="panel-head"><div class="panel-title">הרשמות לאורך זמן</div><span class="panel-action" onclick="showPage('users')">כל המשתמשים</span></div>
-            <div class="bar-chart" id="reg-chart">
-              <div style="width:100%;display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px">אין נתוני הרשמה עדיין</div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><div class="panel-title">פעילות אחרונה</div></div>
-            <div class="activity-feed" id="activity-feed">
-              <div style="font-size:12px;color:var(--muted);text-align:center;padding:20px 0">אין פעילות עדיין</div>
-            </div>
-          </div>
-        </div>
-        <div class="three-col">
-          <div class="panel">
-            <div class="panel-head"><div class="panel-title">יוצרים</div></div>
-            <div style="font-size:32px;font-family:var(--font);font-weight:700;margin-bottom:4px" id="stat-creators">0</div>
-            <div style="font-size:11px;color:var(--muted)">רשומים בפלטפורמה</div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><div class="panel-title">עסקים</div></div>
-            <div style="font-size:32px;font-family:var(--font);font-weight:700;margin-bottom:4px" id="stat-brands">0</div>
-            <div style="font-size:11px;color:var(--muted)">רשומים בפלטפורמה</div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><div class="panel-title">Match rate</div></div>
-            <div style="font-size:32px;font-family:var(--font);font-weight:700;margin-bottom:4px">—</div>
-            <div style="font-size:11px;color:var(--muted)">אין נתונים עדיין</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ USERS ══ -->
-      <div class="page" id="page-users">
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <div><div class="page-title">משתמשים</div><div class="page-sub" id="users-count-sub">0 משתמשים רשומים</div></div>
-          <div class="search-wrap" style="margin-right:auto">
-            <span style="font-size:12px;opacity:.5">[ti-search]</span>
-            <input class="search-input" placeholder="חיפוש לפי שם, אימייל..." oninput="filterUsers(this.value)" id="user-search">
-          </div>
-          <select style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:8px 12px;border-radius:10px;font-family:var(--body);font-size:12px;outline:none;cursor:pointer" onchange="filterUsersByRole(this.value)">
-            <option value="all">כל התפקידים</option>
-            <option value="creator">יוצרים</option>
-            <option value="business">עסקים</option>
-          </select>
-          <button onclick="openAddUser()" style="padding:8px 16px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#0099cc);color:#07070f;font-family:var(--font);font-size:12px;font-weight:700;border:none;cursor:pointer;display:flex;align-items:center;gap:6px"><svg style="font-size:14px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> הוסף משתמש</button>
-        </div>
-        <div class="panel" style="padding:0;overflow:hidden">
-          <table class="data-table">
-            <thead><tr>
-              <th>משתמש</th><th>תפקיד</th><th>סטטוס</th><th>הצטרף</th><th>קטגוריות</th><th>פעולות</th>
-            </tr></thead>
-            <tbody id="users-table-body"></tbody>
-          </table>
-        </div>
-        <div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0" id="users-empty" style="display:none">
-          אין משתמשים עדיין. משתמשים יופיעו כאן לאחר ההרשמה.
-        </div>
-      </div>
-
-      <!-- ══ PENDING ══ -->
-      <div class="page" id="page-pending">
-        <div><div class="page-title">ממתינים לאישור</div><div class="page-sub">פרופילים שהוגשו ומחכים לאישורך</div></div>
-        <div class="panel" id="pending-list">
-          <div style="text-align:center;padding:40px;color:var(--muted)">
-            <svg style="font-size:40px;color:var(--green);display:block;margin-bottom:12px" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text)">אין ממתינים לאישור</div>
-            <div style="font-size:12px">כשיירשמו משתמשים חדשים, הם יופיעו כאן</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ COLLABS ══ -->
-      <div class="page" id="page-collabs">
-        <div><div class="page-title">שיתופי פעולה</div><div class="page-sub">כל הבקשות והשיתופים הפעילים בפלטפורמה</div></div>
-        <div class="kpi-row" style="grid-template-columns:repeat(3,1fr)">
-          <div class="kpi kpi-blue"><div class="kpi-label"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> נשלחו</div><div class="kpi-val">0</div></div>
-          <div class="kpi kpi-green"><div class="kpi-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> אושרו</div><div class="kpi-val">0</div></div>
-          <div class="kpi kpi-gold"><div class="kpi-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10a4 4 0 0 0 4 4h4"/><path d="M16 3v10a4 4 0 0 1-4 4H8"/></svg> שווי כולל</div><div class="kpi-val">₪0</div></div>
-        </div>
-        <div class="panel" style="text-align:center;padding:40px;color:var(--muted)">
-          <svg style="font-size:40px;display:block;margin-bottom:12px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V7a2 2 0 0 1 2-2h2l3 3h4l3-3h2a2 2 0 0 1 2 2v4"/><path d="M4 11l4 4 4-4 4 4 4-4"/><path d="M4 15v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          <div style="font-size:13px">אין שיתופי פעולה עדיין.<br>יופיעו כאן כשמשתמשים יתחילו לשתף פעולה.</div>
-        </div>
-      </div>
-
-      <!-- ══ REVENUE ══ -->
-      <div class="page" id="page-revenue">
-        <div><div class="page-title">הכנסות</div><div class="page-sub">מנויים ועמלות עסקאות</div></div>
-        <div class="kpi-row">
-          <div class="kpi kpi-gold"><div class="kpi-label"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg> החודש</div><div class="kpi-val">₪0</div><div class="kpi-change neu">אין נתונים</div></div>
-          <div class="kpi kpi-blue"><div class="kpi-label"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> מנויים פעילים</div><div class="kpi-val">0</div></div>
-          <div class="kpi kpi-green"><div class="kpi-label"><span style="font-size:12px;opacity:.5">[ti-percentage]</span> עמלות</div><div class="kpi-val">₪0</div></div>
-          <div class="kpi kpi-red"><div class="kpi-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> MRR</div><div class="kpi-val">₪0</div></div>
-        </div>
-        <div class="panel" style="text-align:center;padding:48px;color:var(--muted)">
-          <svg style="font-size:48px;display:block;margin-bottom:14px" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          <div style="font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text)">גרף הכנסות יופיע כאן</div>
-          <div style="font-size:12px">לאחר שיתחילו מנויים ועסקאות, תוכל לעקוב אחרי ה-MRR, ARR וגרף הצמיחה.</div>
-        </div>
-      </div>
-
-      <!-- ══ SUBSCRIPTIONS ══ -->
-      <div class="page" id="page-subscriptions">
-        <div><div class="page-title">מנויים</div><div class="page-sub">ניהול תוכניות המחיר</div></div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
-          <div class="panel" style="border-color:rgba(0,207,255,0.25)">
-            <div style="font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Starter</div>
-            <div style="font-family:var(--font);font-size:22px;font-weight:700;margin-bottom:4px">$49<span style="font-size:12px;color:var(--muted);font-weight:400">/mo</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:14px">20 קשרים/חודש</div>
-            <div style="font-size:28px;font-family:var(--font);font-weight:700">0</div>
-            <div style="font-size:11px;color:var(--muted)">מנויים פעילים</div>
-          </div>
-          <div class="panel" style="border-color:rgba(255,215,0,0.3)">
-            <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Pro ★</div>
-            <div style="font-family:var(--font);font-size:22px;font-weight:700;margin-bottom:4px">$149<span style="font-size:12px;color:var(--muted);font-weight:400">/mo</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:14px">ללא הגבלה + AI</div>
-            <div style="font-size:28px;font-family:var(--font);font-weight:700">0</div>
-            <div style="font-size:11px;color:var(--muted)">מנויים פעילים</div>
-          </div>
-          <div class="panel">
-            <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Enterprise</div>
-            <div style="font-family:var(--font);font-size:22px;font-weight:700;margin-bottom:4px">Custom</div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:14px">חשבונות מרובים</div>
-            <div style="font-size:28px;font-family:var(--font);font-weight:700">0</div>
-            <div style="font-size:11px;color:var(--muted)">לקוחות</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ REPORTS ══ -->
-      <div class="page" id="page-reports">
-        <div><div class="page-title">דיווחים</div><div class="page-sub">תוכן מדווח שדורש בדיקה</div></div>
-        <div class="panel" style="text-align:center;padding:40px;color:var(--muted)">
-          <svg style="font-size:40px;color:var(--green);display:block;margin-bottom:12px" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text)">אין דיווחים פעילים</div>
-          <div style="font-size:12px">הפלטפורמה נקייה. דיווחים יופיעו כאן.</div>
-        </div>
-      </div>
-
-      <!-- ══ FEATURED ══ -->
-      <div class="page" id="page-featured">
-        <div><div class="page-title">Featured Creators</div><div class="page-sub">יוצרים מקודמים שמופיעים ראשונים בדיסקברי</div></div>
-        <div class="panel" style="text-align:center;padding:40px;color:var(--muted)">
-          <svg style="font-size:40px;color:var(--gold);display:block;margin-bottom:12px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text)">אין יוצרים מקודמים</div>
-          <div style="font-size:12px">לאחר שיוצרים יירשמו, תוכל לקדם אותם לראש ה-feed.</div>
-        </div>
-      </div>
-
-      <!-- ══ SETTINGS ══ -->
-      <div class="page" id="page-settings">
-        <div><div class="page-title">הגדרות מערכת</div></div>
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title">כללי</div></div>
-          <div class="notif-row"><div><div class="notif-label">שם הפלטפורמה</div></div><input style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:8px;outline:none;font-family:var(--body);font-size:12px;width:180px" value="Collabo"></div>
-          <div class="notif-row"><div><div class="notif-label">עמלת עסקה (%)</div><div class="notif-desc">אחוז שנלקח מכל שיתוף פעולה</div></div><input type="number" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;border-radius:8px;outline:none;font-family:var(--body);font-size:12px;width:80px" value="5"></div>
-          <div class="notif-row"><div><div class="notif-label">אישור ידני לפרופילים חדשים</div><div class="notif-desc">כל פרופיל חדש דורש אישורך לפני שמוצג</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="notif-row"><div><div class="notif-label">מצב תחזוקה</div><div class="notif-desc">הפלטפורמה לא תהיה נגישה למשתמשים</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
-        </div>
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title">אבטחה</div></div>
-          <div class="notif-row">
-            <div><div class="notif-label">סיסמת Admin נוכחית</div></div>
-            <input type="password" class="form-input" id="admin-cur-pass" placeholder="סיסמה נוכחית" style="width:160px">
-          </div>
-          <div class="notif-row">
-            <div><div class="notif-label">סיסמה חדשה</div></div>
-            <input type="password" class="form-input" id="admin-new-pass" placeholder="לפחות 6 תווים" style="width:160px">
-          </div>
-          <div class="notif-row">
-            <div><div class="notif-label">אימות סיסמה חדשה</div></div>
-            <input type="password" class="form-input" id="admin-new-pass2" placeholder="••••••••" style="width:160px">
-          </div>
-          <div id="admin-pass-err" style="font-size:11px;color:var(--red);padding:0 0 8px 17px;display:none"></div>
-          <div style="padding:0 17px 14px">
-            <button onclick="changeAdminPass()" class="form-btn">עדכן סיסמת Admin</button>
-          </div>
-          <div class="notif-row"><div><div class="notif-label">2FA</div><div class="notif-desc">אימות דו-שלבי לכניסה למשרד</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
-        </div>
-        <button onclick="this.textContent='נשמר ✓';this.style.background='var(--green)';setTimeout(()=>{this.textContent='שמור הגדרות';this.style.background='';},2000)" style="padding:11px 28px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#0099cc);color:#07070f;font-family:var(--font);font-size:13px;font-weight:700;border:none;cursor:pointer;transition:all .3s">שמור הגדרות</button>
-      </div>
-
-      <!-- ══ LOGS ══ -->
-      <div class="page" id="page-logs">
-        <div><div class="page-title">System Logs</div><div class="page-sub">פעולות מנהל ואירועי מערכת</div></div>
-        <div class="panel">
-          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:2;background:var(--bg);padding:16px;border-radius:10px;min-height:200px" id="log-output">
-            <span style="color:var(--blue)">[SYSTEM]</span> Admin panel initialized<br>
-            <span style="color:var(--muted)">[INFO]</span> Waiting for user activity...<br>
-          </div>
-        </div>
-      </div>
-
-    </main>
-  </div>
-</div>
-
-<!-- Add User Modal -->
-<div class="modal-bg" id="add-user-modal">
-  <div class="modal-box">
-    <div class="modal-box-title">
-      הוסף משתמש ידנית
-      <span class="modal-close" onclick="closeModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-    </div>
-    <div class="form-field"><div class="form-label">שם מלא</div><input class="form-input" placeholder="שם המשתמש" id="new-name"></div>
-    <div class="form-field"><div class="form-label">אימייל</div><input class="form-input" type="email" placeholder="user@email.com" id="new-email"></div>
-    <div class="form-field"><div class="form-label">תפקיד</div>
-      <select class="form-input" id="new-role" style="cursor:pointer">
-        <option value="creator">יוצר תוכן</option>
-        <option value="business">עסק / מותג</option>
-      </select>
-    </div>
-    <div class="form-field"><div class="form-label">קטגוריה</div><input class="form-input" placeholder="למשל: Beauty, Food" id="new-cat"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
-      <button class="form-btn-ghost" onclick="closeModal()">ביטול</button>
-      <button class="form-btn" onclick="addUser()">הוסף משתמש</button>
-    </div>
-  </div>
-</div>
-
-<script>
-let ADMIN_PASS='admin123';
-/* ── LOCALSTORAGE SYNC ── */
-function loadUsersFromStorage(){
-  try {
-    const stored = JSON.parse(localStorage.getItem('collabo_users') || '[]');
-    stored.forEach(su => {
-      if(!USERS.find(u => u.id === su.id)) USERS.push(su);
-    });
-  } catch(e) {}
-}
-function saveUsersToStorage(){
-  try { localStorage.setItem('collabo_users', JSON.stringify(USERS)); } catch(e) {}
-}
-
-// טעינה מהשרת (עם fallback ל-localStorage)
-function loadFromServer(){
-  fetch('/api/users')
-    .then(r => r.json())
-    .then(data => {
-      if(!Array.isArray(data)) return;
-      let added = 0;
-      data.forEach(u => {
-        if(!USERS.find(x => x.id === u.id)){
-          USERS.push(u); added++;
-        } else {
-          // עדכן status אם השתנה
-          const idx = USERS.findIndex(x => x.id === u.id);
-          if(idx !== -1) USERS[idx] = {...USERS[idx], ...u};
-        }
-      });
-      if(added > 0){
-        renderAll();
-        addActivity(`${added} משתמש${added>1?'ים':''} חדש${added>1?'ים':''} מהשרת`, 'var(--blue)');
-      }
-      const sb=document.getElementById('sync-badge');
-      if(sb){sb.style.display='inline-flex';sb.textContent='● שרת מחובר';}
-    })
-    .catch(() => {
-      // אין שרת — fallback ל-localStorage
-      loadUsersFromStorage();
-      const badge=document.getElementById('sync-badge');
-      if(badge){badge.style.display='inline-flex';badge.textContent='● localStorage';badge.style.background='rgba(245,166,35,0.1)';badge.style.color='#f5a623';badge.style.borderColor='rgba(245,166,35,0.3)';}
-    });
-}
-
-function startAutoSync(){
-  setInterval(() => {
-    const before = USERS.length;
-    fetch('/api/users')
-      .then(r => r.json())
-      .then(data => {
-        if(!Array.isArray(data)) return;
-        let added = 0;
-        data.forEach(u => {
-          if(!USERS.find(x => x.id === u.id)){ USERS.push(u); added++; }
-        });
-        if(added > 0){
-          renderAll();
-          addActivity(`${added} משתמש${added>1?'ים':''} חדש${added>1?'ים':''} נרשמו`, 'var(--blue)');
-          addLog('INFO', `Auto-sync: ${added} new user(s)`);
-        }
-      }).catch(() => {
-        // אין שרת — בדוק localStorage
-        const before2 = USERS.length;
-        loadUsersFromStorage();
-        if(USERS.length !== before2){ renderAll(); }
-      });
-  }, 3000);
-}
-
-let USERS=[
-  {id:1,name:'מאיה לוי',email:'maya@collabo.io',password:'Maya1234',role:'creator',cats:'אוכל, לייפסטייל, UGC',city:'תל אביב',status:'active',joined:'26/05/2025',color:'rgba(0,207,255,0.15)',textColor:'#00cfff'},
-  {id:2,name:'Urban Eats TLV',email:'urban@collabo.io',password:'Urban1234',role:'business',cats:'מסעדה ואוכל',city:'תל אביב',status:'active',joined:'25/05/2025',color:'rgba(255,215,0,0.15)',textColor:'#ffd700'},
-  {id:3,name:'נועם כהן',email:'noam@collabo.io',password:'Noam1234',role:'creator',cats:'כושר, ספורט',city:'הרצליה',status:'active',joined:'24/05/2025',color:'rgba(0,229,160,0.15)',textColor:'#00e5a0'},
-  {id:4,name:'Café Roma',email:'roma@collabo.io',password:'Roma1234',role:'business',cats:'קפה',city:'רמת גן',status:'active',joined:'23/05/2025',color:'rgba(255,77,77,0.15)',textColor:'#ff4d4d'},
-  {id:5,name:'שירה אביב',email:'shira@collabo.io',password:'Shira1234',role:'creator',cats:'אופנה, יופי',city:'תל אביב',status:'active',joined:'22/05/2025',color:'rgba(245,166,35,0.15)',textColor:'#f5a623'},
+const DEMO_USERS = [
+  {
+    "id": 1,
+    "name": "מאיה לוי",
+    "email": "maya@collabo.io",
+    "password": "Maya1234",
+    "role": "creator",
+    "cats": "אוכל, לייפסטייל, UGC",
+    "city": "תל אביב",
+    "status": "active",
+    "joined": "26/05/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff"
+  },
+  {
+    "id": 2,
+    "name": "Urban Eats TLV",
+    "email": "urban@collabo.io",
+    "password": "Urban1234",
+    "role": "business",
+    "cats": "מסעדה ואוכל",
+    "city": "תל אביב",
+    "status": "active",
+    "joined": "25/05/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700"
+  },
+  {
+    "id": 3,
+    "name": "נועם כהן",
+    "email": "noam@collabo.io",
+    "password": "Noam1234",
+    "role": "creator",
+    "cats": "כושר, ספורט",
+    "city": "הרצליה",
+    "status": "active",
+    "joined": "24/05/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0"
+  },
+  {
+    "id": 4,
+    "name": "Café Roma",
+    "email": "roma@collabo.io",
+    "password": "Roma1234",
+    "role": "business",
+    "cats": "קפה",
+    "city": "רמת גן",
+    "status": "active",
+    "joined": "23/05/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d"
+  },
+  {
+    "id": 5,
+    "name": "שירה אביב",
+    "email": "shira@collabo.io",
+    "password": "Shira1234",
+    "role": "creator",
+    "cats": "אופנה, יופי",
+    "city": "תל אביב",
+    "status": "active",
+    "joined": "22/05/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623"
+  },
+  {
+    "id": 10,
+    "name": "נועה כהן",
+    "email": "נועהכהן@collabo.io",
+    "password": "נועה1234",
+    "role": "creator",
+    "cats": "אוכל, בישול, מתכונים",
+    "city": "תל אביב",
+    "handle": "@noakitchen",
+    "followers": "84K",
+    "engagement": "6.2%",
+    "price": "₪800-3,500",
+    "bio": "שפית אוכל ביתי 🍳",
+    "status": "active",
+    "joined": "27/005/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "📸",
+    "verified": true
+  },
+  {
+    "id": 11,
+    "name": "יואב לוי",
+    "email": "יואבלוי@collabo.io",
+    "password": "יואב1234",
+    "role": "creator",
+    "cats": "אוכל, מסעדות",
+    "city": "תל אביב",
+    "handle": "@yoavfood",
+    "followers": "120K",
+    "engagement": "5.8%",
+    "price": "₪1,200-5,000",
+    "bio": "מבקר מסעדות ✨",
+    "status": "active",
+    "joined": "19/001/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🎬",
+    "verified": true
+  },
+  {
+    "id": 12,
+    "name": "מיכל דוד",
+    "email": "מיכלדוד@collabo.io",
+    "password": "מיכל1234",
+    "role": "creator",
+    "cats": "אוכל, טבעוני",
+    "city": "תל אביב",
+    "handle": "@michalvegan",
+    "followers": "67K",
+    "engagement": "7.1%",
+    "price": "₪700-2,800",
+    "bio": "חיים טבעוניים 🌱",
+    "status": "active",
+    "joined": "08/005/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "✨",
+    "verified": true
+  },
+  {
+    "id": 13,
+    "name": "אורי ברק",
+    "email": "אוריברק@collabo.io",
+    "password": "אורי1234",
+    "role": "creator",
+    "cats": "אוכל, גריל",
+    "city": "ראשון לציון",
+    "handle": "@uribbq",
+    "followers": "95K",
+    "engagement": "5.4%",
+    "price": "₪900-3,800",
+    "bio": "מלך הגריל 🔥",
+    "status": "active",
+    "joined": "26/004/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🌟",
+    "verified": true
+  },
+  {
+    "id": 14,
+    "name": "שני אברהם",
+    "email": "שניאברהם@collabo.io",
+    "password": "שני1234",
+    "role": "creator",
+    "cats": "אוכל, אפייה",
+    "city": "חיפה",
+    "handle": "@shanibakes",
+    "followers": "52K",
+    "engagement": "8.3%",
+    "price": "₪600-2,200",
+    "bio": "אופה חובבת 🎂",
+    "status": "active",
+    "joined": "13/005/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "💫",
+    "verified": false
+  },
+  {
+    "id": 15,
+    "name": "דניאל מזרחי",
+    "email": "דניאלמזרחי@collabo.io",
+    "password": "דניאל1234",
+    "role": "creator",
+    "cats": "לייפסטייל, נסיעות",
+    "city": "תל אביב",
+    "handle": "@daniellife",
+    "followers": "210K",
+    "engagement": "4.9%",
+    "price": "₪2,000-8,000",
+    "bio": "חיים יפים 📸",
+    "status": "active",
+    "joined": "07/003/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🎨",
+    "verified": true
+  },
+  {
+    "id": 16,
+    "name": "רוני שפירא",
+    "email": "רונישפירא@collabo.io",
+    "password": "רוני1234",
+    "role": "creator",
+    "cats": "לייפסטייל, בית",
+    "city": "הרצליה",
+    "handle": "@ronishapira",
+    "followers": "78K",
+    "engagement": "6.7%",
+    "price": "₪800-3,200",
+    "bio": "עיצוב בית 🏠",
+    "status": "active",
+    "joined": "05/001/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🎵",
+    "verified": true
+  },
+  {
+    "id": 17,
+    "name": "גלית עוז",
+    "email": "גליתעוז@collabo.io",
+    "password": "גלית1234",
+    "role": "creator",
+    "cats": "לייפסטייל, אמהות",
+    "city": "רמת גן",
+    "handle": "@galitoz",
+    "followers": "143K",
+    "engagement": "5.2%",
+    "price": "₪1,400-5,500",
+    "bio": "אמא, אישה, יזמית 💪",
+    "status": "active",
+    "joined": "03/002/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🏃",
+    "verified": true
+  },
+  {
+    "id": 18,
+    "name": "עמית כץ",
+    "email": "עמיתכץ@collabo.io",
+    "password": "עמית1234",
+    "role": "creator",
+    "cats": "לייפסטייל, גברים",
+    "city": "תל אביב",
+    "handle": "@amitlife",
+    "followers": "89K",
+    "engagement": "5.9%",
+    "price": "₪900-3,600",
+    "bio": "לייפסטייל גברי 🕶️",
+    "status": "active",
+    "joined": "27/004/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🧘",
+    "verified": true
+  },
+  {
+    "id": 19,
+    "name": "יעל גרין",
+    "email": "יעלגרין@collabo.io",
+    "password": "יעל1234",
+    "role": "creator",
+    "cats": "לייפסטייל, קיימות",
+    "city": "תל אביב",
+    "handle": "@yaelgreen",
+    "followers": "61K",
+    "engagement": "7.4%",
+    "price": "₪700-2,600",
+    "bio": "חיים ירוקים 🌿",
+    "status": "active",
+    "joined": "10/005/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🌿",
+    "verified": true
+  },
+  {
+    "id": 20,
+    "name": "שירה בן דוד",
+    "email": "שירהבןדוד@collabo.io",
+    "password": "שירה1234",
+    "role": "creator",
+    "cats": "אופנה, סטייל",
+    "city": "תל אביב",
+    "handle": "@shirafashion",
+    "followers": "185K",
+    "engagement": "5.1%",
+    "price": "₪1,800-7,000",
+    "bio": "סטייל ישראלי 👗",
+    "status": "active",
+    "joined": "25/001/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "💄",
+    "verified": false
+  },
+  {
+    "id": 21,
+    "name": "רז אלון",
+    "email": "רזאלון@collabo.io",
+    "password": "רז1234",
+    "role": "creator",
+    "cats": "אופנה, גברים",
+    "city": "תל אביב",
+    "handle": "@razstyle",
+    "followers": "97K",
+    "engagement": "5.6%",
+    "price": "₪1,000-4,200",
+    "bio": "אופנת גברים 🎩",
+    "status": "active",
+    "joined": "24/002/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "👗",
+    "verified": true
+  },
+  {
+    "id": 22,
+    "name": "נטע רוזן",
+    "email": "נטערוזן@collabo.io",
+    "password": "נטע1234",
+    "role": "creator",
+    "cats": "אופנה, יוקרה",
+    "city": "הרצליה",
+    "handle": "@netafashion",
+    "followers": "230K",
+    "engagement": "4.7%",
+    "price": "₪2,500-9,000",
+    "bio": "לוקסוס נגיש 💎",
+    "status": "active",
+    "joined": "26/005/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🍕",
+    "verified": true
+  },
+  {
+    "id": 23,
+    "name": "אלה שמש",
+    "email": "אלהשמש@collabo.io",
+    "password": "אלה1234",
+    "role": "creator",
+    "cats": "אופנה, טרנדים",
+    "city": "תל אביב",
+    "handle": "@ellastyle",
+    "followers": "74K",
+    "engagement": "6.8%",
+    "price": "₪800-3,000",
+    "bio": "טרנדים עכשיו 🔥",
+    "status": "active",
+    "joined": "01/001/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "☕",
+    "verified": true
+  },
+  {
+    "id": 24,
+    "name": "תומר נגל",
+    "email": "תומרנגל@collabo.io",
+    "password": "תומר1234",
+    "role": "creator",
+    "cats": "אופנה, נעליים",
+    "city": "תל אביב",
+    "handle": "@tomernagel",
+    "followers": "112K",
+    "engagement": "5.5%",
+    "price": "₪1,100-4,500",
+    "bio": "סניקרס 👟",
+    "status": "active",
+    "joined": "02/005/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "✈️",
+    "verified": true
+  },
+  {
+    "id": 25,
+    "name": "רם שלום",
+    "email": "רםשלום@collabo.io",
+    "password": "רם1234",
+    "role": "creator",
+    "cats": "כושר, תזונה",
+    "city": "תל אביב",
+    "handle": "@ramfitness",
+    "followers": "156K",
+    "engagement": "6.3%",
+    "price": "₪1,500-6,000",
+    "bio": "מאמן כושר 💪",
+    "status": "active",
+    "joined": "08/002/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "💪",
+    "verified": false
+  },
+  {
+    "id": 26,
+    "name": "לירון כהן",
+    "email": "לירוןכהן@collabo.io",
+    "password": "לירון1234",
+    "role": "creator",
+    "cats": "כושר, יוגה",
+    "city": "תל אביב",
+    "handle": "@lironyoga",
+    "followers": "88K",
+    "engagement": "7.2%",
+    "price": "₪900-3,500",
+    "bio": "יוגה כדרך חיים 🧘",
+    "status": "active",
+    "joined": "21/001/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🎮",
+    "verified": true
+  },
+  {
+    "id": 27,
+    "name": "אבי גל",
+    "email": "אביגל@collabo.io",
+    "password": "אבי1234",
+    "role": "creator",
+    "cats": "כושר, ריצה",
+    "city": "ירושלים",
+    "handle": "@avigal_sport",
+    "followers": "64K",
+    "engagement": "6.9%",
+    "price": "₪700-2,800",
+    "bio": "רץ מרתון 🏃",
+    "status": "active",
+    "joined": "15/004/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "📚",
+    "verified": false
+  },
+  {
+    "id": 28,
+    "name": "נדב ברון",
+    "email": "נדבברון@collabo.io",
+    "password": "נדב1234",
+    "role": "creator",
+    "cats": "כושר, קרוספיט",
+    "city": "תל אביב",
+    "handle": "@nadavfit",
+    "followers": "103K",
+    "engagement": "5.8%",
+    "price": "₪1,000-4,200",
+    "bio": "קרוספיט 🏋️",
+    "status": "active",
+    "joined": "01/002/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🔬",
+    "verified": true
+  },
+  {
+    "id": 29,
+    "name": "מור לוי",
+    "email": "מורלוי@collabo.io",
+    "password": "מור1234",
+    "role": "creator",
+    "cats": "כושר, בריאות",
+    "city": "נתניה",
+    "handle": "@morfitlife",
+    "followers": "71K",
+    "engagement": "7.5%",
+    "price": "₪750-2,900",
+    "bio": "בריאות = השקעה 🌟",
+    "status": "active",
+    "joined": "06/004/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🚀",
+    "verified": true
+  },
+  {
+    "id": 30,
+    "name": "איתי מור",
+    "email": "איתימור@collabo.io",
+    "password": "איתי1234",
+    "role": "creator",
+    "cats": "טיולים, הרפתקאות",
+    "city": "תל אביב",
+    "handle": "@itaytravel",
+    "followers": "198K",
+    "engagement": "5.3%",
+    "price": "₪2,000-8,500",
+    "bio": "60 מדינות ✈️",
+    "status": "active",
+    "joined": "12/004/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "📸",
+    "verified": false
+  },
+  {
+    "id": 31,
+    "name": "מיה פרץ",
+    "email": "מיהפרץ@collabo.io",
+    "password": "מיה1234",
+    "role": "creator",
+    "cats": "טיולים, אסיה",
+    "city": "תל אביב",
+    "handle": "@miyaexplores",
+    "followers": "134K",
+    "engagement": "5.7%",
+    "price": "₪1,300-5,500",
+    "bio": "מגלה עולם 🗺️",
+    "status": "active",
+    "joined": "02/002/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🎬",
+    "verified": true
+  },
+  {
+    "id": 32,
+    "name": "גיל אדר",
+    "email": "גילאדר@collabo.io",
+    "password": "גיל1234",
+    "role": "creator",
+    "cats": "טיולים, טבע",
+    "city": "חיפה",
+    "handle": "@giladventure",
+    "followers": "76K",
+    "engagement": "6.4%",
+    "price": "₪800-3,200",
+    "bio": "טבע ושקט ⛺",
+    "status": "active",
+    "joined": "06/004/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "✨",
+    "verified": true
+  },
+  {
+    "id": 33,
+    "name": "טל שגיא",
+    "email": "טלשגיא@collabo.io",
+    "password": "טל1234",
+    "role": "creator",
+    "cats": "טיולים, תקציב",
+    "city": "באר שבע",
+    "handle": "@taltrip",
+    "followers": "58K",
+    "engagement": "7.8%",
+    "price": "₪600-2,400",
+    "bio": "לטייל בזול 💰",
+    "status": "active",
+    "joined": "23/005/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🌟",
+    "verified": true
+  },
+  {
+    "id": 34,
+    "name": "אנה סמית",
+    "email": "אנהסמית@collabo.io",
+    "password": "אנה1234",
+    "role": "creator",
+    "cats": "יופי, מייקאפ",
+    "city": "תל אביב",
+    "handle": "@anabeauty",
+    "followers": "167K",
+    "engagement": "5.5%",
+    "price": "₪1,600-6,500",
+    "bio": "מייקאפ ארטיסט 💄",
+    "status": "active",
+    "joined": "01/005/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "💫",
+    "verified": true
+  },
+  {
+    "id": 35,
+    "name": "הדר לוי",
+    "email": "הדרלוי@collabo.io",
+    "password": "הדר1234",
+    "role": "creator",
+    "cats": "יופי, עור",
+    "city": "תל אביב",
+    "handle": "@hadarskinn",
+    "followers": "92K",
+    "engagement": "6.1%",
+    "price": "₪950-3,800",
+    "bio": "טיפוח עור 🧴",
+    "status": "active",
+    "joined": "16/001/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🎨",
+    "verified": false
+  },
+  {
+    "id": 36,
+    "name": "ספיר גולן",
+    "email": "ספירגולן@collabo.io",
+    "password": "ספיר1234",
+    "role": "creator",
+    "cats": "יופי, ציפורניים",
+    "city": "רמת גן",
+    "handle": "@sapirnails",
+    "followers": "83K",
+    "engagement": "7.6%",
+    "price": "₪850-3,200",
+    "bio": "ציפורניים כאמנות 💅",
+    "status": "active",
+    "joined": "09/001/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🎵",
+    "verified": true
+  },
+  {
+    "id": 37,
+    "name": "אלינה בר",
+    "email": "אלינהבר@collabo.io",
+    "password": "אלינה1234",
+    "role": "creator",
+    "cats": "יופי, שיער",
+    "city": "תל אביב",
+    "handle": "@alinahair",
+    "followers": "119K",
+    "engagement": "5.9%",
+    "price": "₪1,200-4,800",
+    "bio": "שיער מושלם 💇",
+    "status": "active",
+    "joined": "02/001/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🏃",
+    "verified": false
+  },
+  {
+    "id": 38,
+    "name": "רחל מוסרי",
+    "email": "רחלמוסרי@collabo.io",
+    "password": "רחל1234",
+    "role": "creator",
+    "cats": "יופי, טבעי",
+    "city": "ירושלים",
+    "handle": "@rachelbeauty",
+    "followers": "55K",
+    "engagement": "8.1%",
+    "price": "₪600-2,300",
+    "bio": "יופי טבעי 🌸",
+    "status": "active",
+    "joined": "15/005/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🧘",
+    "verified": false
+  },
+  {
+    "id": 39,
+    "name": "אלון ביטון",
+    "email": "אלוןביטון@collabo.io",
+    "password": "אלון1234",
+    "role": "creator",
+    "cats": "טכנולוגיה, AI",
+    "city": "תל אביב",
+    "handle": "@alontech",
+    "followers": "145K",
+    "engagement": "5.2%",
+    "price": "₪1,400-5,800",
+    "bio": "טכנולוגיה לכולם 📱",
+    "status": "active",
+    "joined": "15/004/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🌿",
+    "verified": true
+  },
+  {
+    "id": 40,
+    "name": "יונתן סגל",
+    "email": "יונתןסגל@collabo.io",
+    "password": "יונתן1234",
+    "role": "creator",
+    "cats": "טכנולוגיה, סייבר",
+    "city": "תל אביב",
+    "handle": "@yonisegal",
+    "followers": "87K",
+    "engagement": "5.7%",
+    "price": "₪900-3,600",
+    "bio": "אבטחת מידע 🔒",
+    "status": "active",
+    "joined": "09/003/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "💄",
+    "verified": true
+  },
+  {
+    "id": 41,
+    "name": "רות שרון",
+    "email": "רותשרון@collabo.io",
+    "password": "רות1234",
+    "role": "creator",
+    "cats": "טכנולוגיה, קריירה",
+    "city": "תל אביב",
+    "handle": "@ruthtech",
+    "followers": "73K",
+    "engagement": "6.5%",
+    "price": "₪750-3,000",
+    "bio": "הייטק וקריירה 💻",
+    "status": "active",
+    "joined": "15/003/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "👗",
+    "verified": true
+  },
+  {
+    "id": 42,
+    "name": "בן אורן",
+    "email": "בןאורן@collabo.io",
+    "password": "בן1234",
+    "role": "creator",
+    "cats": "UGC, מוצרים",
+    "city": "תל אביב",
+    "handle": "@benugc",
+    "followers": "38K",
+    "engagement": "9.2%",
+    "price": "₪400-1,800",
+    "bio": "UGC creator 📦",
+    "status": "active",
+    "joined": "17/002/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🍕",
+    "verified": true
+  },
+  {
+    "id": 43,
+    "name": "מאיה זיו",
+    "email": "מאיהזיו@collabo.io",
+    "password": "מאיה1234",
+    "role": "creator",
+    "cats": "UGC, בית",
+    "city": "פתח תקווה",
+    "handle": "@mayaugc",
+    "followers": "29K",
+    "engagement": "10.1%",
+    "price": "₪350-1,500",
+    "bio": "UGC מהבית 🏠",
+    "status": "active",
+    "joined": "24/003/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "☕",
+    "verified": true
+  },
+  {
+    "id": 44,
+    "name": "ליאור גל",
+    "email": "ליאורגל@collabo.io",
+    "password": "ליאור1234",
+    "role": "creator",
+    "cats": "UGC, מזון",
+    "city": "חיפה",
+    "handle": "@liaorugc",
+    "followers": "34K",
+    "engagement": "9.8%",
+    "price": "₪380-1,600",
+    "bio": "UGC מזון 🍕",
+    "status": "active",
+    "joined": "01/002/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "✈️",
+    "verified": false
+  },
+  {
+    "id": 45,
+    "name": "אריאל כץ",
+    "email": "אריאלכץ@collabo.io",
+    "password": "אריאל1234",
+    "role": "creator",
+    "cats": "פיננסים, השקעות",
+    "city": "תל אביב",
+    "handle": "@arielfinance",
+    "followers": "178K",
+    "engagement": "5.4%",
+    "price": "₪1,700-7,000",
+    "bio": "כסף זה לא טאבו 💸",
+    "status": "active",
+    "joined": "25/004/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "💪",
+    "verified": true
+  },
+  {
+    "id": 46,
+    "name": "נועם זוהר",
+    "email": "נועםזוהר@collabo.io",
+    "password": "נועם1234",
+    "role": "creator",
+    "cats": "פיננסים, נדלן",
+    "city": "הרצליה",
+    "handle": "@noamzohar",
+    "followers": "124K",
+    "engagement": "5.1%",
+    "price": "₪1,200-5,000",
+    "bio": "בונה עושר 🏦",
+    "status": "active",
+    "joined": "24/003/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🎮",
+    "verified": false
+  },
+  {
+    "id": 47,
+    "name": "ליאב שחר",
+    "email": "ליאבשחר@collabo.io",
+    "password": "ליאב1234",
+    "role": "creator",
+    "cats": "וידאו, קולנוע",
+    "city": "תל אביב",
+    "handle": "@liavfilm",
+    "followers": "93K",
+    "engagement": "6.3%",
+    "price": "₪950-4,000",
+    "bio": "מספר סיפורים 🎬",
+    "status": "active",
+    "joined": "03/001/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "📚",
+    "verified": true
+  },
+  {
+    "id": 48,
+    "name": "הילה אמדי",
+    "email": "הילהאמדי@collabo.io",
+    "password": "הילה1234",
+    "role": "creator",
+    "cats": "וידאו, ריילס",
+    "city": "תל אביב",
+    "handle": "@hilafilm",
+    "followers": "158K",
+    "engagement": "5.6%",
+    "price": "₪1,500-6,200",
+    "bio": "ריילס שאנשים שומרים 🎥",
+    "status": "active",
+    "joined": "26/004/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🔬",
+    "verified": true
+  },
+  {
+    "id": 49,
+    "name": "טלי כהן",
+    "email": "טליכהן@collabo.io",
+    "password": "טלי1234",
+    "role": "creator",
+    "cats": "חיות מחמד, כלבים",
+    "city": "תל אביב",
+    "handle": "@talidogs",
+    "followers": "112K",
+    "engagement": "7.8%",
+    "price": "₪1,100-4,300",
+    "bio": "3 כלבים מדהימים 🐕",
+    "status": "active",
+    "joined": "12/005/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🚀",
+    "verified": false
+  },
+  {
+    "id": 50,
+    "name": "רועי עמר",
+    "email": "רועיעמר@collabo.io",
+    "password": "רועי1234",
+    "role": "creator",
+    "cats": "חיות מחמד, חתולים",
+    "city": "ירושלים",
+    "handle": "@royicats",
+    "followers": "78K",
+    "engagement": "8.4%",
+    "price": "₪800-3,100",
+    "bio": "חתולים הם החיים 🐱",
+    "status": "active",
+    "joined": "02/002/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "📸",
+    "verified": true
+  },
+  {
+    "id": 51,
+    "name": "עדן הרוש",
+    "email": "עדןהרוש@collabo.io",
+    "password": "עדן1234",
+    "role": "creator",
+    "cats": "ספורט, כדורגל",
+    "city": "תל אביב",
+    "handle": "@edengoal",
+    "followers": "203K",
+    "engagement": "4.8%",
+    "price": "₪2,000-8,000",
+    "bio": "כדורגל זו לא משחק ⚽",
+    "status": "active",
+    "joined": "19/003/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🎬",
+    "verified": true
+  },
+  {
+    "id": 52,
+    "name": "שחר ביטון",
+    "email": "שחרביטון@collabo.io",
+    "password": "שחר1234",
+    "role": "creator",
+    "cats": "ספורט, גלישה",
+    "city": "תל אביב",
+    "handle": "@shaharsurf",
+    "followers": "87K",
+    "engagement": "6.6%",
+    "price": "₪900-3,500",
+    "bio": "חיים על הגלים 🏄",
+    "status": "active",
+    "joined": "14/002/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "✨",
+    "verified": false
+  },
+  {
+    "id": 53,
+    "name": "נועא קירל",
+    "email": "נועאקירל@collabo.io",
+    "password": "נועא1234",
+    "role": "creator",
+    "cats": "מוזיקה, שירה",
+    "city": "תל אביב",
+    "handle": "@noamusic",
+    "followers": "312K",
+    "engagement": "4.5%",
+    "price": "₪3,500-12,000",
+    "bio": "מוזיקה היא הנשמה 🎵",
+    "status": "active",
+    "joined": "21/005/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🌟",
+    "verified": true
+  },
+  {
+    "id": 54,
+    "name": "אסף אוחיון",
+    "email": "אסףאוחיון@collabo.io",
+    "password": "אסף1234",
+    "role": "creator",
+    "cats": "מוזיקה, DJ",
+    "city": "תל אביב",
+    "handle": "@asafbeats",
+    "followers": "134K",
+    "engagement": "5.3%",
+    "price": "₪1,300-5,500",
+    "bio": "מפיק ו-DJ 🎧",
+    "status": "active",
+    "joined": "05/005/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "💫",
+    "verified": false
+  },
+  {
+    "id": 55,
+    "name": "דינה אזולאי",
+    "email": "דינהאזולאי@collabo.io",
+    "password": "דינה1234",
+    "role": "creator",
+    "cats": "בריאות, תזונה",
+    "city": "תל אביב",
+    "handle": "@dinahealth",
+    "followers": "96K",
+    "engagement": "6.7%",
+    "price": "₪1,000-4,000",
+    "bio": "דיאטנית קלינית 🥗",
+    "status": "active",
+    "joined": "16/001/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🎨",
+    "verified": true
+  },
+  {
+    "id": 56,
+    "name": "יורם בן נון",
+    "email": "יורםבןנון@collabo.io",
+    "password": "יורם1234",
+    "role": "creator",
+    "cats": "בריאות, מדיטציה",
+    "city": "תל אביב",
+    "handle": "@yoramwellness",
+    "followers": "67K",
+    "engagement": "7.3%",
+    "price": "₪700-2,800",
+    "bio": "בריאות הנפש 🧠",
+    "status": "active",
+    "joined": "04/004/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🎵",
+    "verified": true
+  },
+  {
+    "id": 57,
+    "name": "ורד שמחון",
+    "email": "ורדשמחון@collabo.io",
+    "password": "ורד1234",
+    "role": "creator",
+    "cats": "הורות, ילדים",
+    "city": "רעננה",
+    "handle": "@veredmom",
+    "followers": "145K",
+    "engagement": "5.9%",
+    "price": "₪1,400-5,600",
+    "bio": "אמא ל4 ✨",
+    "status": "active",
+    "joined": "15/002/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🏃",
+    "verified": true
+  },
+  {
+    "id": 58,
+    "name": "עמרי גבע",
+    "email": "עמריגבע@collabo.io",
+    "password": "עמרי1234",
+    "role": "creator",
+    "cats": "הורות, אבות",
+    "city": "כפר סבא",
+    "handle": "@omridad",
+    "followers": "82K",
+    "engagement": "6.8%",
+    "price": "₪850-3,300",
+    "bio": "אבא מודרני 👨‍👧",
+    "status": "active",
+    "joined": "06/001/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🧘",
+    "verified": true
+  },
+  {
+    "id": 59,
+    "name": "מאיה ארט",
+    "email": "מאיהארט@collabo.io",
+    "password": "מאיה1234",
+    "role": "creator",
+    "cats": "אמנות, ציור",
+    "city": "תל אביב",
+    "handle": "@mayaart",
+    "followers": "74K",
+    "engagement": "7.9%",
+    "price": "₪800-3,200",
+    "bio": "צייר ואמן 🎨",
+    "status": "active",
+    "joined": "10/001/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🌿",
+    "verified": true
+  },
+  {
+    "id": 60,
+    "name": "בן גרפיק",
+    "email": "בןגרפיק@collabo.io",
+    "password": "בן1234",
+    "role": "creator",
+    "cats": "אמנות, גרפיקה",
+    "city": "תל אביב",
+    "handle": "@bengraphic",
+    "followers": "59K",
+    "engagement": "8.6%",
+    "price": "₪650-2,600",
+    "bio": "עיצוב שמספר סיפור 🖌️",
+    "status": "active",
+    "joined": "11/003/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "💄",
+    "verified": true
+  },
+  {
+    "id": 61,
+    "name": "ניר הומור",
+    "email": "נירהומור@collabo.io",
+    "password": "ניר1234",
+    "role": "creator",
+    "cats": "קומדי, סטנדאפ",
+    "city": "תל אביב",
+    "handle": "@nirhumor",
+    "followers": "267K",
+    "engagement": "4.6%",
+    "price": "₪2,800-10,000",
+    "bio": "גורם לאנשים לצחוק 😂",
+    "status": "active",
+    "joined": "09/003/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "👗",
+    "verified": false
+  },
+  {
+    "id": 62,
+    "name": "יובל קומי",
+    "email": "יובלקומי@collabo.io",
+    "password": "יובל1234",
+    "role": "creator",
+    "cats": "קומדי, פרודיה",
+    "city": "תל אביב",
+    "handle": "@yuvalcomedy",
+    "followers": "189K",
+    "engagement": "5.1%",
+    "price": "₪1,900-7,500",
+    "bio": "פרודיות ויראליות 🤣",
+    "status": "active",
+    "joined": "14/003/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🍕",
+    "verified": false
+  },
+  {
+    "id": 63,
+    "name": "שיר ישראל",
+    "email": "שירישראל@collabo.io",
+    "password": "שיר1234",
+    "role": "creator",
+    "cats": "טיולים, ישראל",
+    "city": "ירושלים",
+    "handle": "@shirtravel_il",
+    "followers": "91K",
+    "engagement": "6.5%",
+    "price": "₪950-3,800",
+    "bio": "ישראל יפה 🇮🇱",
+    "status": "active",
+    "joined": "11/001/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "☕",
+    "verified": true
+  },
+  {
+    "id": 64,
+    "name": "לילי דיזיין",
+    "email": "לילידיזיין@collabo.io",
+    "password": "לילי1234",
+    "role": "creator",
+    "cats": "עיצוב פנים, ריהוט",
+    "city": "תל אביב",
+    "handle": "@lilydesign",
+    "followers": "138K",
+    "engagement": "5.8%",
+    "price": "₪1,350-5,400",
+    "bio": "הבית הוא הביטוי שלך 🏡",
+    "status": "active",
+    "joined": "04/005/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "✈️",
+    "verified": false
+  },
+  {
+    "id": 65,
+    "name": "גולן עיצוב",
+    "email": "גולןעיצוב@collabo.io",
+    "password": "גולן1234",
+    "role": "creator",
+    "cats": "עיצוב, ארכיטקטורה",
+    "city": "הרצליה",
+    "handle": "@golandesign",
+    "followers": "86K",
+    "engagement": "6.2%",
+    "price": "₪900-3,600",
+    "bio": "פחות זה יותר 🏛️",
+    "status": "active",
+    "joined": "15/003/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "💪",
+    "verified": false
+  },
+  {
+    "id": 66,
+    "name": "ירון קפה",
+    "email": "ירוןקפה@collabo.io",
+    "password": "ירון1234",
+    "role": "creator",
+    "cats": "קפה, בריסטה",
+    "city": "תל אביב",
+    "handle": "@yaroncoffee",
+    "followers": "72K",
+    "engagement": "7.4%",
+    "price": "₪750-3,000",
+    "bio": "קפה כאמנות ☕",
+    "status": "active",
+    "joined": "01/001/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🎮",
+    "verified": true
+  },
+  {
+    "id": 67,
+    "name": "עדי גורמה",
+    "email": "עדיגורמה@collabo.io",
+    "password": "עדי1234",
+    "role": "creator",
+    "cats": "אוכל, גורמה",
+    "city": "תל אביב",
+    "handle": "@adigourmet",
+    "followers": "104K",
+    "engagement": "5.9%",
+    "price": "₪1,050-4,200",
+    "bio": "גסטרונומיה ישראלית 🍽️",
+    "status": "active",
+    "joined": "21/004/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "📚",
+    "verified": true
+  },
+  {
+    "id": 68,
+    "name": "מיטל ספרים",
+    "email": "מיטלספרים@collabo.io",
+    "password": "מיטל1234",
+    "role": "creator",
+    "cats": "ספרים, תרבות",
+    "city": "ירושלים",
+    "handle": "@mitalbooks",
+    "followers": "63K",
+    "engagement": "8.7%",
+    "price": "₪650-2,600",
+    "bio": "ספר ביום 📚",
+    "status": "active",
+    "joined": "17/005/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🔬",
+    "verified": false
+  },
+  {
+    "id": 69,
+    "name": "יניב גיימר",
+    "email": "יניבגיימר@collabo.io",
+    "password": "יניב1234",
+    "role": "creator",
+    "cats": "גיימינג, ספורט אלקטרוני",
+    "city": "תל אביב",
+    "handle": "@yanivgamer",
+    "followers": "178K",
+    "engagement": "5.3%",
+    "price": "₪1,700-6,800",
+    "bio": "גיימר מקצועי 🎮",
+    "status": "active",
+    "joined": "21/005/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🚀",
+    "verified": false
+  },
+  {
+    "id": 70,
+    "name": "דר עדי",
+    "email": "דרעדי@collabo.io",
+    "password": "דר1234",
+    "role": "creator",
+    "cats": "חינוך, פסיכולוגיה",
+    "city": "תל אביב",
+    "handle": "@dradi_edu",
+    "followers": "124K",
+    "engagement": "5.6%",
+    "price": "₪1,200-5,000",
+    "bio": "פסיכולוג ומחנך 🧑‍🏫",
+    "status": "active",
+    "joined": "08/003/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "📸",
+    "verified": false
+  },
+  {
+    "id": 71,
+    "name": "תמר עשה זאת",
+    "email": "תמרעשהזאת@collabo.io",
+    "password": "תמר1234",
+    "role": "creator",
+    "cats": "DIY, יצירה",
+    "city": "נתניה",
+    "handle": "@tamardiy",
+    "followers": "79K",
+    "engagement": "7.1%",
+    "price": "₪820-3,300",
+    "bio": "עשה זאת בעצמך 🔨",
+    "status": "active",
+    "joined": "19/005/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🎬",
+    "verified": false
+  },
+  {
+    "id": 72,
+    "name": "ניצן חתונות",
+    "email": "ניצןחתונות@collabo.io",
+    "password": "ניצן1234",
+    "role": "creator",
+    "cats": "חתונות, אירועים",
+    "city": "תל אביב",
+    "handle": "@nitzanwedding",
+    "followers": "168K",
+    "engagement": "5.4%",
+    "price": "₪1,600-6,500",
+    "bio": "היום הכי יפה 💒",
+    "status": "active",
+    "joined": "11/001/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "✨",
+    "verified": false
+  },
+  {
+    "id": 73,
+    "name": "אלכס לוקסוס",
+    "email": "אלכסלוקסוס@collabo.io",
+    "password": "אלכס1234",
+    "role": "creator",
+    "cats": "יוקרה, מלונות",
+    "city": "הרצליה",
+    "handle": "@alexluxury",
+    "followers": "221K",
+    "engagement": "4.9%",
+    "price": "₪2,300-9,000",
+    "bio": "חיים ברמה גבוהה ✈️",
+    "status": "active",
+    "joined": "17/001/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🌟",
+    "verified": false
+  },
+  {
+    "id": 74,
+    "name": "אור אקסטרים",
+    "email": "אוראקסטרים@collabo.io",
+    "password": "אור1234",
+    "role": "creator",
+    "cats": "ספורט אתגרי, טיפוס",
+    "city": "חיפה",
+    "handle": "@oradventure",
+    "followers": "93K",
+    "engagement": "6.7%",
+    "price": "₪950-3,800",
+    "bio": "גבולות לשבור 🧗",
+    "status": "active",
+    "joined": "21/002/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "💫",
+    "verified": true
+  },
+  {
+    "id": 75,
+    "name": "טכנו ביתי",
+    "email": "טכנוביתי@collabo.io",
+    "password": "טכנו1234",
+    "role": "creator",
+    "cats": "טכנולוגיה, בית חכם",
+    "city": "תל אביב",
+    "handle": "@techno_home",
+    "followers": "84K",
+    "engagement": "6.1%",
+    "price": "₪860-3,400",
+    "bio": "הבית החכם 🏠",
+    "status": "active",
+    "joined": "17/004/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🎨",
+    "verified": false
+  },
+  {
+    "id": 76,
+    "name": "דר מדע",
+    "email": "דרמדע@collabo.io",
+    "password": "דר1234",
+    "role": "creator",
+    "cats": "מדע, חינוך",
+    "city": "ירושלים",
+    "handle": "@drscience_il",
+    "followers": "156K",
+    "engagement": "5.7%",
+    "price": "₪1,500-6,000",
+    "bio": "מדע לכולם 🔬",
+    "status": "active",
+    "joined": "05/003/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🎵",
+    "verified": false
+  },
+  {
+    "id": 77,
+    "name": "רן מכוניות",
+    "email": "רןמכוניות@collabo.io",
+    "password": "רן1234",
+    "role": "creator",
+    "cats": "רכב, מירוצים",
+    "city": "תל אביב",
+    "handle": "@rancars",
+    "followers": "147K",
+    "engagement": "5.4%",
+    "price": "₪1,400-5,800",
+    "bio": "אוהב מכוניות 🚗",
+    "status": "active",
+    "joined": "22/002/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🏃",
+    "verified": false
+  },
+  {
+    "id": 78,
+    "name": "עמית פודקאסט",
+    "email": "עמיתפודקאסט@collabo.io",
+    "password": "עמית1234",
+    "role": "creator",
+    "cats": "פודקאסט, עסקים",
+    "city": "תל אביב",
+    "handle": "@amitpodcast",
+    "followers": "98K",
+    "engagement": "6.4%",
+    "price": "₪1,000-4,100",
+    "bio": "שיחות שמשנות 🎙️",
+    "status": "active",
+    "joined": "24/001/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🧘",
+    "verified": false
+  },
+  {
+    "id": 79,
+    "name": "ים ושמש",
+    "email": "יםושמש@collabo.io",
+    "password": "ים1234",
+    "role": "creator",
+    "cats": "ים, ספורט ים",
+    "city": "תל אביב",
+    "handle": "@seaandsun_il",
+    "followers": "118K",
+    "engagement": "5.8%",
+    "price": "₪1,150-4,600",
+    "bio": "חיים על החוף 🌊",
+    "status": "active",
+    "joined": "07/005/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🌿",
+    "verified": false
+  },
+  {
+    "id": 80,
+    "name": "סטארטאפ ישראל",
+    "email": "סטארטאפישראל@collabo.io",
+    "password": "סטארטאפ1234",
+    "role": "creator",
+    "cats": "עסקים, יזמות",
+    "city": "תל אביב",
+    "handle": "@startup_il",
+    "followers": "187K",
+    "engagement": "5.2%",
+    "price": "₪1,850-7,500",
+    "bio": "עולם הסטארטאפ 🚀",
+    "status": "active",
+    "joined": "19/004/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "💄",
+    "verified": true
+  },
+  {
+    "id": 81,
+    "name": "עולם הילד",
+    "email": "עולםהילד@collabo.io",
+    "password": "עולם1234",
+    "role": "creator",
+    "cats": "ילדים, צעצועים",
+    "city": "רמת גן",
+    "handle": "@kidworld_il",
+    "followers": "94K",
+    "engagement": "6.9%",
+    "price": "₪960-3,800",
+    "bio": "כל מה שלילדים 👶",
+    "status": "active",
+    "joined": "22/003/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "👗",
+    "verified": true
+  },
+  {
+    "id": 82,
+    "name": "פיט גרלז",
+    "email": "פיטגרלז@collabo.io",
+    "password": "פיט1234",
+    "role": "creator",
+    "cats": "כושר, נשים",
+    "city": "תל אביב",
+    "handle": "@fitgirlz_il",
+    "followers": "163K",
+    "engagement": "5.5%",
+    "price": "₪1,600-6,300",
+    "bio": "כושר לנשים 💪",
+    "status": "active",
+    "joined": "20/001/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🍕",
+    "verified": true
+  },
+  {
+    "id": 83,
+    "name": "רועי ריצות",
+    "email": "רועיריצות@collabo.io",
+    "password": "רועי1234",
+    "role": "creator",
+    "cats": "ריצה, מרתון, כושר",
+    "city": "תל אביב",
+    "handle": "@roirunning",
+    "followers": "54K",
+    "engagement": "8.2%",
+    "price": "₪580-2,300",
+    "bio": "ריצה שמשנה חיים 🏃",
+    "status": "active",
+    "joined": "04/005/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "☕",
+    "verified": false
+  },
+  {
+    "id": 84,
+    "name": "לי צמחוני",
+    "email": "ליצמחוני@collabo.io",
+    "password": "לי1234",
+    "role": "creator",
+    "cats": "טבעוני, מתכונים",
+    "city": "תל אביב",
+    "handle": "@leivegan",
+    "followers": "76K",
+    "engagement": "7.6%",
+    "price": "₪780-3,100",
+    "bio": "טבעוני ומאושר 🥑",
+    "status": "active",
+    "joined": "01/004/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "✈️",
+    "verified": true
+  },
+  {
+    "id": 85,
+    "name": "אדם צילום",
+    "email": "אדםצילום@collabo.io",
+    "password": "אדם1234",
+    "role": "creator",
+    "cats": "צילום, פורטרט",
+    "city": "תל אביב",
+    "handle": "@adamphoto",
+    "followers": "108K",
+    "engagement": "6.0%",
+    "price": "₪1,080-4,300",
+    "bio": "צלם שמספר סיפורים 📷",
+    "status": "active",
+    "joined": "09/003/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "💪",
+    "verified": true
+  },
+  {
+    "id": 86,
+    "name": "נגה מוזיקה",
+    "email": "נגהמוזיקה@collabo.io",
+    "password": "נגה1234",
+    "role": "creator",
+    "cats": "מוזיקה, ריקוד",
+    "city": "תל אביב",
+    "handle": "@nogamusic",
+    "followers": "142K",
+    "engagement": "5.4%",
+    "price": "₪1,400-5,600",
+    "bio": "מוזיקה וריקוד 💃",
+    "status": "active",
+    "joined": "08/003/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🎮",
+    "verified": true
+  },
+  {
+    "id": 87,
+    "name": "יהל טבע",
+    "email": "יהלטבע@collabo.io",
+    "password": "יהל1234",
+    "role": "creator",
+    "cats": "טבע, אקולוגיה",
+    "city": "הרצליה",
+    "handle": "@yahelnature",
+    "followers": "69K",
+    "engagement": "7.2%",
+    "price": "₪710-2,800",
+    "bio": "שומר הטבע 🌳",
+    "status": "active",
+    "joined": "17/005/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "📚",
+    "verified": true
+  },
+  {
+    "id": 100,
+    "name": "קפה נמרוד",
+    "email": "קפהנמרוד@collabo.io",
+    "password": "קפה1234",
+    "role": "business",
+    "cats": "קפה",
+    "city": "תל אביב",
+    "budget": "₪5,000-15,000",
+    "status": "active",
+    "joined": "25/005/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🏢",
+    "verified": true
+  },
+  {
+    "id": 101,
+    "name": "פיצה רומא",
+    "email": "פיצהרומא@collabo.io",
+    "password": "פיצה1234",
+    "role": "business",
+    "cats": "מסעדה ואוכל",
+    "city": "תל אביב",
+    "budget": "₪8,000-20,000",
+    "status": "active",
+    "joined": "23/003/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🍕",
+    "verified": true
+  },
+  {
+    "id": 102,
+    "name": "גימנסיה פרו",
+    "email": "גימנסיהפרו@collabo.io",
+    "password": "גימנסיה1234",
+    "role": "business",
+    "cats": "חדר כושר",
+    "city": "הרצליה",
+    "budget": "₪6,000-18,000",
+    "status": "active",
+    "joined": "18/002/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "☕",
+    "verified": true
+  },
+  {
+    "id": 103,
+    "name": "ביוטי סטור",
+    "email": "ביוטיסטור@collabo.io",
+    "password": "ביוטי1234",
+    "role": "business",
+    "cats": "יופי וקוסמטיקה",
+    "city": "תל אביב",
+    "budget": "₪10,000-30,000",
+    "status": "active",
+    "joined": "05/004/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "💪",
+    "verified": true
+  },
+  {
+    "id": 104,
+    "name": "פאשן אאוטלט",
+    "email": "פאשןאאוטלט@collabo.io",
+    "password": "פאשן1234",
+    "role": "business",
+    "cats": "אופנה",
+    "city": "תל אביב",
+    "budget": "₪12,000-40,000",
+    "status": "active",
+    "joined": "22/004/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "💄",
+    "verified": true
+  },
+  {
+    "id": 105,
+    "name": "טק גאדג'טס",
+    "email": "טקגאדגטס@collabo.io",
+    "password": "טק1234",
+    "role": "business",
+    "cats": "טכנולוגיה",
+    "city": "תל אביב",
+    "budget": "₪7,000-22,000",
+    "status": "active",
+    "joined": "08/003/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "👗",
+    "verified": true
+  },
+  {
+    "id": 106,
+    "name": "ספא דלוקס",
+    "email": "ספאדלוקס@collabo.io",
+    "password": "ספא1234",
+    "role": "business",
+    "cats": "בריאות",
+    "city": "הרצליה",
+    "budget": "₪9,000-25,000",
+    "status": "active",
+    "joined": "16/003/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🏨",
+    "verified": true
+  },
+  {
+    "id": 107,
+    "name": "מלון בוטיק",
+    "email": "מלוןבוטיק@collabo.io",
+    "password": "מלון1234",
+    "role": "business",
+    "cats": "מלון ואירוח",
+    "city": "תל אביב",
+    "budget": "₪15,000-50,000",
+    "status": "active",
+    "joined": "23/002/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🥗",
+    "verified": true
+  },
+  {
+    "id": 108,
+    "name": "סופרפוד",
+    "email": "סופרפוד@collabo.io",
+    "password": "סופרפוד1234",
+    "role": "business",
+    "cats": "מסעדה ואוכל",
+    "city": "תל אביב",
+    "budget": "₪5,500-16,000",
+    "status": "active",
+    "joined": "25/001/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🛍️",
+    "verified": true
+  },
+  {
+    "id": 109,
+    "name": "ספורט פלוס",
+    "email": "ספורטפלוס@collabo.io",
+    "password": "ספורט1234",
+    "role": "business",
+    "cats": "חדר כושר",
+    "city": "ראשון לציון",
+    "budget": "₪4,000-12,000",
+    "status": "active",
+    "joined": "12/002/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🚗",
+    "verified": true
+  },
+  {
+    "id": 110,
+    "name": "עיצוב הבית",
+    "email": "עיצובהבית@collabo.io",
+    "password": "עיצוב1234",
+    "role": "business",
+    "cats": "ריטייל",
+    "city": "תל אביב",
+    "budget": "₪8,000-24,000",
+    "status": "active",
+    "joined": "02/001/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "🧖",
+    "verified": true
+  },
+  {
+    "id": 111,
+    "name": "אורגני מרקט",
+    "email": "אורגנימרקט@collabo.io",
+    "password": "אורגני1234",
+    "role": "business",
+    "cats": "מסעדה ואוכל",
+    "city": "תל אביב",
+    "budget": "₪6,000-18,000",
+    "status": "active",
+    "joined": "26/003/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "🍣",
+    "verified": true
+  },
+  {
+    "id": 112,
+    "name": "קידס פאן",
+    "email": "קידספאן@collabo.io",
+    "password": "קידס1234",
+    "role": "business",
+    "cats": "ריטייל",
+    "city": "פתח תקווה",
+    "budget": "₪5,000-15,000",
+    "status": "active",
+    "joined": "28/003/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "🐾",
+    "verified": true
+  },
+  {
+    "id": 113,
+    "name": "וינו בר",
+    "email": "וינובר@collabo.io",
+    "password": "וינו1234",
+    "role": "business",
+    "cats": "מסעדה ואוכל",
+    "city": "תל אביב",
+    "budget": "₪7,000-20,000",
+    "status": "active",
+    "joined": "07/001/2025",
+    "color": "rgba(255,215,0,0.15)",
+    "textColor": "#ffd700",
+    "emoji": "🍷",
+    "verified": true
+  },
+  {
+    "id": 114,
+    "name": "רנט א קאר",
+    "email": "רנטאקאר@collabo.io",
+    "password": "רנט1234",
+    "role": "business",
+    "cats": "אחר",
+    "city": "תל אביב",
+    "budget": "₪9,000-28,000",
+    "status": "active",
+    "joined": "02/003/2025",
+    "color": "rgba(0,229,160,0.15)",
+    "textColor": "#00e5a0",
+    "emoji": "🦷",
+    "verified": true
+  },
+  {
+    "id": 115,
+    "name": "דנטל קליניק",
+    "email": "דנטלקליניק@collabo.io",
+    "password": "דנטל1234",
+    "role": "business",
+    "cats": "בריאות",
+    "city": "הרצליה",
+    "budget": "₪5,000-14,000",
+    "status": "active",
+    "joined": "28/002/2025",
+    "color": "rgba(255,77,77,0.15)",
+    "textColor": "#ff4d4d",
+    "emoji": "🏢",
+    "verified": true
+  },
+  {
+    "id": 116,
+    "name": "פט שופ",
+    "email": "פטשופ@collabo.io",
+    "password": "פט1234",
+    "role": "business",
+    "cats": "ריטייל",
+    "city": "תל אביב",
+    "budget": "₪4,500-13,000",
+    "status": "active",
+    "joined": "20/003/2025",
+    "color": "rgba(245,166,35,0.15)",
+    "textColor": "#f5a623",
+    "emoji": "🍕",
+    "verified": true
+  },
+  {
+    "id": 117,
+    "name": "סושי בר",
+    "email": "סושיבר@collabo.io",
+    "password": "סושי1234",
+    "role": "business",
+    "cats": "מסעדה ואוכל",
+    "city": "תל אביב",
+    "budget": "₪6,500-19,000",
+    "status": "active",
+    "joined": "01/005/2025",
+    "color": "rgba(168,85,247,0.15)",
+    "textColor": "#a855f7",
+    "emoji": "☕",
+    "verified": true
+  },
+  {
+    "id": 118,
+    "name": "יוגה סטודיו",
+    "email": "יוגהסטודיו@collabo.io",
+    "password": "יוגה1234",
+    "role": "business",
+    "cats": "חדר כושר",
+    "city": "תל אביב",
+    "budget": "₪3,500-10,000",
+    "status": "active",
+    "joined": "27/001/2025",
+    "color": "rgba(236,72,153,0.15)",
+    "textColor": "#ec4899",
+    "emoji": "💪",
+    "verified": true
+  },
+  {
+    "id": 119,
+    "name": "ברבר שופ",
+    "email": "ברברשופ@collabo.io",
+    "password": "ברבר1234",
+    "role": "business",
+    "cats": "יופי וקוסמטיקה",
+    "city": "תל אביב",
+    "budget": "₪4,000-12,000",
+    "status": "active",
+    "joined": "25/001/2025",
+    "color": "rgba(0,207,255,0.15)",
+    "textColor": "#00cfff",
+    "emoji": "💄",
+    "verified": true
+  }
 ];
 
-/* ── LOGIN ── */
-function doLogin(){
-  const pass=document.getElementById('login-pass').value;
-  if(pass===ADMIN_PASS){
-    document.getElementById('login-screen').style.cssText='display:none';
-    document.getElementById('admin-app').style.cssText='display:flex;flex-direction:column;height:100vh';
-    addLog('INFO','Admin logged in successfully');
-    loadFromServer();
-    renderAll();
-    startAutoSync();
-  } else {
-    const err=document.getElementById('login-err');
-    err.style.display='block';
-    document.getElementById('login-pass').style.borderColor='var(--red)';
-    setTimeout(()=>{err.style.display='none';document.getElementById('login-pass').style.borderColor='';},3000);
-  }
-}
-function changeAdminPass(){
-  const cur=document.getElementById('admin-cur-pass').value;
-  const nw=document.getElementById('admin-new-pass').value;
-  const nw2=document.getElementById('admin-new-pass2').value;
-  const err=document.getElementById('admin-pass-err');
-  err.style.display='none';
-  if(cur!==ADMIN_PASS){err.textContent='סיסמה נוכחית שגויה';err.style.display='block';return;}
-  if(nw.length<6){err.textContent='הסיסמה החדשה חייבת להכיל לפחות 6 תווים';err.style.display='block';return;}
-  if(nw!==nw2){err.textContent='הסיסמאות לא תואמות';err.style.display='block';return;}
-  ADMIN_PASS=nw;
-  ['admin-cur-pass','admin-new-pass','admin-new-pass2'].forEach(id=>document.getElementById(id).value='');
-  addLog('ACTION','Admin password changed successfully');
-  addActivity('סיסמת Admin עודכנה','var(--green)');
-  // הצג הצלחה
-  const btn=event.target;
-  btn.textContent='✓ עודכנה!';btn.style.background='var(--green)';
-  setTimeout(()=>{btn.textContent='עדכן סיסמת Admin';btn.style.background='';},2500);
-}
+let EXTRA_USERS = [];
 
-function clearAllUsers(){
-  USERS=[];
-  localStorage.removeItem('collabo_users');
-  renderAll();
-  addLog('ACTION','All demo users cleared');
-}
+export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') { res.status(204).end(); return; }
 
-function doLogout(){
-  document.getElementById('login-screen').style.cssText='position:fixed;inset:0;background:#07070f;display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column';
-  document.getElementById('admin-app').style.cssText='display:none';
-  document.getElementById('login-pass').value='';
-  document.getElementById('login-err').style.display='none';
-  document.getElementById('login-pass').style.borderColor='';
-}
+  const allUsers = [...DEMO_USERS, ...EXTRA_USERS];
 
-/* ── NAVIGATION ── */
-document.querySelectorAll('.sidebar-item[data-page]').forEach(item=>{
-  item.addEventListener('click',()=>{
-    document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
-    item.classList.add('active');
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById('page-'+item.dataset.page).classList.add('active');
-  });
-});
-function showPage(name){
-  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
-  const btn=document.querySelector(`[data-page="${name}"]`);
-  if(btn)btn.classList.add('active');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-}
-
-/* ── RENDER ── */
-function renderAll(){
-  const now=new Date();
-  document.getElementById('dash-date').textContent=now.toLocaleDateString('he-IL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  updateKPIs();
-  renderUsersTable(USERS);
-  updateBadges();
-  const badge=document.getElementById('sync-badge');
-  if(badge) badge.style.display=USERS.length?'inline-flex':'none';
-}
-
-function updateKPIs(){
-  const total=USERS.length;
-  const pending=USERS.filter(u=>u.status==='pending').length;
-  const creators=USERS.filter(u=>u.role==='creator').length;
-  const brands=USERS.filter(u=>u.role==='business').length;
-  document.getElementById('kpi-total-users').textContent=total;
-  document.getElementById('kpi-revenue').textContent='₪0';
-  document.getElementById('kpi-collabs').textContent='0';
-  document.getElementById('kpi-pending').textContent=pending;
-  document.getElementById('kpi-pending-sub').textContent=pending>0?`${pending} ממתינים לאישור`:'אין ממתינים';
-  document.getElementById('stat-creators').textContent=creators;
-  document.getElementById('stat-brands').textContent=brands;
-  document.getElementById('users-count-sub').textContent=`${total} משתמשים רשומים`;
-}
-
-function updateBadges(){
-  document.getElementById('sb-users').textContent=USERS.length;
-  document.getElementById('sb-pending').textContent=USERS.filter(u=>u.status==='pending').length;
-  document.getElementById('sb-reports').textContent=0;
-}
-
-function renderUsersTable(data){
-  const body=document.getElementById('users-table-body');
-  const empty=document.getElementById('users-empty');
-  if(!data||data.length===0){
-    body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)">
-      <svg style="font-size:28px;display:block;margin-bottom:10px" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-      אין משתמשים עדיין. לחץ "הוסף משתמש" כדי להוסיף ידנית.
-    </td></tr>`;
+  if (req.method === 'GET') {
+    res.status(200).json(allUsers);
     return;
   }
-  body.innerHTML='';
-  data.forEach((u,i)=>{
-    const roleLabel=u.role==='creator'?'יוצר':'עסק';
-    const rolePill=u.role==='creator'?'pill-blue':'pill-gold';
-    const statusPill=u.status==='active'?'pill-green':u.status==='pending'?'pill-amber':'pill-red';
-    const statusLabel=u.status==='active'?'פעיל':u.status==='pending'?'ממתין':'חסום';
-    body.innerHTML+=`<tr>
-      <td><div style="display:flex;align-items:center;gap:8px">
-        <div class="u-avatar" style="background:${u.color||'var(--surface3)'};color:${u.textColor||'var(--text)'};margin-left:0">${(u.name||'?')[0]}</div>
-        <div>
-          <div style="font-weight:500">${u.name||'—'}</div>
-          <div class="td-muted" style="font-size:11px">${u.email||''}</div>
-        </div>
-      </div></td>
-      <td><span class="status-pill ${rolePill}">${roleLabel}</span></td>
-      <td><span class="status-pill ${statusPill}">${statusLabel}</span></td>
-      <td class="td-muted">${u.joined||'—'}</td>
-      <td class="td-muted">${u.cats||'—'}</td>
-      <td>
-        <span class="action-icon" onclick="approveUser(${i})" title="אשר"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-        <span class="action-icon" onclick="blockUser(${i})" title="חסום" style="margin-right:4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span>
-        <span class="action-icon" onclick="openResetPass(${i})" title="אפס סיסמה" style="margin-right:4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-        <span class="action-icon danger" onclick="deleteUser(${i})" title="מחק" style="margin-right:4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>
-      </td>
-    </tr>`;
-  });
-}
 
-/* ── USER ACTIONS ── */
-function filterUsers(q){
-  const f=USERS.filter(u=>(u.name||'').includes(q)||(u.email||'').includes(q)||(u.cats||'').includes(q));
-  renderUsersTable(f);
-}
-function filterUsersByRole(role){
-  const f=role==='all'?USERS:USERS.filter(u=>u.role===role);
-  renderUsersTable(f);
-}
-function approveUser(i){
-  USERS[i].status='active';
-  addLog('ACTION',`Approved user: ${USERS[i].name}`);
-  addActivity(`אושר: ${USERS[i].name}`,'var(--green)');
-  saveUsersToStorage();
-  renderUsersTable(USERS);updateKPIs();updateBadges();
-}
-function blockUser(i){
-  USERS[i].status=USERS[i].status==='blocked'?'active':'blocked';
-  const action=USERS[i].status==='blocked'?'נחסם':'שוחרר';
-  addLog('ACTION',`${action}: ${USERS[i].name}`);
-  addActivity(`${action}: ${USERS[i].name}`,'var(--amber)');
-  saveUsersToStorage();
-  renderUsersTable(USERS);updateKPIs();updateBadges();
-}
-function deleteUser(i){
-  addLog('ACTION',`Deleted user: ${USERS[i].name}`);
-  addActivity(`נמחק: ${USERS[i].name}`,'var(--red)');
-  USERS.splice(i,1);
-  saveUsersToStorage();
-  renderUsersTable(USERS);updateKPIs();updateBadges();
-}
-
-/* ── ADD USER MODAL ── */
-const COLORS=[
-  {bg:'rgba(0,207,255,0.15)',txt:'#00cfff'},{bg:'rgba(255,215,0,0.15)',txt:'#ffd700'},
-  {bg:'rgba(0,229,160,0.15)',txt:'#00e5a0'},{bg:'rgba(255,77,77,0.15)',txt:'#ff4d4d'},
-  {bg:'rgba(245,166,35,0.15)',txt:'#f5a623'},
-];
-function openAddUser(){document.getElementById('add-user-modal').classList.add('open')}
-function closeModal(){document.getElementById('add-user-modal').classList.remove('open')}
-function addUser(){
-  const name=document.getElementById('new-name').value.trim();
-  const email=document.getElementById('new-email').value.trim();
-  const role=document.getElementById('new-role').value;
-  const cat=document.getElementById('new-cat').value.trim();
-  if(!name||!email){
-    document.getElementById('new-name').style.borderColor=!name?'var(--red)':'';
-    document.getElementById('new-email').style.borderColor=!email?'var(--red)':'';
-    return;
-  }
-  document.getElementById('new-name').style.borderColor='';
-  document.getElementById('new-email').style.borderColor='';
-  const color=COLORS[USERS.length%COLORS.length];
-  const now=new Date().toLocaleDateString('he-IL');
-  USERS.push({name,email,role,cats:cat||'—',status:'pending',joined:now,color:color.bg,textColor:color.txt});
-  addLog('ACTION',`Added user manually: ${name} (${role})`);
-  addActivity(`נוסף: ${name} (${role==='creator'?'יוצר':'עסק'})`,'var(--blue)');
-  document.getElementById('new-name').value='';
-  document.getElementById('new-email').value='';
-  document.getElementById('new-cat').value='';
-  saveUsersToStorage();
-  closeModal();
-  renderUsersTable(USERS);updateKPIs();updateBadges();
-}
-
-/* ── LOGS + ACTIVITY ── */
-function addLog(type,msg){
-  const el=document.getElementById('log-output');
-  const now=new Date().toLocaleTimeString('he-IL');
-  const colors={INFO:'var(--blue)',ACTION:'var(--gold)',ERROR:'var(--red)',SYSTEM:'var(--green)'};
-  el.innerHTML+=`<span style="color:${colors[type]||'var(--muted)'}">[${type}]</span> ${now} — ${msg}<br>`;
-  el.scrollTop=el.scrollHeight;
-}
-function addActivity(text,color){
-  const feed=document.getElementById('activity-feed');
-  const empty=feed.querySelector('div[style]');
-  if(empty&&empty.style.textAlign==='center')empty.remove();
-  const item=document.createElement('div');
-  item.className='activity-item';
-  item.innerHTML=`<div class="act-dot" style="background:${color}"></div><div class="act-text">${text}</div><div class="act-time">עכשיו</div>`;
-  feed.prepend(item);
-  if(feed.children.length>8)feed.lastChild.remove();
-}
-
-/* ── INIT ── */
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('he-IL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  updateBadges();
-  renderUsersTable(USERS);
-});
-</script>
-<!-- Reset User Password Modal -->
-<div class="modal-bg" id="reset-user-modal">
-  <div class="modal-box" style="width:400px">
-    <div class="modal-box-title">
-      🔐 איפוס סיסמה
-      <span class="modal-close" onclick="closeResetPass()">✕</span>
-    </div>
-    <div id="reset-user-info" style="font-size:13px;color:var(--muted);margin-bottom:16px;padding:10px 12px;background:var(--surface2);border-radius:8px;line-height:1.6"></div>
-    <div class="form-field">
-      <div class="form-label">סיסמה חדשה</div>
-      <div style="position:relative">
-        <input class="form-input" type="password" id="reset-user-pass" placeholder="לפחות 6 תווים" style="padding-left:36px">
-        <span onclick="toggleResetPassVis()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--muted)">👁</span>
-      </div>
-    </div>
-    <div class="form-field">
-      <div class="form-label">אימות סיסמה</div>
-      <div style="position:relative">
-        <input class="form-input" type="password" id="reset-user-pass2" placeholder="••••••••" style="padding-left:36px" onkeydown="if(event.key==='Enter')doResetUserPass()">
-        <span onclick="toggleResetPassVis2()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--muted)">👁</span>
-      </div>
-    </div>
-    <div id="reset-user-err" style="font-size:12px;color:var(--red);margin-bottom:10px;display:none"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px">
-      <button class="form-btn-ghost" onclick="closeResetPass()">ביטול</button>
-      <button class="form-btn" onclick="doResetUserPass()">אפס סיסמה ✓</button>
-    </div>
-  </div>
-</div>
-
-<script>
-let resetUserIdx = -1;
-
-function openResetPass(i){
-  resetUserIdx = i;
-  const u = USERS[i];
-  document.getElementById('reset-user-info').innerHTML = `<strong>${u.name}</strong><br>${u.email}`;
-  document.getElementById('reset-user-pass').value = '';
-  document.getElementById('reset-user-pass2').value = '';
-  document.getElementById('reset-user-err').style.display = 'none';
-  document.getElementById('reset-user-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('reset-user-pass').focus(), 100);
-}
-function closeResetPass(){
-  document.getElementById('reset-user-modal').classList.remove('open');
-  resetUserIdx = -1;
-}
-function toggleResetPassVis(){
-  const inp=document.getElementById('reset-user-pass');
-  inp.type=inp.type==='password'?'text':'password';
-}
-function toggleResetPassVis2(){
-  const inp=document.getElementById('reset-user-pass2');
-  inp.type=inp.type==='password'?'text':'password';
-}
-function doResetUserPass(){
-  const pass = document.getElementById('reset-user-pass').value;
-  const pass2 = document.getElementById('reset-user-pass2').value;
-  const err = document.getElementById('reset-user-err');
-  err.style.display = 'none';
-
-  if(pass.length < 6){ err.textContent='הסיסמה חייבת להכיל לפחות 6 תווים'; err.style.display='block'; return; }
-  if(pass !== pass2){ err.textContent='הסיסמאות לא תואמות'; err.style.display='block'; return; }
-
-  const u = USERS[resetUserIdx];
-  u.password = pass;
-
-  // עדכן בשרת
-  fetch('/api/reset-password', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ email: u.email, password: pass })
-  }).catch(()=>{});
-
-  saveUsersToStorage();
-  addLog('ACTION', `Password reset for: ${u.name} (${u.email})`);
-  addActivity(`סיסמה אופסה: ${u.name}`, 'var(--blue)');
-  closeResetPass();
-
-  // הצג הצלחה
-  const successToast = document.createElement('div');
-  successToast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--green);color:#052e16;padding:12px 24px;border-radius:12px;font-weight:700;font-size:13px;z-index:9999;transition:opacity .3s';
-  successToast.textContent = `✓ סיסמה עודכנה עבור ${u.name}`;
-  document.body.appendChild(successToast);
-  setTimeout(()=>{ successToast.style.opacity='0'; setTimeout(()=>successToast.remove(), 300); }, 2500);
-}
-</script>
-<div class="modal-bg" id="import-modal">
-  <div class="modal-box" style="width:500px">
-    <div class="modal-box-title">
-      📥 ייבא משתמשים מ-Collabo
-      <span class="modal-close" onclick="closeImport()">✕</span>
-    </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.7">
-      ב-Collabo לחץ על <strong style="color:var(--blue)">"ייצא משתמשים"</strong> בתפריט ← העתק את ה-JSON ← הדבק כאן:
-    </div>
-    <textarea id="import-json" style="width:100%;height:140px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;color:var(--text);font-family:monospace;font-size:11px;outline:none;resize:none;line-height:1.5" placeholder='[{"name":"...","email":"...","role":"creator",...}]'></textarea>
-    <div id="import-err" style="font-size:11px;color:var(--red);margin-top:6px;display:none"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
-      <button class="form-btn-ghost" onclick="closeImport()">ביטול</button>
-      <button class="form-btn" onclick="importUsers()">ייבא משתמשים</button>
-    </div>
-  </div>
-</div>
-
-<script>
-function openImport(){document.getElementById('import-modal').classList.add('open');}
-function closeImport(){document.getElementById('import-modal').classList.remove('open');document.getElementById('import-err').style.display='none';}
-function importUsers(){
-  const raw=document.getElementById('import-json').value.trim();
-  const err=document.getElementById('import-err');
-  try{
-    const data=JSON.parse(raw);
-    if(!Array.isArray(data))throw new Error('הקובץ חייב להיות רשימה []');
-    let added=0;
-    data.forEach(u=>{
-      if(!u.name||!u.email)return;
-      if(!USERS.find(x=>x.email===u.email)){
-        USERS.push({...u,id:u.id||Date.now()+Math.random(),status:u.status||'pending',joined:u.joined||new Date().toLocaleDateString('he-IL'),color:u.color||'rgba(0,207,255,0.15)',textColor:u.textColor||'#00cfff'});
-        added++;
+  if (req.method === 'POST') {
+    const user = req.body;
+    if (user && user.email) {
+      const exists = allUsers.find(u => u.email === user.email);
+      if (!exists) {
+        user.id = Date.now();
+        user.status = user.status || 'pending';
+        user.joined = new Date().toLocaleDateString('he-IL');
+        EXTRA_USERS.push(user);
       }
-    });
-    saveUsersToStorage();
-    renderAll();
-    addActivity(`יובאו ${added} משתמשים חדשים`,'var(--blue)');
-    addLog('ACTION',`Imported ${added} users from Collabo`);
-    closeImport();
-    document.getElementById('import-json').value='';
-  }catch(e){
-    err.textContent='שגיאה: '+e.message;
-    err.style.display='block';
+    }
+    res.status(200).json({ ok: true });
+    return;
   }
+
+  res.status(405).json({ error: 'Method not allowed' });
 }
-</script>
