@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" id="root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00cfff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Collabo">
+<meta name="description" content="The creator marketplace">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.svg">
+<title>Collabo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#07070f;--sf:#0e0e1c;--sf2:#161628;--sf3:#1e1e35;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.14);--tx:#f0f0fa;--mu:#6b7280;--dim:#2a2a40;--ac:#00cfff;--ac2:#ffd700;--glow:rgba(0,207,255,0.12);--gr:#00e5a0;--gr2:rgba(0,229,160,0.1);--rd:#ff4d4d;--rd2:rgba(255,77,77,0.1);--fn:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--r:14px;--t:.18s}
+[data-theme=light]{--bg:#f4f6fb;--sf:#fff;--sf2:#f0f2f8;--sf3:#e8eaf2;--bd:rgba(0,0,0,0.08);--bd2:rgba(0,0,0,0.15);--tx:#111118;--dim:#d0d4e8}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{height:100vh;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--fb);transition:background var(--t),color var(--t)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.skip{position:absolute;top:-60px;right:0;background:var(--ac);color:#000;padding:8px 18px;border-radius:0 0 10px 10px;font-weight:700;z-index:9000;transition:top .2s;font-family:var(--fn)}
+.skip:focus{top:0}
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;gap:14px}
+.spl-logo{font-family:var(--fn);font-size:60px;font-weight:800;letter-spacing:-3px;line-height:1}
+.spl-logo .b{color:var(--ac);text-shadow:0 0 30px rgba(0,207,255,.7)}
+.spl-logo .g{color:var(--ac2);text-shadow:0 0 30px rgba(255,215,0,.6)}
+.spl-tag{font-size:12px;color:var(--mu);letter-spacing:2px;text-transform:uppercase}
+.spl-bar{width:0;height:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:2px;animation:barGrow 1.7s ease forwards}
+@keyframes barGrow{to{width:52px}}
+@keyframes fadeOut{to{opacity:0;pointer-events:none}}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes swr{to{transform:translateX(120%) rotate(20deg);opacity:0}}
+@keyframes swl{to{transform:translateX(-120%) rotate(-20deg);opacity:0}}
+.an-swr{animation:swr .38s ease forwards}
+.an-swl{animation:swl .38s ease forwards}
+/* ONBOARDING */
+.ov{position:fixed;inset:0;background:rgba(7,7,15,.86);z-index:2000;display:flex;align-items:center;justify-content:center}
+.ov.hidden{display:none}
+.modal{background:var(--sf);border:1px solid var(--bd2);border-radius:20px;width:min(500px,95vw);max-height:90vh;overflow-y:auto;padding:32px}
+.mstep{display:none}.mstep.active{display:block;animation:up .25s ease}
+.prog{display:flex;gap:6px;margin-bottom:22px}
+.pd{height:3px;flex:1;border-radius:2px;background:var(--dim);transition:background .3s}
+.pd.done{background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.mtitle{font-family:var(--fn);font-size:20px;font-weight:700;margin-bottom:6px}
+.msub{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.6}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.rc{padding:20px 16px;border-radius:14px;border:1.5px solid var(--bd2);cursor:pointer;text-align:center;transition:all .2s}
+.rc:hover,.rc:focus{border-color:var(--ac);outline:none}
+.rc.sel{border-color:var(--ac);background:var(--glow)}
+.rc .re{font-size:36px;margin-bottom:8px}
+.rc .rt{font-family:var(--fn);font-size:14px;font-weight:700;margin-bottom:4px}
+.rc .rd{font-size:11px;color:var(--mu);line-height:1.5}
+.fl{margin-bottom:14px}
+.fl label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block}
+.fi{width:100%;background:var(--sf2);border:1.5px solid var(--bd2);border-radius:10px;padding:10px 13px;color:var(--tx);font-family:var(--fb);font-size:13px;outline:none;transition:border-color .15s}
+.fi:focus{border-color:var(--ac)}
+.fi::placeholder{color:var(--mu)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--bd2);color:var(--mu);transition:all .15s;background:transparent}
+.chip:hover,.chip:focus{border-color:var(--ac);color:var(--ac);outline:none}
+.chip.on{background:var(--glow);border-color:var(--ac);color:var(--ac)}
+.mbtn{width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-family:var(--fn);font-size:14px;font-weight:700;border:none;cursor:pointer;transition:opacity .15s;margin-top:8px}
+.mbtn:hover{opacity:.88}
+.mbtn-ghost{width:100%;padding:11px;border-radius:12px;background:transparent;color:var(--mu);font-family:var(--fb);font-size:13px;border:1.5px solid var(--bd);cursor:pointer;margin-top:8px;transition:all .15s}
+.mbtn-ghost:hover{background:var(--sf2);color:var(--tx)}
+.lang-row{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
+.lang-pill{padding:7px 16px;border-radius:10px;border:1.5px solid var(--bd2);background:transparent;color:var(--mu);cursor:pointer;font-size:12px;font-family:var(--fb);transition:all .15s}
+.lang-pill:hover{border-color:var(--ac);color:var(--ac)}
+.ps-bar{flex:1;height:3px;border-radius:2px;background:var(--dim);transition:background .3s}
+.ps-bar.w{background:var(--rd)}.ps-bar.m{background:var(--ac2)}.ps-bar.s{background:var(--gr)}
+.lang-pill.active{background:var(--glow);border-color:var(--ac);color:var(--ac);font-weight:600}
+/* MATCH TOAST */
+#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:4000;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#07070f;padding:24px 44px;border-radius:24px;text-align:center;font-family:var(--fn);font-weight:800;font-size:22px;pointer-events:none;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+#toast.show{transform:translate(-50%,-50%) scale(1)}
+#toast.hide{transform:translate(-50%,-50%) scale(0);opacity:0}
+/* APP */
+#app{display:none;height:100vh;flex-direction:column}
+.topbar{height:54px;flex-shrink:0;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 18px;gap:10px}
+.tlogo{font-family:var(--fn);font-size:20px;font-weight:800;letter-spacing:-1px;cursor:pointer;flex-shrink:0}
+.tlogo .b{color:var(--ac)}.tlogo .g{color:var(--ac2)}
+.tright{margin-right:auto;display:flex;align-items:center;gap:6px}
+.tbb{width:36px;height:36px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);font-size:17px;transition:all .15s;position:relative;flex-shrink:0;font-family:var(--fb)}
+.tbb:hover,.tbb:focus{color:var(--tx);outline:2px solid var(--ac);outline-offset:2px}
+.ndot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--rd);border:2px solid var(--sf)}
+.lbtn{font-size:11px;padding:6px 11px;border-radius:8px;background:var(--sf2);border:1px solid var(--bd);color:var(--mu);cursor:pointer;font-family:var(--fb);transition:all .15s;white-space:nowrap}
+.lbtn:hover{color:var(--tx)}
+/* LAYOUT */
+.abody{display:flex;flex:1;overflow:hidden}
+.sidebar{width:68px;flex-shrink:0;background:var(--sf);border-left:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:4px}
+.nb{width:44px;height:44px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;border:1.5px solid transparent;color:var(--mu);font-size:20px;position:relative;gap:2px;background:transparent}
+.nb:hover,.nb:focus{background:var(--sf2);color:var(--tx);outline:2px solid var(--ac);outline-offset:2px}
+.nb.on{background:var(--glow);color:var(--ac);border-color:rgba(0,207,255,.25)}
+.nb .nl{font-size:8px;font-family:var(--fb);line-height:1;opacity:0;transition:opacity .15s}
+.nb:hover .nl,.nb.on .nl{opacity:1}
+.nbadge{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--rd);border:2px solid var(--sf)}
+.sb-bot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:8px}
+.uav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#001a2e,#00304a);border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:transform .15s}
+.uav:hover{transform:scale(1.06)}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.on{display:flex;animation:up .2s ease}
+/* NOTIF PANEL */
+#np{position:absolute;top:54px;left:18px;width:310px;background:var(--sf);border:1px solid var(--bd2);border-radius:14px;z-index:500;display:none;box-shadow:0 16px 48px rgba(0,0,0,.45);overflow:hidden}
+#np.open{display:block}
+.np-head{padding:14px 16px;font-family:var(--fn);font-size:13px;font-weight:700;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.np-clear{font-size:11px;color:var(--ac);cursor:pointer;font-family:var(--fb)}
+.ni{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .15s}
+.ni:hover{background:var(--sf2)}
+.ni.unread{background:var(--glow)}
+.ni-text{font-size:12px;line-height:1.5;flex:1}
+.ni-time{font-size:10px;color:var(--mu);margin-top:2px}
+.np-empty{padding:24px;text-align:center;color:var(--mu);font-size:12px}
+/* MATCHES */
+.mh{padding:16px 24px 0;display:flex;align-items:center;gap:12px}
+.ph{font-family:var(--fn);font-size:20px;font-weight:700;letter-spacing:-.5px}
+.ph span{color:var(--ac)}
+.psub{font-size:11px;color:var(--mu);margin-top:2px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;padding:20px 24px}
+.mc-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .2s,transform .2s}
+.mc-card:hover{border-color:rgba(0,207,255,.35);transform:translateY(-2px)}
+.mc-hero{height:90px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
+.mc-new{position:absolute;top:8px;right:8px;font-size:9px;padding:2px 7px;border-radius:8px;background:var(--ac);color:#07070f;font-weight:700}
+.mc-body{padding:12px}
+.mc-name{font-family:var(--fn);font-size:13px;font-weight:700;margin-bottom:2px}
+.mc-sub{font-size:11px;color:var(--mu);margin-bottom:8px}
+.mc-btn{width:100%;padding:7px;border-radius:8px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-family:var(--fn);font-size:11px;font-weight:700;border:none;cursor:pointer}
+/* DISCOVER */
+.fbar{padding:12px 24px;background:var(--sf);border-bottom:1px solid var(--bd);display:none;flex-wrap:wrap;gap:16px;flex-shrink:0}
+.fbar.open{display:flex}
+.fg-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.ftgl{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:20px;border:1px solid var(--bd2);background:var(--sf);color:var(--mu);font-size:12px;cursor:pointer;transition:all .15s;font-family:var(--fb)}
+.ftgl.open{color:var(--ac);background:var(--glow);border-color:rgba(0,207,255,.3)}
+.disc-area{flex:1;display:flex;justify-content:center;align-items:center;padding:16px;gap:18px;overflow:hidden}
+.cstack{position:relative;width:320px;height:460px;flex-shrink:0}
+.ccard{position:absolute;inset:0;border-radius:22px;overflow:hidden;border:1px solid var(--bd2);user-select:none}
+.c1{z-index:3}.c2{z-index:2;transform:rotate(-2deg) scale(.97) translateY(8px)}.c3{z-index:1;transform:rotate(1.5deg) scale(.94) translateY(16px)}
+.cmedia{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.cemoji{font-size:80px;padding-top:60px}
+.verdict{position:absolute;top:22px;font-family:var(--fn);font-size:24px;font-weight:800;padding:5px 14px;border-radius:9px;border:3px solid;opacity:0;pointer-events:none}
+.vlike{left:16px;color:var(--gr);border-color:var(--gr);transform:rotate(-12deg)}
+.vpass{right:16px;color:var(--rd);border-color:var(--rd);transform:rotate(12deg)}
+.covl{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(to top,rgba(7,7,15,.98) 0%,rgba(7,7,15,.5) 65%,transparent 100%)}
+.cloc{font-size:11px;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.cname{font-family:var(--fn);font-size:20px;font-weight:700;margin-bottom:2px;color:#fff}
+.chandle{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:8px}
+.ccats{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.ccat{font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.75)}
+.cstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.06);border-radius:9px;overflow:hidden;margin-bottom:12px}
+.cst{background:rgba(255,255,255,.04);padding:7px;text-align:center}
+.csv{font-family:var(--fn);font-size:13px;font-weight:700;color:#fff}
+.csl{font-size:9px;color:rgba(255,255,255,.4);margin-top:1px}
+.vbdg{position:absolute;top:12px;right:12px;font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(0,229,160,.2);color:var(--gr);border:1px solid rgba(0,229,160,.35)}
+.cacts{display:flex;justify-content:center;gap:12px;align-items:center}
+.ab{border:none;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .12s;font-size:20px}
+.ab:hover{transform:scale(1.1)}.ab:active{transform:scale(.93)}
+.ab:focus{outline:3px solid var(--ac);outline-offset:3px}
+.ab-pass{width:48px;height:48px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+.ab-save{width:44px;height:44px;background:rgba(255,215,0,.15);color:var(--ac2)}
+.ab-view{width:44px;height:44px;background:rgba(0,207,255,.15);color:var(--ac);font-size:16px}
+.ab-like{width:54px;height:54px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-size:22px}
+.crem{font-size:11px;color:var(--mu);text-align:center;margin-top:6px}
+.dside{width:256px;flex-shrink:0;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.sp{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:14px}
+.sp-ttl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.svi{display:flex;align-items:center;gap:9px;padding:7px;border-radius:9px;cursor:pointer;transition:background .15s}
+.svi:hover{background:var(--sf2)}
+.sv-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sv-name{font-size:12px;font-weight:500}
+.sv-cat{font-size:10px;color:var(--mu)}
+.ali{font-size:11px;color:var(--mu);display:flex;gap:7px;align-items:flex-start;line-height:1.5;margin-bottom:6px}
+.adot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+/* CREATORS */
+.cr-head{padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.cr-ttl{font-family:var(--fn);font-size:18px;font-weight:700}
+.sw{position:relative;flex:1;min-width:180px;max-width:340px}
+.si{width:100%;background:var(--sf2);border:1px solid var(--bd2);border-radius:10px;padding:9px 12px 9px 34px;color:var(--tx);font-family:var(--fb);font-size:12px;outline:none;transition:border-color .15s}
+.si:focus{border-color:var(--ac)}
+.si::placeholder{color:var(--mu)}
+.si-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--mu);font-size:14px;pointer-events:none}
+.sort-sel{background:var(--sf2);border:1px solid var(--bd2);color:var(--tx);font-family:var(--fb);font-size:12px;padding:8px 11px;border-radius:10px;outline:none;cursor:pointer;margin-right:auto}
+.sort-sel:focus{border-color:var(--ac)}
+.cr-wrap{flex:1;overflow-y:auto;padding:18px 20px}
+.cr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.ct{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .2s,transform .2s}
+.ct:hover,.ct:focus{border-color:rgba(0,207,255,.35);transform:translateY(-2px);outline:none}
+.th{height:100px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative}
+.tv{position:absolute;top:8px;right:8px;font-size:9px;padding:2px 7px;border-radius:8px;background:rgba(0,229,160,.2);color:var(--gr);border:1px solid rgba(0,229,160,.3)}
+.tb{padding:13px}
+.t-name{font-family:var(--fn);font-size:13px;font-weight:700;margin-bottom:2px}
+.t-hdl{font-size:11px;color:var(--mu);margin-bottom:7px}
+.t-cats{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.t-cat{font-size:9px;padding:2px 7px;border-radius:7px;background:var(--glow);color:var(--ac);border:1px solid rgba(0,207,255,.2)}
+.t-stats{display:flex;gap:10px;font-size:11px;color:var(--mu)}
+.t-stats span{color:var(--tx);font-weight:500}
+.t-foot{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:9px;border-top:1px solid var(--bd)}
+.t-price{font-size:12px;font-weight:600;color:var(--gr)}
+.t-rat{font-size:11px;color:var(--mu)}
+/* PROFILE */
+.pl{display:flex;flex:1;overflow:hidden}
+.pleft{width:300px;flex-shrink:0;border-left:1px solid var(--bd);overflow-y:auto;padding:20px}
+.phero{height:160px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;margin-bottom:-28px;overflow:hidden}
+.pavail{position:absolute;top:10px;right:10px;font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(0,229,160,.18);color:var(--gr);border:1px solid rgba(0,229,160,.3)}
+.pav-wrap{display:flex;justify-content:center;margin-bottom:10px;position:relative;z-index:2}
+.pav{width:56px;height:56px;border-radius:50%;background:var(--sf3);border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:24px}
+.pname{font-family:var(--fn);font-size:18px;font-weight:800;text-align:center;margin-bottom:2px}
+.phdl{font-size:12px;color:var(--mu);text-align:center;margin-bottom:3px}
+.ploc{font-size:11px;color:var(--mu);text-align:center;display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:10px}
+.pvbdg{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;padding:3px 9px;border-radius:10px;background:rgba(0,229,160,.15);color:var(--gr);border:1px solid rgba(0,229,160,.3);margin-bottom:10px;width:fit-content;margin-left:auto;margin-right:auto}
+.pbio{font-size:12px;color:var(--mu);text-align:center;line-height:1.6;margin-bottom:12px}
+.pcats{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:12px}
+.pcat{font-size:10px;padding:3px 9px;border-radius:10px;background:var(--glow);color:var(--ac);border:1px solid rgba(0,207,255,.2)}
+.ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.ps-c{background:var(--sf2);border-radius:10px;padding:9px;text-align:center}
+.ps-v{font-family:var(--fn);font-size:15px;font-weight:700}
+.ps-l{font-size:9px;color:var(--mu);margin-top:2px}
+.soclist{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.socrow{display:flex;align-items:center;gap:8px;padding:7px 9px;background:var(--sf2);border-radius:9px}
+.socicon{font-size:14px;width:22px;text-align:center}
+.socname{font-size:11px;font-weight:500;flex:1}
+.soccount{font-size:11px;color:var(--mu)}
+.prow{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--sf2);border-radius:9px;margin-bottom:10px}
+.p-lbl{font-size:11px;color:var(--mu)}
+.p-val{font-size:13px;font-weight:600;color:var(--gr)}
+.shr-btn{width:100%;padding:9px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd2);color:var(--mu);font-family:var(--fb);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;transition:all .15s}
+.shr-btn:hover{color:var(--tx)}
+.cta{width:100%;padding:11px;border-radius:12px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-family:var(--fn);font-size:13px;font-weight:700;border:none;cursor:pointer;margin-bottom:7px;transition:opacity .15s}
+.cta:hover{opacity:.88}
+.cta2{width:100%;padding:10px;border-radius:12px;background:var(--sf2);color:var(--tx);font-family:var(--fb);font-size:12px;border:1px solid var(--bd2);cursor:pointer;transition:background .15s}
+.cta2:hover{background:var(--sf3)}
+.pright{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:18px}
+.stitle{font-family:var(--fn);font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.pmason{columns:2;gap:8px}
+.pi{break-inside:avoid;border-radius:12px;overflow:hidden;margin-bottom:8px;cursor:pointer;transition:opacity .15s;position:relative}
+.pi:hover{opacity:.85}
+.pi-bg{display:flex;align-items:center;justify-content:center;font-size:32px}
+.pi-type{position:absolute;top:7px;right:7px;font-size:9px;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.6);color:rgba(255,255,255,.8)}
+.coli{display:flex;align-items:center;gap:10px;padding:11px;background:var(--sf2);border-radius:11px;margin-bottom:8px}
+.col-logo{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.col-info{flex:1}
+.col-brand{font-size:12px;font-weight:600}
+.col-desc{font-size:11px;color:var(--mu)}
+.col-reach{font-size:11px;color:var(--gr)}
+.revi{padding:12px;background:var(--sf2);border-radius:11px;margin-bottom:8px}
+.rev-head{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.rev-av{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.rev-brand{font-size:12px;font-weight:500;flex:1}
+.rev-stars{font-size:12px;color:#fbbf24}
+.rev-date{font-size:10px;color:var(--mu)}
+.rev-text{font-size:12px;color:var(--mu);line-height:1.6}
+/* MESSAGES */
+.mlayout{display:flex;flex:1;overflow:hidden}
+.tpanel{width:270px;flex-shrink:0;border-left:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden}
+.thead{padding:14px 14px 12px;border-bottom:1px solid var(--bd);flex-shrink:0}
+.ttitle{font-family:var(--fn);font-size:15px;font-weight:700;margin-bottom:10px}
+.tsr{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:9px;padding:7px 11px;color:var(--tx);font-family:var(--fb);font-size:12px;outline:none}
+.tsr::placeholder{color:var(--mu)}
+.tsr:focus{border-color:var(--ac)}
+.tlist{flex:1;overflow-y:auto}
+.thr{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--bd)}
+.thr:hover{background:var(--sf2)}
+.thr.on{background:var(--glow)}
+.thr:focus{outline:2px solid var(--ac);outline-offset:-2px}
+.tav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:2px solid var(--bd)}
+.thr.on .tav{border-color:var(--ac)}
+.ti{flex:1;min-width:0}
+.tn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tp{font-size:11px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.tt{font-size:10px;color:var(--mu)}
+.tu{width:17px;height:17px;border-radius:50%;background:var(--ac);color:#07070f;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.carea{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.ctopbar{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:11px;flex-shrink:0;background:var(--sf)}
+.ctav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#001a2e,#003040);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ctname{font-family:var(--fn);font-size:14px;font-weight:700}
+.ctstatus{font-size:11px;color:var(--gr);display:flex;align-items:center;gap:4px}
+.ctacts{display:flex;gap:7px;margin-right:auto}
+.cta-btn{width:32px;height:32px;border-radius:9px;background:var(--sf2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);font-size:15px;transition:all .15s}
+.cta-btn:hover{color:var(--tx)}
+.obanner{margin:12px 18px 0;border-radius:12px;padding:13px;background:rgba(0,207,255,.07);border:1px solid rgba(0,207,255,.2)}
+.ob-lbl{font-size:9px;color:var(--ac);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:700}
+.ob-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.ob-details{font-size:11px;color:var(--mu);margin-bottom:9px}
+.ob-acts{display:flex;gap:7px}
+.ob-accept{flex:1;padding:7px;border-radius:7px;background:var(--gr);color:#052e16;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--fb)}
+.ob-decline{flex:1;padding:7px;border-radius:7px;background:var(--sf3);color:var(--tx);border:1px solid var(--bd2);font-size:11px;cursor:pointer;font-family:var(--fb)}
+.oform{background:var(--sf2);border:1px solid var(--bd2);border-radius:12px;padding:14px;margin:12px 18px 0}
+.of-ttl{font-size:12px;font-weight:600;margin-bottom:12px;font-family:var(--fn)}
+.of-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.off label{font-size:10px;color:var(--mu);display:block;margin-bottom:4px}
+.off input,.off textarea{width:100%;background:var(--sf);border:1px solid var(--bd2);border-radius:7px;padding:7px 9px;color:var(--tx);font-family:var(--fb);font-size:12px;outline:none}
+.off input:focus,.off textarea:focus{border-color:var(--ac)}
+.off.full{grid-column:1/-1}
+.of-send{width:100%;padding:9px;border-radius:8px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-family:var(--fn);font-size:12px;font-weight:700;border:none;cursor:pointer;margin-top:6px}
+.mbody{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+.mg{display:flex;flex-direction:column;gap:3px}
+.bbl{max-width:68%;padding:9px 13px;border-radius:16px;font-size:12px;line-height:1.55}
+.bbl-them{background:var(--sf2);color:var(--tx);align-self:flex-start;border-radius:3px 16px 16px 16px}
+.bbl-me{background:linear-gradient(135deg,var(--ac),#007aaa);color:#fff;align-self:flex-end;border-radius:16px 3px 16px 16px}
+.mts{font-size:9px;color:var(--mu)}
+.mts-t{align-self:flex-start}.mts-m{align-self:flex-end}
+.rr{font-size:10px;color:var(--ac);align-self:flex-end}
+.composer{padding:11px 18px;border-top:1px solid var(--bd);flex-shrink:0;background:var(--sf)}
+.comp-row{display:flex;align-items:center;gap:8px}
+.comp-acts{display:flex;gap:5px}
+.comp-b{width:30px;height:30px;border-radius:9px;background:var(--sf2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);font-size:15px}
+.comp-b:hover{color:var(--ac)}
+.comp-in{flex:1;background:var(--sf2);border:1px solid var(--bd2);border-radius:18px;padding:8px 14px;color:var(--tx);font-family:var(--fb);font-size:12px;outline:none;transition:border-color .15s}
+.comp-in:focus{border-color:var(--ac)}
+.comp-in::placeholder{color:var(--mu)}
+.comp-send{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#0099cc);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#07070f;font-size:15px;transition:transform .12s}
+.comp-send:hover{transform:scale(1.06)}
+/* ANALYTICS */
+.anh{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding:16px 24px 0}
+.antitle{font-family:var(--fn);font-size:20px;font-weight:700;letter-spacing:-.5px}
+.ptabs{display:flex;gap:5px}
+.ptab{padding:6px 13px;border-radius:18px;font-size:11px;cursor:pointer;border:1px solid var(--bd);color:var(--mu);transition:all .15s;font-family:var(--fb)}
+.ptab.on{background:var(--glow);color:var(--ac);border-color:rgba(0,207,255,.3)}
+.anwrap{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:16px}
+.mgd{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mcard{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:15px 17px;position:relative;overflow:hidden}
+.mcard::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%}
+.mc-bl::before{background:var(--ac)}.mc-go::before{background:var(--ac2)}.mc-gr::before{background:var(--gr)}.mc-rd::before{background:var(--rd)}
+.mc-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;display:flex;align-items:center;gap:5px}
+.mc-val{font-family:var(--fn);font-size:24px;font-weight:700;line-height:1;margin-bottom:5px}
+.mc-ch{font-size:11px;display:flex;align-items:center;gap:3px}
+.cup{color:var(--gr)}.cneu{color:var(--mu)}
+.an2{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.apanel{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.apttl{font-family:var(--fn);font-size:13px;font-weight:700;margin-bottom:14px}
+.bchart{display:flex;align-items:flex-end;gap:5px;height:100px}
+.bcc{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%}
+.bct{flex:1;width:100%;display:flex;align-items:flex-end}
+.bcf{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height .5s}
+.bcl{font-size:9px;color:var(--mu)}
+.tcr{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.tc-rk{font-size:11px;color:var(--mu);width:14px}
+.tc-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+.tc-nm{font-size:12px;font-weight:500}
+.tc-ct{font-size:10px;color:var(--mu)}
+.tc-st{font-size:11px;color:var(--ac)}
+/* SETTINGS */
+.slayout{display:flex;flex:1;overflow:hidden}
+.snav{width:200px;flex-shrink:0;border-left:1px solid var(--bd);padding:16px 10px;display:flex;flex-direction:column;gap:3px}
+.sn-ttl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px;padding:0 8px;margin:10px 0 3px}
+.sni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;font-size:12px;color:var(--mu);cursor:pointer;transition:all .15s}
+.sni:hover{background:var(--sf2);color:var(--tx)}
+.sni.on{background:var(--glow);color:var(--ac)}
+.sni i{font-size:16px}
+.scont{flex:1;overflow-y:auto;padding:22px 28px}
+.sttl{font-family:var(--fn);font-size:17px;font-weight:700;margin-bottom:18px}
+.ssec{background:var(--sf);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:13px}
+.ssec-ttl{font-size:11px;color:var(--mu);padding:11px 17px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px;font-weight:500}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;border-bottom:1px solid var(--bd)}
+.srow:last-child{border-bottom:none}
+.slbl{font-size:13px;font-weight:500}
+.sdesc{font-size:11px;color:var(--mu);margin-top:2px}
+.sinp{background:var(--sf2);border:1px solid var(--bd2);color:var(--tx);font-family:var(--fb);font-size:12px;padding:7px 11px;border-radius:8px;outline:none;transition:border-color .15s}
+.sinp:focus{border-color:var(--ac)}
+.tgl{position:relative;width:40px;height:22px;cursor:pointer;flex-shrink:0}
+.tgl input{opacity:0;width:0;height:0}
+.tgl-s{position:absolute;inset:0;background:var(--dim);border-radius:11px;transition:.25s}
+.tgl-s::before{content:'';position:absolute;width:16px;height:16px;right:3px;top:3px;background:#fff;border-radius:50%;transition:.25s}
+.tgl input:checked+.tgl-s{background:linear-gradient(135deg,var(--ac),#0099cc)}
+.tgl input:checked+.tgl-s::before{transform:translateX(-18px)}
+.s-save{background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;border:none;border-radius:10px;padding:10px 26px;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.s-save:hover{opacity:.88}
+.pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:14px}
+.pcard{background:var(--sf2);border:1px solid var(--bd);border-radius:13px;padding:15px;cursor:pointer;transition:border-color .2s;position:relative}
+.pcard.sel{border-color:var(--ac);background:var(--glow)}
+.pplan{font-family:var(--fn);font-size:12px;font-weight:700;margin-bottom:4px}
+.pprice{font-family:var(--fn);font-size:20px;font-weight:800;margin-bottom:7px}
+.pprice span{font-size:11px;font-weight:400;color:var(--mu)}
+.pfeat{font-size:11px;color:var(--mu);display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.pfeat::before{content:'✓';color:var(--gr);font-size:10px}
+.ppop{position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-size:9px;padding:2px 9px;border-radius:0 0 7px 7px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-weight:700}
+/* HIGH CONTRAST */
+[data-hc=on]{--mu:#aaa;--bd:rgba(255,255,255,.2);--bd2:rgba(255,255,255,.35)}
+/* LARGE FONT */
+[data-lf=on]{font-size:17px}
+/* REDUCE MOTION */
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+[data-rm=on] *{animation:none!important;transition:none!important}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">דלג לתוכן הראשי</a>
+<div id="splash" aria-label="טוען" role="status"><div class="spl-logo"><span class="b">colla</span><span class="g">bo</span></div><div class="spl-tag">creators × brands</div><div class="spl-bar"></div></div>
+<div id="toast" role="alert" aria-live="assertive"><div style="font-size:28px;margin-bottom:4px">🎉</div><div id="toast-name">Match!</div><div style="font-size:13px;font-weight:400;margin-top:4px;opacity:.8" id="T.toast-sub">לחץ Messages להתחיל</div></div>
+<div class="ov hidden" id="onb" role="dialog" aria-modal="true" aria-label="הרשמה">
+ <div class="modal">
+  <!-- מסך כניסה / הרשמה -->
+  <div class="mstep active" id="s0">
+   <div style="text-align:center;margin-bottom:24px">
+    <div style="font-family:var(--fn);font-size:36px;font-weight:800;letter-spacing:-1.5px"><span style="color:var(--ac)">colla</span><span style="color:var(--ac2)">bo</span></div>
+    <div style="font-size:11px;color:var(--mu);margin-top:4px;letter-spacing:1px;text-transform:uppercase">The creator marketplace</div>
+   </div>
+   <!-- טאבים -->
+   <div style="display:flex;background:var(--sf2);border-radius:12px;padding:4px;margin-bottom:20px;gap:4px">
+    <button id="tab-login" onclick="switchAuthTab('login')" style="flex:1;padding:9px;border-radius:9px;border:none;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;background:var(--ac);color:#07070f;transition:all .2s">התחברות</button>
+    <button id="tab-register" onclick="switchAuthTab('register')" style="flex:1;padding:9px;border-radius:9px;border:none;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--mu);transition:all .2s">הרשמה</button>
+   </div>
+   <!-- טופס התחברות -->
+   <div id="auth-login">
+    <div class="fl"><label>אימייל</label><input class="fi" id="login-email" type="email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="fl"><label>סיסמה</label>
+     <div style="position:relative">
+      <input class="fi" id="login-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <span onclick="togglePass('login-pass',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+     </div>
+    </div>
+    <div id="login-err" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+    <button class="mbtn" onclick="doLogin()">כניסה →</button>
+    <div style="text-align:center;margin-top:10px">
+     <span onclick="showForgot()" style="font-size:12px;color:var(--ac);cursor:pointer;text-decoration:underline">שכחתי סיסמה</span>
+    </div>
+    <div style="text-align:center;margin-top:8px;font-size:12px;color:var(--mu)">אין לך חשבון? <span onclick="switchAuthTab('register')" style="color:var(--ac);cursor:pointer;font-weight:600">הרשמה</span></div>
+   </div>
+   <!-- טופס הרשמה מהיר -->
+   <div id="auth-register" style="display:none">
+    <div class="lang-row" style="margin-bottom:16px">
+     <button class="lang-pill active" id="lp-he" onclick="setLang('he')">🇮🇱 עברית</button>
+     <button class="lang-pill" id="lp-en" onclick="setLang('en')">🇺🇸 English</button>
+     <button class="lang-pill" id="lp-ar" onclick="setLang('ar')">🇸🇦 عربي</button>
+    </div>
+    <div class="mtitle" id="T.who">מי אתה?</div>
+    <div class="msub" id="T.choosepath" style="margin-bottom:14px">בחר את הנתיב שלך</div>
+    <div class="role-grid" style="margin-bottom:16px">
+     <div class="rc" id="rc-c" onclick="selRole('c')" tabindex="0" role="button" aria-pressed="false"><div class="re">📸</div><div class="rt" id="T.creator">יוצר תוכן</div><div class="rd" id="T.creatordesc">אני יוצר תוכן</div></div>
+     <div class="rc" id="rc-b" onclick="selRole('b')" tabindex="0" role="button" aria-pressed="false"><div class="re">🏢</div><div class="rt" id="T.business">עסק</div><div class="rd" id="T.businessdesc">אני מחפש יוצרים</div></div>
+    </div>
+    <div class="fl"><label>אימייל</label><input class="fi" id="reg-email" type="email" placeholder="you@example.com"></div>
+    <div class="fl"><label>סיסמה</label>
+     <div style="position:relative">
+      <input class="fi" id="reg-pass" type="password" placeholder="לפחות 6 תווים" oninput="checkPassStrength(this.value)">
+      <span onclick="togglePass('reg-pass',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+     </div>
+     <div id="pass-strength" style="margin-top:5px;display:flex;gap:4px">
+      <div class="ps-bar"></div><div class="ps-bar"></div><div class="ps-bar"></div><div class="ps-bar"></div>
+     </div>
+    </div>
+    <div class="fl"><label>אימות סיסמה</label>
+     <div style="position:relative">
+      <input class="fi" id="reg-pass2" type="password" placeholder="••••••••">
+      <span onclick="togglePass('reg-pass2',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+     </div>
+    </div>
+    <div id="reg-err" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+    <button class="mbtn" id="T.continue" onclick="validateAndGo('reg')">המשך →</button>
+    <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--mu)">כבר יש לך חשבון? <span onclick="switchAuthTab('login')" style="color:var(--ac);cursor:pointer;font-weight:600">התחברות</span></div>
+   </div>
+  </div>
+
+  <div class="mstep" id="s1">
+   <div style="text-align:center;margin-bottom:22px"><div style="font-family:var(--fn);font-size:32px;font-weight:800;letter-spacing:-1.5px"><span style="color:var(--ac)">colla</span><span style="color:var(--ac2)">bo</span></div><div style="font-size:11px;color:var(--mu);margin-top:4px;letter-spacing:1px;text-transform:uppercase">The creator marketplace</div></div>
+   <div class="mtitle" id="T.who2">מי אתה?</div>
+   <div class="msub" id="T.choosepath2">בחר את הנתיב שלך כדי להתחיל</div>
+   <div class="role-grid">
+    <div class="rc" id="rc-c2" onclick="selRole('c')" tabindex="0" role="button" aria-pressed="false"><div class="re">📸</div><div class="rt">יוצר תוכן</div><div class="rd">אני יוצר תוכן ורוצה לשתף פעולה עם מותגים</div></div>
+    <div class="rc" id="rc-b2" onclick="selRole('b')" tabindex="0" role="button" aria-pressed="false"><div class="re">🏢</div><div class="rt">עסק / מותג</div><div class="rd">אני מחפש יוצרי תוכן לקמפיינים שלי</div></div>
+   </div>
+   <button class="mbtn" id="T.continue" onclick="step2()">המשך →</button>
+  </div>
+  <div class="mstep" id="sc2">
+   <div class="prog"><div class="pd done"></div><div class="pd done"></div><div class="pd"></div><div class="pd"></div></div>
+   <div class="mtitle" id="T.yourprofile">הפרופיל שלך</div>
+   <div class="msub" id="T.profilesub">זה מה שמותגים יראו קודם</div>
+   <div class="fl"><label id="T.fullname">שם מלא</label><input class="fi" id="c-name" placeholder="השם שלך"></div>
+   <div class="fl"><label id="T.username">שם משתמש</label><input class="fi" id="c-handle" placeholder="@username"></div>
+   <div class="fl"><label id="T.bio">ביו</label><textarea class="fi" id="c-bio" rows="3" placeholder="ספר למותגים עליך..."></textarea></div>
+   <div class="fl"><label id="T.country">מדינה</label>
+    <select class="fi" id="c-country" style="cursor:pointer" onchange="onCountryChange('c')">
+     <option value="">בחר מדינה...</option>
+     <option value="il">🇮🇱 ישראל</option>
+     <option value="us">🇺🇸 ארצות הברית</option>
+     <option value="gb">🇬🇧 בריטניה</option>
+     <option value="de">🇩🇪 גרמניה</option>
+     <option value="fr">🇫🇷 צרפת</option>
+     <option value="nl">🇳🇱 הולנד</option>
+     <option value="es">🇪🇸 ספרד</option>
+     <option value="ae">🇦🇪 איחוד האמירויות</option>
+     <option value="ca">🇨🇦 קנדה</option>
+     <option value="au">🇦🇺 אוסטרליה</option>
+     <option value="th">🇹🇭 תאילנד</option>
+     <option value="pt">🇵🇹 פורטוגל</option>
+     <option value="it">🇮🇹 איטליה</option>
+     <option value="tr">🇹🇷 טורקיה</option>
+     <option value="gr">🇬🇷 יוון</option>
+    </select>
+   </div>
+   <div class="fl"><label id="T.city">עיר</label>
+    <div style="position:relative">
+     <input class="fi" id="c-city-search" placeholder="חפש עיר..." oninput="filterCities('c',this.value)" onfocus="showCityDrop('c')" autocomplete="off" disabled style="opacity:.5;cursor:not-allowed">
+     <div id="c-city-drop" style="display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:var(--sf);border:1px solid var(--bd2);border-radius:10px;max-height:180px;overflow-y:auto;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.3)"></div>
+    </div>
+   </div>
+   <div id="err-c2" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" onclick="validateAndGo('c2')">המשך →</button><button class="mbtn-ghost" onclick="goS('1')">← חזור</button>
+  </div>
+  <div class="mstep" id="sc3">
+   <div class="prog"><div class="pd done"></div><div class="pd done"></div><div class="pd done"></div><div class="pd"></div></div>
+   <div class="mtitle" id="T.yourcats">הקטגוריות שלך</div>
+   <div class="msub" id="T.catssub">מה אתה מתמחה בו? מותגים מסננים לפי זה</div>
+   <div class="chips" style="margin-bottom:18px">
+    <div class="chip" onclick="tChip(this)" tabindex="0">אוכל ושתייה</div><div class="chip" onclick="tChip(this)" tabindex="0">לייפסטייל</div>
+    <div class="chip" onclick="tChip(this)" tabindex="0">אופנה</div><div class="chip" onclick="tChip(this)" tabindex="0">כושר</div>
+    <div class="chip" onclick="tChip(this)" tabindex="0">טיולים</div><div class="chip" onclick="tChip(this)" tabindex="0">יופי וקוסמטיקה</div>
+    <div class="chip" onclick="tChip(this)" tabindex="0">UGC</div><div class="chip" onclick="tChip(this)" tabindex="0">טכנולוגיה</div>
+    <div class="chip" onclick="tChip(this)" tabindex="0">צילום</div><div class="chip" onclick="tChip(this)" tabindex="0">וידאו / ריילס</div>
+   </div>
+   <div class="frow"><div class="fl"><label id="T.pricefrom">מחיר מינימום</label><input class="fi" id="c-pf" placeholder="₪500"></div><div class="fl"><label id="T.priceto">מחיר מקסימום</label><input class="fi" id="c-pt" placeholder="₪5,000"></div></div>
+   <div id="err-c3" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" onclick="validateAndGo('c3')">המשך →</button><button class="mbtn-ghost" onclick="goS('c2')">← חזור</button>
+  </div>
+  <div class="mstep" id="sc4">
+   <div class="prog"><div class="pd done"></div><div class="pd done"></div><div class="pd done"></div><div class="pd done"></div></div>
+   <div class="mtitle" id="T.socials">חבר את הסושיאל שלך</div>
+   <div class="msub" id="T.socialssub">מותגים רואים את הנתונים האמיתיים שלך</div>
+   <div class="fl"><label>Instagram</label><input class="fi" id="c-ig" placeholder="@username"></div>
+   <div class="fl"><label>TikTok</label><input class="fi" id="c-tt" placeholder="@username"></div>
+   <div class="fl"><label>YouTube</label><input class="fi" id="c-yt" placeholder="קישור לערוץ (אופציונלי)"></div>
+   <div class="fl"><label id="T.followers">סה"כ עוקבים</label><input class="fi" id="c-fol" placeholder="50,000"></div>
+   <div id="err-c4" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" id="T.launch" onclick="validateAndGo('c4')">השק את הפרופיל שלי 🚀</button><button class="mbtn-ghost" onclick="goS('c3')">← חזור</button>
+  </div>
+  <div class="mstep" id="sb2">
+   <div class="prog"><div class="pd done"></div><div class="pd done"></div><div class="pd"></div></div>
+   <div class="mtitle" id="T.yourbiz">הפרטים שלך</div>
+   <div class="msub" id="T.bizsub">30 שניות וגמרנו</div>
+   <div class="fl"><label id="T.bizname">שם העסק</label><input class="fi" id="b-name" placeholder="למשל: קפה רומא"></div>
+   <div class="frow">
+    <div class="fl"><label id="T.city2">מדינה</label>
+     <select class="fi" id="b-country" style="cursor:pointer" onchange="onCountryChange('b')">
+      <option value="">בחר מדינה...</option>
+      <option value="il">🇮🇱 ישראל</option>
+      <option value="us">🇺🇸 ארצות הברית</option>
+      <option value="gb">🇬🇧 בריטניה</option>
+      <option value="de">🇩🇪 גרמניה</option>
+      <option value="fr">🇫🇷 צרפת</option>
+      <option value="nl">🇳🇱 הולנד</option>
+      <option value="es">🇪🇸 ספרד</option>
+      <option value="ae">🇦🇪 איחוד האמירויות</option>
+      <option value="ca">🇨🇦 קנדה</option>
+      <option value="au">🇦🇺 אוסטרליה</option>
+      <option value="it">🇮🇹 איטליה</option>
+      <option value="tr">🇹🇷 טורקיה</option>
+      <option value="gr">🇬🇷 יוון</option>
+     </select>
+    </div>
+    <div class="fl"><label>עיר</label>
+     <div style="position:relative">
+      <input class="fi" id="b-city-search" placeholder="חפש עיר..." oninput="filterCities('b',this.value)" onfocus="showCityDrop('b')" autocomplete="off" disabled style="opacity:.5;cursor:not-allowed">
+      <div id="b-city-drop" style="display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:var(--sf);border:1px solid var(--bd2);border-radius:10px;max-height:180px;overflow-y:auto;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.3)"></div>
+     </div>
+    </div>
+    <div class="fl"><label id="T.industry">תחום</label><select class="fi" id="b-ind" style="cursor:pointer"><option value="">בחר תחום...</option><option>מסעדה ואוכל</option><option>קפה</option><option>מלון ואירוח</option><option>חדר כושר</option><option>יופי וקוסמטיקה</option><option>אופנה</option><option>ריטייל</option><option>טכנולוגיה</option><option>בריאות</option><option>אחר</option></select></div>
+   </div>
+   <div class="fl"><label id="T.budget">תקציב חודשי</label><select class="fi" style="cursor:pointer"><option>עד ₪2,000</option><option>₪2,000–₪5,000</option><option selected>₪5,000–₪15,000</option><option>₪15,000–₪50,000</option><option>₪50,000+</option></select></div>
+   <div id="err-b2" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" onclick="validateAndGo('b2')">המשך →</button><button class="mbtn-ghost" onclick="goS('1')">← חזור</button>
+  </div>
+  <div class="mstep" id="sb3">
+   <div class="prog"><div class="pd done"></div><div class="pd done"></div><div class="pd done"></div></div>
+   <div class="mtitle" id="T.lookingfor">מה אתה מחפש?</div>
+   <div class="msub" id="T.lfsub">נציג לך קודם את היוצרים הכי רלוונטיים</div>
+   <div style="margin-bottom:14px"><div class="fg-lbl" id="T.contenttype">סוג תוכן</div><div class="chips"><div class="chip" onclick="tChip(this)" tabindex="0">ריילס אינסטגרם</div><div class="chip" onclick="tChip(this)" tabindex="0">TikTok</div><div class="chip" onclick="tChip(this)" tabindex="0">סטוריז</div><div class="chip" onclick="tChip(this)" tabindex="0">UGC תמונות</div><div class="chip" onclick="tChip(this)" tabindex="0">יוטיוב</div></div></div>
+   <div style="margin-bottom:14px"><div class="fg-lbl" id="T.creatorcats">קטגוריית יוצר</div><div class="chips"><div class="chip" onclick="tChip(this)" tabindex="0">אוכל</div><div class="chip" onclick="tChip(this)" tabindex="0">לייפסטייל</div><div class="chip" onclick="tChip(this)" tabindex="0">אופנה</div><div class="chip" onclick="tChip(this)" tabindex="0">כושר</div><div class="chip" onclick="tChip(this)" tabindex="0">יופי</div></div></div>
+   <div><div class="fg-lbl" id="T.creatorsize">גודל יוצר</div><div class="chips"><div class="chip" onclick="tChip(this)" tabindex="0">ננו (1K–10K)</div><div class="chip" onclick="tChip(this)" tabindex="0">מיקרו (10K–50K)</div><div class="chip" onclick="tChip(this)" tabindex="0">מיד (50K–200K)</div><div class="chip" onclick="tChip(this)" tabindex="0">מאקרו (200K+)</div></div></div>
+   <div id="err-b3" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" id="T.findcreators" style="margin-top:18px" onclick="validateAndGo('b3')">מצא יוצרים 🔍</button><button class="mbtn-ghost" onclick="goS('b2')">← חזור</button>
+  </div>
+ </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div id="forgot-modal" style="position:fixed;inset:0;background:rgba(7,7,15,.86);z-index:3000;display:none;align-items:center;justify-content:center">
+ <div style="background:var(--sf);border:1px solid var(--bd2);border-radius:20px;width:min(400px,95vw);padding:32px">
+  <!-- שלב 1: הזנת אימייל -->
+  <div id="forgot-s1">
+   <div style="text-align:center;margin-bottom:20px">
+    <div style="font-size:40px;margin-bottom:8px">🔐</div>
+    <div style="font-family:var(--fn);font-size:18px;font-weight:700">שכחתי סיסמה</div>
+    <div style="font-size:12px;color:var(--mu);margin-top:4px">הזן את האימייל שלך ונשלח קוד איפוס</div>
+   </div>
+   <div class="fl"><label>אימייל</label><input class="fi" id="forgot-email" type="email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')sendResetCode()"></div>
+   <div id="forgot-err" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" onclick="sendResetCode()">שלח קוד איפוס →</button>
+   <button class="mbtn-ghost" onclick="closeForgot()">ביטול</button>
+  </div>
+  <!-- שלב 2: הזנת קוד + סיסמה חדשה -->
+  <div id="forgot-s2" style="display:none">
+   <div style="text-align:center;margin-bottom:20px">
+    <div style="font-size:40px;margin-bottom:8px">📬</div>
+    <div style="font-family:var(--fn);font-size:18px;font-weight:700">הזן קוד איפוס</div>
+    <div id="forgot-sent-to" style="font-size:12px;color:var(--mu);margin-top:4px"></div>
+   </div>
+   <div class="fl">
+    <label>קוד האיפוס (6 ספרות)</label>
+    <input class="fi" id="reset-code" placeholder="123456" maxlength="6" style="text-align:center;font-size:20px;letter-spacing:6px;font-family:var(--fn)" onkeydown="if(event.key==='Enter')verifyCode()">
+   </div>
+   <div class="fl">
+    <label>סיסמה חדשה</label>
+    <div style="position:relative">
+     <input class="fi" id="new-pass" type="password" placeholder="לפחות 6 תווים" oninput="checkPassStrength2(this.value)">
+     <span onclick="togglePass('new-pass',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+    </div>
+    <div id="pass-strength2" style="margin-top:5px;display:flex;gap:4px">
+     <div class="ps-bar"></div><div class="ps-bar"></div><div class="ps-bar"></div><div class="ps-bar"></div>
+    </div>
+   </div>
+   <div class="fl">
+    <label>אימות סיסמה חדשה</label>
+    <div style="position:relative">
+     <input class="fi" id="new-pass2" type="password" placeholder="••••••••">
+     <span onclick="togglePass('new-pass2',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+    </div>
+   </div>
+   <div id="reset-err" style="font-size:12px;color:var(--rd);margin-bottom:8px;display:none;text-align:center"></div>
+   <button class="mbtn" onclick="verifyAndReset()">איפוס סיסמה ✓</button>
+   <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--mu)">לא קיבלת? <span onclick="sendResetCode()" style="color:var(--ac);cursor:pointer">שלח שוב</span></div>
+  </div>
+  <!-- שלב 3: הצלחה -->
+  <div id="forgot-s3" style="display:none;text-align:center">
+   <div style="font-size:48px;margin-bottom:14px">✅</div>
+   <div style="font-family:var(--fn);font-size:18px;font-weight:700;margin-bottom:6px">הסיסמה אופסה!</div>
+   <div style="font-size:12px;color:var(--mu);margin-bottom:20px">עכשיו אפשר להתחבר עם הסיסמה החדשה</div>
+   <button class="mbtn" onclick="closeForgot()">חזור להתחברות →</button>
+  </div>
+ </div>
+</div>
+<div id="np" role="dialog" aria-label="התראות">
+ <div class="np-head"><span id="T.notifs">התראות</span><span class="np-clear" onclick="clearN()" id="T.markread">סמן הכל כנקרא</span></div>
+ <div id="nl"><div class="np-empty" id="T.nonotifs">אין התראות חדשות</div></div>
+</div>
+<div id="app">
+ <div class="topbar" role="banner">
+  <div class="tlogo" onclick="showPg('discover')" tabindex="0" role="link" aria-label="Collabo — דף הבית"><span class="b">colla</span><span class="g">bo</span></div>
+  <div class="tright">
+   <button class="lbtn" id="lang-cycle" onclick="cycleLang()" aria-label="שנה שפה">🇮🇱 עב</button>
+   <button class="tbb" onclick="toggleTheme()" id="theme-btn" aria-label="מצב בהיר/כהה" title="ערכת צבעים"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
+   <button class="tbb" onclick="toggleNP()" id="notif-btn" aria-label="התראות"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="ndot" id="ndot" style="display:none"></div></button>
+   <button class="tbb" onclick="showPg('matches')" aria-label="Matches"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><div class="ndot" id="match-ndot" style="display:none"></div></button>
+  </div>
+  <select style="background:var(--sf2);border:1px solid var(--bd2);color:var(--tx);font-family:var(--fb);font-size:11px;padding:6px 10px;border-radius:8px;outline:none;cursor:pointer;flex-shrink:0" aria-label="סניף">
+   <option>סניף תל אביב</option><option>סניף רמת גן</option><option>סניף הרצליה</option>
+  </select>
+ </div>
+ <div class="abody" id="main">
+  <nav class="sidebar" aria-label="ניווט ראשי">
+   <button class="nb on" data-pg="discover" onclick="showPg('discover')" aria-label="גלה יוצרים"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5M2 17l10 5 10-5M2 12l10 5 10-5"/></svg><span class="nl" id="T.nl-discover">גלה</span></button>
+   <button class="nb" data-pg="creators" onclick="showPg('creators')" aria-label="עיין ביוצרים"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg><span class="nl" id="T.nl-browse">עיין</span></button>
+   <button class="nb" data-pg="matches" onclick="showPg('matches')" aria-label="Matches"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nl">Matches</span><div class="nbadge" id="match-badge" style="display:none"></div></button>
+   <button class="nb" data-pg="messages" onclick="showPg('messages')" aria-label="הודעות"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="nl" id="T.nl-messages">הודעות</span><div class="nbadge" id="msg-badge"></div></button>
+   <button class="nb" data-pg="analytics" onclick="showPg('analytics')" aria-label="אנליטיקס"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg><span class="nl" id="T.nl-analytics">נתונים</span></button>
+   <div class="sb-bot">
+    <button class="nb" data-pg="settings" onclick="showPg('settings')" aria-label="הגדרות"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="nl" id="T.nl-settings">הגדרות</span></button>
+    <div class="uav" onclick="showPg('settings')" tabindex="0" role="button" aria-label="פרופיל">🏢</div>
+   </div>
+  </nav>
+  <div class="main">
+   <!-- MATCHES -->
+   <div class="page" id="page-matches">
+    <div class="mh"><div><div class="ph" id="T.matches-title">ה-<span>Matches</span> שלך</div><div class="psub" id="T.matches-sub">יוצרים שממתינים לצ'אט</div></div></div>
+    <div id="mgrid" class="mgrid" style="flex:1;overflow-y:auto" role="list"></div>
+   </div>
+   <!-- DISCOVER -->
+   <div class="page on" id="page-discover">
+    <div class="mh" style="flex-shrink:0">
+     <div><div class="ph" id="T.disc-title">מצא <span>יוצרים</span></div><div class="psub" id="T.disc-count">טוען...</div></div>
+     <button class="ftgl" id="ftgl-btn" onclick="togFilters()" aria-expanded="false" aria-controls="fbar"><svg style="font-size:13px" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> <span id="T.filters">פילטרים</span></button>
+    </div>
+    <div class="fbar" id="fbar">
+     <div><div class="fg-lbl" id="T.cat-filter">קטגוריה</div><div class="chips"><div class="chip on" onclick="tChip(this)" tabindex="0" id="T.all">הכל</div><div class="chip" onclick="tChip(this)" tabindex="0">אוכל</div><div class="chip" onclick="tChip(this)" tabindex="0">אופנה</div><div class="chip" onclick="tChip(this)" tabindex="0">כושר</div><div class="chip" onclick="tChip(this)" tabindex="0">יופי</div></div></div>
+     <div><div class="fg-lbl" id="T.fol-filter">עוקבים</div><div class="chips"><div class="chip on" onclick="tChip(this)" tabindex="0" id="T.any">הכל</div><div class="chip" onclick="tChip(this)" tabindex="0">10K–50K</div><div class="chip" onclick="tChip(this)" tabindex="0">50K–200K</div><div class="chip" onclick="tChip(this)" tabindex="0">200K+</div></div></div>
+     <div><div class="fg-lbl" id="T.loc-filter">מיקום</div><div class="chips"><div class="chip on" onclick="tChip(this)" tabindex="0" id="T.anywhere">בכל מקום</div><div class="chip" onclick="tChip(this)" tabindex="0">קרוב אליי</div><div class="chip" onclick="tChip(this)" tabindex="0">תל אביב</div></div></div>
+    </div>
+    <div class="disc-area">
+     <div>
+      <div class="cstack" id="cstack" role="region" aria-label="כרטיסי יוצרים" aria-live="polite"></div>
+      <div class="crem" id="crem"></div>
+     </div>
+     <div class="dside">
+      <div class="sp"><div class="sp-ttl" id="T.saved">שמורים</div><div id="saved-list"><div style="font-size:11px;color:var(--mu);text-align:center;padding:10px;line-height:1.7" id="T.nosaved">אין שמורים עדיין.<br>לחץ 🔖 לשמור.</div></div></div>
+      <div class="sp"><div class="sp-ttl" id="T.activity">פעילות אחרונה</div><div id="act-log"><div style="font-size:11px;color:var(--mu);text-align:center;padding:8px" id="T.noactivity">אין פעילות עדיין</div></div></div>
+     </div>
+    </div>
+   </div>
+   <!-- CREATORS -->
+   <div class="page" id="page-creators">
+    <div class="cr-head">
+     <div class="cr-ttl" id="T.browse-title">עיין ביוצרים</div>
+     <div class="sw"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="si" id="T.search" placeholder="חיפוש..." oninput="filterC(this.value)" aria-label="חיפוש יוצרים"></div>
+     <select class="sort-sel" onchange="sortC(this.value)" aria-label="מיון">
+      <option value="match" id="T.sort-match">הכי מתאים</option>
+      <option value="followers" id="T.sort-fol">הכי עוקבים</option>
+      <option value="engagement" id="T.sort-eng">Engagement גבוה</option>
+      <option value="price" id="T.sort-price">מחיר: נמוך לגבוה</option>
+      <option value="rating" id="T.sort-rating">דירוג גבוה</option>
+     </select>
+    </div>
+    <div style="padding:10px 20px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0">
+     <div class="chip on" onclick="tChip(this)" tabindex="0" id="T.allcats">כל הקטגוריות</div>
+     <div class="chip" onclick="tChip(this)" tabindex="0">אוכל</div><div class="chip" onclick="tChip(this)" tabindex="0">אופנה</div>
+     <div class="chip" onclick="tChip(this)" tabindex="0">כושר</div><div class="chip" onclick="tChip(this)" tabindex="0">לייפסטייל</div>
+     <div class="chip" onclick="tChip(this)" tabindex="0">יופי</div><div class="chip" onclick="tChip(this)" tabindex="0">UGC</div>
+    </div>
+    <div class="cr-wrap"><div class="cr-grid" id="cr-grid"></div></div>
+   </div>
+   <!-- PROFILE -->
+   <div class="page" id="page-profile">
+    <div style="padding:12px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--sf)">
+     <button onclick="showPg('discover')" style="background:var(--sf2);border:1px solid var(--bd);border-radius:9px;padding:7px 12px;color:var(--tx);cursor:pointer;font-family:var(--fb);font-size:12px;display:flex;align-items:center;gap:5px" aria-label="חזור"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> <span id="T.back">חזור</span></button>
+     <button onclick="shareProfile()" style="margin-right:auto;background:var(--sf2);border:1px solid var(--bd);border-radius:9px;padding:7px 12px;color:var(--mu);cursor:pointer;font-family:var(--fb);font-size:12px;display:flex;align-items:center;gap:5px" aria-label="שתף פרופיל"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> <span id="T.share">שתף</span></button>
+    </div>
+    <div class="pl">
+     <div class="pleft">
+      <div class="phero" id="phero" style="background:linear-gradient(160deg,#001a2e,#003040)"><span class="pavail" id="T.available">● זמין</span><span id="pemoji" style="font-size:64px">📸</span></div>
+      <div class="pav-wrap"><div class="pav" id="pav">📸</div></div>
+      <div class="pname" id="pname">—</div>
+      <div class="phdl" id="phdl">—</div>
+      <div class="ploc"><svg style="font-size:11px" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="ploc">—</span></div>
+      <div class="pvbdg"><svg style="font-size:11px" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span id="T.verified">מאומת</span></div>
+      <div class="pbio" id="pbio">—</div>
+      <div class="pcats" id="pcats"></div>
+      <div class="ps-grid">
+       <div class="ps-c"><div class="ps-v" id="ps-fol">—</div><div class="ps-l" id="T.fol-lbl">עוקבים</div></div>
+       <div class="ps-c"><div class="ps-v" id="ps-eng">—</div><div class="ps-l">Engagement</div></div>
+       <div class="ps-c"><div class="ps-v" id="ps-col">—</div><div class="ps-l" id="T.col-lbl">שיתופים</div></div>
+       <div class="ps-c"><div class="ps-v" id="ps-rat">—</div><div class="ps-l" id="T.rat-lbl">דירוג</div></div>
+      </div>
+      <div class="soclist" id="psocials"></div>
+      <div class="prow"><span class="p-lbl" id="T.price-lbl">מחיר לפוסט</span><span class="p-val" id="pprice">—</span></div>
+      <button class="shr-btn" onclick="shareProfile()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> <span id="T.share-profile">שתף פרופיל</span></button>
+      <button class="cta" onclick="openOffer()" id="T.send-collab" style="display:none">שלח בקשת שיתוף פעולה</button>
+      <button class="cta2" onclick="saveFromProfile()" id="T.save-creator" style="display:none">שמור יוצר</button>
+     </div>
+     <div class="pright">
+      <div><div class="stitle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> <span id="T.portfolio">פורטפוליו</span></div><div class="pmason" id="port-grid"></div></div>
+      <div><div class="stitle"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> <span id="T.past-collabs">שיתופי פעולה</span></div><div id="col-hist"></div></div>
+      <div><div class="stitle"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <span id="T.reviews">ביקורות</span></div><div id="rev-list"></div></div>
+     </div>
+    </div>
+   </div>
+   <!-- MESSAGES -->
+   <div class="page" id="page-messages">
+    <div class="mlayout">
+     <div class="tpanel">
+      <div class="thead"><div class="ttitle" id="T.messages">הודעות</div><input class="tsr" id="T.search-conv" placeholder="חיפוש שיחות..." aria-label="חיפוש שיחות"></div>
+      <div class="tlist" id="tlist" role="list"></div>
+     </div>
+     <div class="carea">
+      <div class="ctopbar">
+       <div class="ctav" id="ctav">📸</div>
+       <div><div class="ctname" id="ctname">—</div><div class="ctstatus"><span style="width:6px;height:6px;border-radius:50%;background:var(--gr);display:inline-block"></span> <span id="T.online">מחובר</span></div></div>
+       <div class="ctacts">
+        <button class="cta-btn" onclick="showPg('profile')" title="פרופיל" aria-label="פרופיל"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+        <button class="cta-btn" onclick="togOForm()" title="שלח הצעה" aria-label="שלח הצעה" id="T.send-offer-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></button>
+        <button class="cta-btn" aria-label="עוד אפשרויות"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+       </div>
+      </div>
+      <div id="obanner" style="display:none">
+       <div class="obanner">
+        <div class="ob-lbl" id="T.offer-lbl">בקשת שיתוף פעולה ממתינה</div>
+        <div class="ob-title" id="ob-title">קמפיין קיץ — 4 ריילס + 8 סטוריז</div>
+        <div class="ob-details" id="ob-det">תקציב: ₪4,500 · 3 שבועות · אינסטגרם</div>
+        <div class="ob-acts">
+         <button class="ob-accept" onclick="acceptOffer()" id="T.accept">אשר עסקה ✓</button>
+         <button class="ob-decline" onclick="hideEl('obanner')" id="T.counter">הצעה נגדית</button>
+         <button class="ob-decline" style="flex:.6" onclick="hideEl('obanner')" id="T.decline">דחה</button>
+        </div>
+       </div>
+      </div>
+      <div id="oform-wrap" style="display:none">
+       <div class="oform">
+        <div class="of-ttl" id="T.new-offer">הצעת שיתוף פעולה חדשה</div>
+        <div class="of-grid">
+         <div class="off"><label id="T.of-campaign">שם הקמפיין</label><input placeholder="קמפיין קיץ 2025" id="of-title"></div>
+         <div class="off"><label id="T.of-budget">תקציב</label><input placeholder="₪3,000" id="of-budget"></div>
+         <div class="off"><label id="T.of-timeline">לוח זמנים</label><input placeholder="3 שבועות" id="of-timeline"></div>
+         <div class="off"><label id="T.of-deliv">דליברבלס</label><input placeholder="4 ריילס, 8 סטוריז" id="of-deliv"></div>
+         <div class="off full"><label id="T.of-brief">ברייף</label><textarea rows="2" placeholder="תאר את הקמפיין..." id="of-brief"></textarea></div>
+        </div>
+        <button class="of-send" onclick="sendOffer()" id="T.send-offer">שלח הצעה →</button>
+       </div>
+      </div>
+      <div class="mbody" id="mbody" role="log" aria-live="polite"></div>
+      <div class="composer">
+       <div class="comp-row">
+        <div class="comp-acts">
+         <button class="comp-b" aria-label="צרף קובץ" title="צרף קובץ"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
+         <button class="comp-b" aria-label="שלח תמונה" title="שלח תמונה"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+        </div>
+        <input class="comp-in" id="chat-in" placeholder="כתוב הודעה..." onkeydown="if(event.key==='Enter')sendMsg()" aria-label="כתוב הודעה">
+        <button class="comp-send" onclick="sendMsg()" aria-label="שלח"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- ANALYTICS -->
+   <div class="page" id="page-analytics">
+    <div class="anh"><div class="antitle" id="T.analytics">אנליטיקס</div><div class="ptabs"><div class="ptab on" onclick="setPer(this)" id="T.7d">7 ימים</div><div class="ptab" onclick="setPer(this)" id="T.30d">30 יום</div><div class="ptab" onclick="setPer(this)" id="T.q">רבעון</div></div></div>
+    <div class="anwrap">
+     <div class="mgd">
+      <div class="mcard mc-bl"><div class="mc-lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> <span id="T.reach">טווח</span></div><div class="mc-val">3.2M</div><div class="mc-ch cup"><svg style="font-size:12px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> +24%</div></div>
+      <div class="mcard mc-go"><div class="mc-lbl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span id="T.engagements">אינטראקציות</span></div><div class="mc-val">186K</div><div class="mc-ch cup"><svg style="font-size:12px" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> +18%</div></div>
+      <div class="mcard mc-gr"><div class="mc-lbl"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg> <span id="T.active-collabs">שיתופים פעילים</span></div><div class="mc-val">7</div><div class="mc-ch cup">+2 <span id="T.new">חדשים</span></div></div>
+      <div class="mcard mc-rd"><div class="mc-lbl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg> <span id="T.invested">הושקע</span></div><div class="mc-val">₪24K</div><div class="mc-ch cneu" id="T.this-period">תקופה זו</div></div>
+     </div>
+     <div class="an2">
+      <div class="apanel"><div class="apttl" id="T.reach-time">טווח לאורך זמן</div><div class="bchart" id="bchart"></div></div>
+      <div class="apanel"><div class="apttl" id="T.top-creators">יוצרים מובילים</div><div id="top-cr"></div></div>
+     </div>
+     <div class="apanel"><div class="apttl" id="T.campaigns">קמפיינים פעילים</div><div id="campaigns" style="text-align:center;padding:24px;color:var(--mu);font-size:12px" id="T.no-campaigns">אין קמפיינים עדיין</div></div>
+    </div>
+   </div>
+   <!-- SETTINGS -->
+   <div class="page" id="page-settings">
+    <div class="slayout">
+     <nav class="snav" aria-label="הגדרות">
+      <div class="sn-ttl" id="T.account">חשבון</div>
+      <div class="sni on" tabindex="0" role="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 22V12h6v10M9 7h1M14 7h1M9 11h1M14 11h1"/></svg> <span id="T.biz-profile">פרופיל עסקי</span></div>
+      <div class="sni" tabindex="0" role="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> <span id="T.billing">חיוב ותוכנית</span></div>
+      <div class="sn-ttl" id="T.preferences">העדפות</div>
+      <div class="sni" tabindex="0" role="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg> <span id="T.notifications">התראות</span></div>
+      <div class="sni" tabindex="0" role="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> <span id="T.appearance">מראה</span></div>
+      <div class="sni" tabindex="0" role="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg> <span id="T.language">שפה</span></div>
+      <div class="sni" tabindex="0" role="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1"/><path d="M8 10h8M12 10v4M8 21l4-7 4 7"/></svg> <span id="T.accessibility">נגישות</span></div>
+     </nav>
+     <div class="scont">
+      <div class="sttl" id="T.settings-title">הגדרות</div>
+      <div class="ssec">
+       <div class="ssec-ttl" id="T.basic-info">מידע בסיסי</div>
+       <div class="srow"><div><div class="slbl" id="T.biz-name">שם העסק</div></div><input class="sinp" value="Urban Eats TLV" aria-label="שם העסק"></div>
+       <div class="srow"><div><div class="slbl" id="T.industry-lbl">תחום</div></div><select class="sinp" style="cursor:pointer" aria-label="תחום"><option>מסעדה ואוכל</option><option>קפה</option><option>אחר</option></select></div>
+       <div class="srow"><div><div class="slbl" id="T.location-lbl">מיקום</div></div>
+        <select class="sinp" style="cursor:pointer;width:200px" aria-label="מיקום">
+         <option>תל אביב, ישראל</option><option>ירושלים, ישראל</option><option>חיפה, ישראל</option>
+         <option>רמת גן, ישראל</option><option>הרצליה, ישראל</option><option>נתניה, ישראל</option>
+         <option>באר שבע, ישראל</option><option>ראשון לציון, ישראל</option>
+         <option>דובאי, UAE</option><option>לונדון, UK</option><option>ניו יורק, USA</option>
+         <option>אחר</option>
+        </select>
+       </div>
+      </div>
+      <div class="ssec">
+       <div class="ssec-ttl">אבטחה</div>
+       <div class="srow">
+        <div><div class="slbl">שינוי סיסמה</div><div class="sdesc">עדכן את הסיסמה שלך</div></div>
+        <button onclick="showChangePass()" style="padding:7px 14px;border-radius:8px;background:var(--glow);border:1px solid rgba(0,207,255,0.3);color:var(--ac);font-family:var(--fb);font-size:12px;cursor:pointer">שנה סיסמה</button>
+       </div>
+      </div>
+      <!-- Change password modal (inline) -->
+      <div id="change-pass-modal" style="display:none;position:fixed;inset:0;background:rgba(7,7,15,.86);z-index:3000;align-items:center;justify-content:center">
+       <div style="background:var(--sf);border:1px solid var(--bd2);border-radius:20px;width:min(380px,95vw);padding:28px">
+        <div style="font-family:var(--fn);font-size:16px;font-weight:700;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center">
+         🔒 שינוי סיסמה
+         <span onclick="closeChangePass()" style="cursor:pointer;color:var(--mu);font-size:18px">✕</span>
+        </div>
+        <div class="fl">
+         <label>סיסמה נוכחית</label>
+         <div style="position:relative">
+          <input class="fi" id="cur-pass" type="password" placeholder="••••••••">
+          <span onclick="togglePass('cur-pass',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+         </div>
+        </div>
+        <div class="fl">
+         <label>סיסמה חדשה</label>
+         <div style="position:relative">
+          <input class="fi" id="chg-pass" type="password" placeholder="לפחות 6 תווים" oninput="checkPassStrength3(this.value)">
+          <span onclick="togglePass('chg-pass',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+         </div>
+         <div id="pass-strength3" style="margin-top:5px;display:flex;gap:4px">
+          <div class="ps-bar"></div><div class="ps-bar"></div><div class="ps-bar"></div><div class="ps-bar"></div>
+         </div>
+        </div>
+        <div class="fl">
+         <label>אימות סיסמה חדשה</label>
+         <div style="position:relative">
+          <input class="fi" id="chg-pass2" type="password" placeholder="••••••••">
+          <span onclick="togglePass('chg-pass2',this)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;color:var(--mu)">👁</span>
+         </div>
+        </div>
+        <div id="chg-err" style="font-size:12px;color:var(--rd);margin-bottom:10px;display:none;text-align:center"></div>
+        <button class="mbtn" onclick="doChangePass()">עדכן סיסמה ✓</button>
+        <button class="mbtn-ghost" onclick="closeChangePass()">ביטול</button>
+       </div>
+      </div>
+
+      <div class="ssec">
+       <div class="ssec-ttl" id="T.lang-access">שפה ונגישות</div>
+       <div class="srow"><div><div class="slbl" id="T.interface-lang">שפת ממשק</div><div class="sdesc" id="T.interface-lang-desc">שפת כל הטקסטים באפליקציה</div></div>
+        <select class="sinp" onchange="setLang(this.value)" aria-label="שפת ממשק">
+         <option value="he">🇮🇱 עברית</option><option value="en">🇺🇸 English</option><option value="ar">🇸🇦 عربي</option>
+        </select>
+       </div>
+       <div class="srow"><div><div class="slbl" id="T.large-text">גודל טקסט גדול</div><div class="sdesc" id="T.large-text-desc">מגדיל את כל הטקסטים לנגישות</div></div><label class="tgl" aria-label="גודל טקסט גדול"><input type="checkbox" id="lf-tog" onchange="togLF(this)"><span class="tgl-s"></span></label></div>
+       <div class="srow"><div><div class="slbl" id="T.high-contrast">ניגודיות גבוהה</div><div class="sdesc" id="T.high-contrast-desc">צבעים חדים יותר לנגישות</div></div><label class="tgl" aria-label="ניגודיות גבוהה"><input type="checkbox" id="hc-tog" onchange="togHC(this)"><span class="tgl-s"></span></label></div>
+       <div class="srow"><div><div class="slbl" id="T.reduce-motion">הפחת אנימציות</div><div class="sdesc" id="T.reduce-motion-desc">מומלץ לרגישים לתנועה</div></div><label class="tgl" aria-label="הפחת אנימציות"><input type="checkbox" id="rm-tog" onchange="togRM(this)"><span class="tgl-s"></span></label></div>
+      </div>
+      <div class="ssec">
+       <div class="ssec-ttl" id="T.notif-section">התראות</div>
+       <div class="srow"><div><div class="slbl" id="T.new-match">Match חדש</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-s"></span></label></div>
+       <div class="srow"><div><div class="slbl" id="T.new-msg">הודעה חדשה</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-s"></span></label></div>
+       <div class="srow"><div><div class="slbl" id="T.collab-update">עדכון שיתוף פעולה</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-s"></span></label></div>
+      </div>
+      <div class="ssec">
+       <div class="ssec-ttl" id="T.plan-section">תוכנית</div>
+       <div class="pgrid">
+        <div class="pcard"><div class="pplan">Starter</div><div class="pprice">$49<span>/mo</span></div><div class="pfeat" id="T.f1">20 קשרים/חודש</div><div class="pfeat" id="T.f2">פילטרים בסיסיים</div></div>
+        <div class="pcard sel"><div class="ppop">נוכחי</div><div class="pplan">Pro</div><div class="pprice">$149<span>/mo</span></div><div class="pfeat" id="T.f3">ללא הגבלה</div><div class="pfeat" id="T.f4">AI matching</div><div class="pfeat" id="T.f5">אנליטיקס מלא</div></div>
+        <div class="pcard"><div class="pplan">Enterprise</div><div class="pprice">Custom</div><div class="pfeat" id="T.f6">חשבונות מרובים</div><div class="pfeat" id="T.f7">מנהל אישי</div></div>
+       </div>
+      </div>
+      <button class="s-save" onclick="saveSettings()" id="T.save-settings">שמור הגדרות</button>
+      <button onclick="exportUsers()" style="margin-right:12px;padding:10px 22px;border-radius:10px;background:var(--sf2);border:1px solid var(--bd2);color:var(--tx);font-family:var(--fb);font-size:13px;cursor:pointer;transition:all .15s">📤 ייצא משתמשים לאדמין</button>
+
+      <!-- Export modal -->
+      <div id="export-modal" style="display:none;position:fixed;inset:0;background:rgba(7,7,15,.85);z-index:2000;align-items:center;justify-content:center">
+        <div style="background:var(--sf);border:1px solid var(--bd2);border-radius:18px;padding:28px;width:min(520px,95vw);max-height:80vh;overflow-y:auto">
+          <div style="font-family:var(--fn);font-size:16px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+            📤 ייצא משתמשים לאדמין
+            <span onclick="document.getElementById('export-modal').style.display='none'" style="cursor:pointer;color:var(--mu);font-size:18px">✕</span>
+          </div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:12px;line-height:1.7">העתק את הטקסט הבא ← פתח את <strong style="color:var(--ac)">collabo-admin.html</strong> ← לחץ "ייבא מ-Collabo" ← הדבק.</div>
+          <textarea id="export-json" style="width:100%;height:160px;background:var(--sf2);border:1px solid var(--bd2);border-radius:10px;padding:12px;color:var(--tx);font-family:monospace;font-size:11px;outline:none;resize:none;line-height:1.5" readonly></textarea>
+          <button onclick="copyExport()" id="copy-btn" style="margin-top:12px;width:100%;padding:11px;border-radius:10px;background:linear-gradient(135deg,var(--ac),#0099cc);color:#07070f;font-family:var(--fn);font-size:13px;font-weight:700;border:none;cursor:pointer">העתק JSON</button>
+        </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+/* ══ TRANSLATIONS ══ */
+const TR={
+he:{dir:'rtl',l:'he',
+'T.who':'מי אתה?','T.choosepath':'בחר את הנתיב שלך',
+'T.creator':'יוצר תוכן','T.creatordesc':'אני יוצר תוכן ורוצה לשתף פעולה עם מותגים',
+'T.business':'עסק / מותג','T.businessdesc':'אני מחפש יוצרי תוכן לקמפיינים שלי',
+'T.continue':'המשך →','T.yourprofile':'הפרופיל שלך','T.profilesub':'זה מה שמותגים יראו קודם',
+'T.fullname':'שם מלא','T.username':'שם משתמש','T.bio':'ביו','T.city':'עיר','T.country':'מדינה','T.city2':'עיר',
+'T.yourcats':'הקטגוריות שלך','T.catssub':'מה אתה מתמחה בו? מותגים מסננים לפי זה',
+'T.pricefrom':'מחיר מינימום','T.priceto':'מחיר מקסימום',
+'T.socials':'חבר את הסושיאל שלך','T.socialssub':'מותגים רואים את הנתונים האמיתיים שלך',
+'T.followers':'סה"כ עוקבים','T.launch':'השק את הפרופיל שלי 🚀',
+'T.yourbiz':'הפרטים שלך','T.bizsub':'30 שניות וגמרנו','T.bizname':'שם העסק',
+'T.industry':'תחום','T.budget':'תקציב חודשי',
+'T.lookingfor':'מה אתה מחפש?','T.lfsub':'נציג לך קודם את היוצרים הכי רלוונטיים',
+'T.contenttype':'סוג תוכן','T.creatorcats':'קטגוריית יוצר','T.creatorsize':'גודל יוצר',
+'T.findcreators':'מצא יוצרים 🔍',
+'T.notifs':'התראות','T.markread':'סמן הכל כנקרא','T.nonotifs':'אין התראות חדשות',
+'T.nl-discover':'גלה','T.nl-browse':'עיין','T.nl-messages':'הודעות','T.nl-analytics':'נתונים','T.nl-settings':'הגדרות',
+'T.matches-title':'ה-Matches שלך','T.matches-sub':"יוצרים שממתינים לצ'אט",
+'T.disc-title':'מצא יוצרים','T.filters':'פילטרים',
+'T.cat-filter':'קטגוריה','T.all':'הכל','T.fol-filter':'עוקבים','T.any':'הכל','T.loc-filter':'מיקום','T.anywhere':'בכל מקום',
+'T.saved':'שמורים','T.nosaved':'אין שמורים עדיין.\nלחץ 🔖 לשמור.','T.activity':'פעילות אחרונה','T.noactivity':'אין פעילות עדיין',
+'T.browse-title':'עיין ביוצרים','T.search':'חיפוש...','T.sort-match':'הכי מתאים','T.sort-fol':'הכי עוקבים',
+'T.sort-eng':'Engagement גבוה','T.sort-price':'מחיר: נמוך לגבוה','T.sort-rating':'דירוג גבוה','T.allcats':'כל הקטגוריות',
+'T.back':'חזור','T.share':'שתף','T.available':'● זמין','T.verified':'מאומת','T.fol-lbl':'עוקבים','T.col-lbl':'שיתופים','T.rat-lbl':'דירוג',
+'T.price-lbl':'מחיר לפוסט','T.share-profile':'שתף פרופיל','T.send-collab':'שלח בקשת שיתוף פעולה','T.save-creator':'שמור יוצר',
+'T.portfolio':'פורטפוליו','T.past-collabs':'שיתופי פעולה','T.reviews':'ביקורות',
+'T.messages':'הודעות','T.search-conv':'חיפוש שיחות...','T.online':'מחובר',
+'T.send-offer-btn':'שלח הצעה','T.offer-lbl':'בקשת שיתוף פעולה ממתינה',
+'T.accept':'אשר עסקה ✓','T.counter':'הצעה נגדית','T.decline':'דחה',
+'T.new-offer':'הצעת שיתוף פעולה חדשה','T.of-campaign':'שם הקמפיין','T.of-budget':'תקציב',
+'T.of-timeline':'לוח זמנים','T.of-deliv':'דליברבלס','T.of-brief':'ברייף','T.send-offer':'שלח הצעה →',
+'T.analytics':'אנליטיקס','T.7d':'7 ימים','T.30d':'30 יום','T.q':'רבעון',
+'T.reach':'טווח','T.engagements':'אינטראקציות','T.active-collabs':'שיתופים פעילים','T.invested':'הושקע','T.this-period':'תקופה זו','T.new':'חדשים',
+'T.reach-time':'טווח לאורך זמן','T.top-creators':'יוצרים מובילים','T.campaigns':'קמפיינים פעילים','T.no-campaigns':'אין קמפיינים עדיין',
+'T.account':'חשבון','T.biz-profile':'פרופיל עסקי','T.billing':'חיוב ותוכנית',
+'T.preferences':'העדפות','T.notifications':'התראות','T.appearance':'מראה','T.language':'שפה','T.accessibility':'נגישות',
+'T.settings-title':'הגדרות','T.basic-info':'מידע בסיסי','T.biz-name':'שם העסק','T.industry-lbl':'תחום','T.location-lbl':'מיקום',
+'T.lang-access':'שפה ונגישות','T.interface-lang':'שפת ממשק','T.interface-lang-desc':'שפת כל הטקסטים באפליקציה',
+'T.large-text':'גודל טקסט גדול','T.large-text-desc':'מגדיל את כל הטקסטים לנגישות',
+'T.high-contrast':'ניגודיות גבוהה','T.high-contrast-desc':'צבעים חדים יותר לנגישות',
+'T.reduce-motion':'הפחת אנימציות','T.reduce-motion-desc':'מומלץ לרגישים לתנועה',
+'T.notif-section':'התראות','T.new-match':'Match חדש','T.new-msg':'הודעה חדשה','T.collab-update':'עדכון שיתוף פעולה',
+'T.plan-section':'תוכנית','T.f1':'20 קשרים/חודש','T.f2':'פילטרים בסיסיים','T.f3':'ללא הגבלה','T.f4':'AI matching','T.f5':'אנליטיקס מלא','T.f6':'חשבונות מרובים','T.f7':'מנהל אישי',
+'T.save-settings':'שמור הגדרות','T.toast-sub':'לחץ Messages להתחיל','lang-cycle':'🇮🇱 עב'},
+en:{dir:'ltr',l:'en',
+'T.who':'Who are you?','T.choosepath':'Choose your path to get started',
+'T.creator':'Creator','T.creatordesc':'I create content and want to collaborate with brands',
+'T.business':'Business','T.businessdesc':'I want to find creators for my campaigns',
+'T.continue':'Continue →','T.yourprofile':'Your profile','T.profilesub':'This is what brands will see first',
+'T.fullname':'Full name','T.username':'Username','T.bio':'Bio','T.city':'City','T.country':'Country','T.city2':'City',
+'T.yourcats':'Your categories','T.catssub':'What do you specialize in? Brands filter by this',
+'T.pricefrom':'Price from','T.priceto':'Price to',
+'T.socials':'Connect your socials','T.socialssub':'Brands see your real stats',
+'T.followers':'Total followers','T.launch':'Launch my profile 🚀',
+'T.yourbiz':'Your details','T.bizsub':'30 seconds and done','T.bizname':'Business name',
+'T.industry':'Industry','T.budget':'Monthly budget',
+'T.lookingfor':'What are you looking for?','T.lfsub':'We\'ll show you the most relevant creators first',
+'T.contenttype':'Content type','T.creatorcats':'Creator category','T.creatorsize':'Creator size',
+'T.findcreators':'Find creators 🔍',
+'T.notifs':'Notifications','T.markread':'Mark all read','T.nonotifs':'No new notifications',
+'T.nl-discover':'Discover','T.nl-browse':'Browse','T.nl-messages':'Messages','T.nl-analytics':'Analytics','T.nl-settings':'Settings',
+'T.matches-title':'Your Matches','T.matches-sub':'Creators waiting to chat',
+'T.disc-title':'Find creators','T.filters':'Filters',
+'T.cat-filter':'Category','T.all':'All','T.fol-filter':'Followers','T.any':'Any','T.loc-filter':'Location','T.anywhere':'Anywhere',
+'T.saved':'Saved','T.nosaved':'Nothing saved yet.\nTap 🔖 to save.','T.activity':'Recent activity','T.noactivity':'No activity yet',
+'T.browse-title':'Browse creators','T.search':'Search...','T.sort-match':'Best match','T.sort-fol':'Most followers',
+'T.sort-eng':'Top engagement','T.sort-price':'Price: low to high','T.sort-rating':'Top rated','T.allcats':'All categories',
+'T.back':'Back','T.share':'Share','T.available':'● Available','T.verified':'Verified','T.fol-lbl':'Followers','T.col-lbl':'Collabs','T.rat-lbl':'Rating',
+'T.price-lbl':'Price per post','T.share-profile':'Share profile','T.send-collab':'Send collaboration request','T.save-creator':'Save creator',
+'T.portfolio':'Portfolio','T.past-collabs':'Past collaborations','T.reviews':'Reviews',
+'T.messages':'Messages','T.search-conv':'Search conversations...','T.online':'Online',
+'T.send-offer-btn':'Send offer','T.offer-lbl':'Pending collaboration request',
+'T.accept':'Accept deal ✓','T.counter':'Counter offer','T.decline':'Decline',
+'T.new-offer':'New collaboration offer','T.of-campaign':'Campaign name','T.of-budget':'Budget',
+'T.of-timeline':'Timeline','T.of-deliv':'Deliverables','T.of-brief':'Brief','T.send-offer':'Send offer →',
+'T.analytics':'Analytics','T.7d':'7 days','T.30d':'30 days','T.q':'Quarter',
+'T.reach':'Reach','T.engagements':'Engagements','T.active-collabs':'Active collabs','T.invested':'Invested','T.this-period':'This period','T.new':'new',
+'T.reach-time':'Reach over time','T.top-creators':'Top creators','T.campaigns':'Active campaigns','T.no-campaigns':'No campaigns yet',
+'T.account':'Account','T.biz-profile':'Business profile','T.billing':'Billing & plan',
+'T.preferences':'Preferences','T.notifications':'Notifications','T.appearance':'Appearance','T.language':'Language','T.accessibility':'Accessibility',
+'T.settings-title':'Settings','T.basic-info':'Basic info','T.biz-name':'Business name','T.industry-lbl':'Industry','T.location-lbl':'Location',
+'T.lang-access':'Language & accessibility','T.interface-lang':'Interface language','T.interface-lang-desc':'Language of all app text',
+'T.large-text':'Large text','T.large-text-desc':'Enlarges all text for accessibility',
+'T.high-contrast':'High contrast','T.high-contrast-desc':'Sharper colors for better visibility',
+'T.reduce-motion':'Reduce motion','T.reduce-motion-desc':'Recommended for motion sensitivity',
+'T.notif-section':'Notifications','T.new-match':'New match','T.new-msg':'New message','T.collab-update':'Collab update',
+'T.plan-section':'Plan','T.f1':'20 contacts/month','T.f2':'Basic filters','T.f3':'Unlimited','T.f4':'AI matching','T.f5':'Full analytics','T.f6':'Multi-brand','T.f7':'Dedicated manager',
+'T.save-settings':'Save settings','T.toast-sub':'Tap Messages to start','lang-cycle':'🇺🇸 EN'},
+ar:{dir:'rtl',l:'ar',
+'T.who':'من أنت؟','T.choosepath':'اختر مسارك للبدء',
+'T.creator':'منشئ محتوى','T.creatordesc':'أنا منشئ محتوى وأريد التعاون مع العلامات التجارية',
+'T.business':'شركة','T.businessdesc':'أبحث عن منشئي محتوى لحملاتي',
+'T.continue':'متابعة →','T.yourprofile':'ملفك الشخصي','T.profilesub':'هذا ما ستراه العلامات التجارية أولاً',
+'T.fullname':'الاسم الكامل','T.username':'اسم المستخدم','T.bio':'نبذة','T.city':'المدينة','T.country':'البلد','T.city2':'المدينة',
+'T.yourcats':'تخصصاتك','T.catssub':'ما الذي تتخصص فيه؟',
+'T.pricefrom':'السعر من','T.priceto':'السعر إلى',
+'T.socials':'ربط حسابات التواصل','T.socialssub':'العلامات التجارية ترى إحصاءاتك الحقيقية',
+'T.followers':'إجمالي المتابعين','T.launch':'أطلق ملفي 🚀',
+'T.yourbiz':'تفاصيلك','T.bizsub':'30 ثانية وتنتهي','T.bizname':'اسم الشركة',
+'T.industry':'القطاع','T.budget':'الميزانية الشهرية',
+'T.lookingfor':'ما الذي تبحث عنه؟','T.lfsub':'سنعرض لك أكثر المنشئين ملاءمةً',
+'T.contenttype':'نوع المحتوى','T.creatorcats':'فئة المنشئ','T.creatorsize':'حجم المنشئ',
+'T.findcreators':'ابحث عن منشئين 🔍',
+'T.notifs':'الإشعارات','T.markread':'تعليم الكل كمقروء','T.nonotifs':'لا إشعارات جديدة',
+'T.nl-discover':'اكتشف','T.nl-browse':'تصفح','T.nl-messages':'رسائل','T.nl-analytics':'تحليلات','T.nl-settings':'إعدادات',
+'T.matches-title':'تطابقاتك','T.matches-sub':'منشئون ينتظرون الدردشة',
+'T.disc-title':'اكتشف منشئين','T.filters':'فلاتر',
+'T.cat-filter':'الفئة','T.all':'الكل','T.fol-filter':'المتابعون','T.any':'أي','T.loc-filter':'الموقع','T.anywhere':'في أي مكان',
+'T.saved':'محفوظ','T.nosaved':'لا يوجد محفوظ.\nاضغط 🔖 للحفظ.','T.activity':'النشاط الأخير','T.noactivity':'لا نشاط بعد',
+'T.browse-title':'تصفح المنشئين','T.search':'بحث...','T.sort-match':'الأنسب','T.sort-fol':'أكثر متابعين',
+'T.sort-eng':'أعلى تفاعل','T.sort-price':'السعر: من الأقل','T.sort-rating':'الأعلى تقييماً','T.allcats':'كل الفئات',
+'T.back':'رجوع','T.share':'مشاركة','T.available':'● متاح','T.verified':'موثق','T.fol-lbl':'متابعون','T.col-lbl':'تعاونات','T.rat-lbl':'تقييم',
+'T.price-lbl':'السعر للمنشور','T.share-profile':'مشاركة الملف','T.send-collab':'إرسال طلب تعاون','T.save-creator':'حفظ المنشئ',
+'T.portfolio':'معرض الأعمال','T.past-collabs':'تعاونات سابقة','T.reviews':'مراجعات',
+'T.messages':'الرسائل','T.search-conv':'بحث في المحادثات...','T.online':'متصل',
+'T.send-offer-btn':'إرسال عرض','T.offer-lbl':'طلب تعاون معلق',
+'T.accept':'قبول الصفقة ✓','T.counter':'عرض مضاد','T.decline':'رفض',
+'T.new-offer':'عرض تعاون جديد','T.of-campaign':'اسم الحملة','T.of-budget':'الميزانية',
+'T.of-timeline':'الجدول الزمني','T.of-deliv':'المخرجات','T.of-brief':'الملخص','T.send-offer':'إرسال العرض →',
+'T.analytics':'التحليلات','T.7d':'7 أيام','T.30d':'30 يوم','T.q':'ربع سنة',
+'T.reach':'الوصول','T.engagements':'التفاعلات','T.active-collabs':'تعاونات نشطة','T.invested':'مُستثمر','T.this-period':'هذه الفترة','T.new':'جديد',
+'T.reach-time':'الوصول عبر الزمن','T.top-creators':'أفضل المنشئين','T.campaigns':'حملات نشطة','T.no-campaigns':'لا حملات بعد',
+'T.account':'الحساب','T.biz-profile':'الملف التجاري','T.billing':'الفوترة والخطة',
+'T.preferences':'التفضيلات','T.notifications':'الإشعارات','T.appearance':'المظهر','T.language':'اللغة','T.accessibility':'إمكانية الوصول',
+'T.settings-title':'الإعدادات','T.basic-info':'المعلومات الأساسية','T.biz-name':'اسم الشركة','T.industry-lbl':'القطاع','T.location-lbl':'الموقع',
+'T.lang-access':'اللغة وإمكانية الوصول','T.interface-lang':'لغة الواجهة','T.interface-lang-desc':'لغة كل نصوص التطبيق',
+'T.large-text':'نص كبير','T.large-text-desc':'يكبر كل النصوص للوصول',
+'T.high-contrast':'تباين عالٍ','T.high-contrast-desc':'ألوان أوضح للرؤية',
+'T.reduce-motion':'تقليل الحركة','T.reduce-motion-desc':'موصى به لحساسية الحركة',
+'T.notif-section':'الإشعارات','T.new-match':'تطابق جديد','T.new-msg':'رسالة جديدة','T.collab-update':'تحديث تعاون',
+'T.plan-section':'الخطة','T.f1':'20 اتصال/شهر','T.f2':'فلاتر أساسية','T.f3':'غير محدود','T.f4':'AI matching','T.f5':'تحليلات كاملة','T.f6':'حسابات متعددة','T.f7':'مدير مخصص',
+'T.save-settings':'حفظ الإعدادات','T.toast-sub':'اضغط Messages للبدء','lang-cycle':'🇸🇦 عر'}
+};
+
+let lang='he', role='', matches=[], chatMsgs=[], NOTIFS=[], curCreator=null, activeThr=0, ofFormOpen=false, isDark=true, CREATORS=[];
+
+/* ══ LANG ══ */
+function setLang(l){
+  lang=l;
+  const L=TR[l];
+  document.documentElement.lang=L.l;
+  document.documentElement.dir=L.dir;
+  document.querySelectorAll('[id^="T."]').forEach(el=>{
+    const k=el.id;
+    if(L[k]!==undefined){
+      if(el.tagName==='INPUT') el.placeholder=L[k];
+      else el.textContent=L[k];
+    }
+  });
+  const lc=document.getElementById('lang-cycle');
+  if(lc)lc.textContent=L['lang-cycle'];
+  ['lp-he','lp-en','lp-ar'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b)b.classList.toggle('active',id==='lp-'+l);
+  });
+  buildCards(); buildCGrid(CREATORS); buildMatches();
+}
+function cycleLang(){const o=['he','en','ar'];setLang(o[(o.indexOf(lang)+1)%3]);}
+function t(k){return(TR[lang]||TR.he)[k]||(TR.he[k]||k);}
+
+/* ══ THEME ══ */
+function toggleTheme(){
+  isDark=!isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'':'light');
+  document.getElementById('theme-btn').innerHTML=isDark?'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>':'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+}
+
+/* ══ ACCESSIBILITY ══ */
+function togLF(cb){document.documentElement.setAttribute('data-lf',cb.checked?'on':'off');}
+function togHC(cb){document.documentElement.setAttribute('data-hc',cb.checked?'on':'off');}
+function togRM(cb){document.documentElement.setAttribute('data-rm',cb.checked?'on':'off');}
+
+/* ══ SPLASH ══ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const s=document.getElementById('splash');
+    s.style.animation='fadeOut .5s ease forwards';
+    setTimeout(()=>{s.style.display='none';document.getElementById('onb').classList.remove('hidden');},500);
+  },1900);
+});
+
+/* ══ ONBOARDING ══ */
+/* ══ VALIDATION ══ */
+function showErr(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.style.display='block';}
+function clearErr(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+function markField(id,invalid){const el=document.getElementById(id);if(!el)return;el.style.borderColor=invalid?'var(--rd)':'';}
+
+function validateAndGo(step){
+  if(step==='reg'){
+    const email=document.getElementById('reg-email').value.trim();
+    const pass=document.getElementById('reg-pass').value;
+    const pass2=document.getElementById('reg-pass2').value;
+    if(!email||!email.includes('@')){markField('reg-email',true);showErr('reg-err','נא להזין אימייל תקין');return;}
+    if(pass.length<6){markField('reg-pass',true);showErr('reg-err','הסיסמה חייבת להכיל לפחות 6 תווים');return;}
+    if(pass!==pass2){markField('reg-pass2',true);showErr('reg-err','הסיסמאות לא תואמות');return;}
+    markField('reg-email',false);markField('reg-pass',false);markField('reg-pass2',false);
+    clearErr('reg-err');step2();return;
+  }
+  if(step==='c2'){
+    const name=document.getElementById('c-name').value.trim();
+    const handle=document.getElementById('c-handle').value.trim();
+    const bio=document.getElementById('c-bio').value.trim();
+    const country=document.getElementById('c-country').value;
+    const city=document.getElementById('c-city-search').value.trim();
+    if(!name){markField('c-name',true);showErr('err-c2','נא להזין שם מלא');return;}
+    if(!handle){markField('c-handle',true);showErr('err-c2','נא להזין שם משתמש');return;}
+    if(!bio||bio.length<10){markField('c-bio',true);showErr('err-c2','נא לכתוב ביו (לפחות 10 תווים)');return;}
+    if(!country){showErr('err-c2','נא לבחור מדינה');return;}
+    if(!city){showErr('err-c2','נא לבחור עיר');return;}
+    markField('c-name',false);markField('c-handle',false);markField('c-bio',false);
+    clearErr('err-c2');goS('c3');return;
+  }
+  if(step==='c3'){
+    const cats=document.querySelectorAll('#sc3 .chip.on');
+    const pf=document.getElementById('c-pf').value.trim();
+    const pt=document.getElementById('c-pt').value.trim();
+    if(!cats.length){showErr('err-c3','נא לבחור לפחות קטגוריה אחת');return;}
+    if(!pf){markField('c-pf',true);showErr('err-c3','נא להזין מחיר מינימום');return;}
+    if(!pt){markField('c-pt',true);showErr('err-c3','נא להזין מחיר מקסימום');return;}
+    markField('c-pf',false);markField('c-pt',false);clearErr('err-c3');goS('c4');return;
+  }
+  if(step==='c4'){
+    const ig=document.getElementById('c-ig').value.trim();
+    const fol=document.getElementById('c-fol').value.trim();
+    if(!ig){markField('c-ig',true);showErr('err-c4','נא להזין שם משתמש Instagram');return;}
+    if(!fol){markField('c-fol',true);showErr('err-c4','נא להזין מספר עוקבים משוער');return;}
+    markField('c-ig',false);markField('c-fol',false);clearErr('err-c4');finish();return;
+  }
+  if(step==='b2'){
+    const name=document.getElementById('b-name').value.trim();
+    const country=document.getElementById('b-country').value;
+    const city=document.getElementById('b-city-search').value.trim();
+    const ind=document.getElementById('b-ind').value;
+    if(!name){markField('b-name',true);showErr('err-b2','נא להזין שם עסק');return;}
+    if(!country){showErr('err-b2','נא לבחור מדינה');return;}
+    if(!city){showErr('err-b2','נא לבחור עיר');return;}
+    if(!ind){showErr('err-b2','נא לבחור תחום');return;}
+    markField('b-name',false);clearErr('err-b2');goS('b3');return;
+  }
+  if(step==='b3'){
+    const chips=document.querySelectorAll('#sb3 .chip.on');
+    if(!chips.length){showErr('err-b3','נא לבחור לפחות אפשרות אחת');return;}
+    clearErr('err-b3');finish();return;
+  }
+}
+
+/* ══ FORGOT PASSWORD ══ */
+let resetCode='', resetEmail='';
+
+function showForgot(){
+  document.getElementById('forgot-modal').style.display='flex';
+  document.getElementById('forgot-s1').style.display='block';
+  document.getElementById('forgot-s2').style.display='none';
+  document.getElementById('forgot-s3').style.display='none';
+  document.getElementById('forgot-err').style.display='none';
+  document.getElementById('forgot-email').value='';
+}
+function closeForgot(){
+  document.getElementById('forgot-modal').style.display='none';
+}
+function sendResetCode(){
+  const email=document.getElementById('forgot-email').value.trim();
+  const err=document.getElementById('forgot-err');
+  err.style.display='none';
+  if(!email){err.textContent='נא להזין אימייל';err.style.display='block';return;}
+
+  // בדוק אם משתמש קיים
+  let found=false;
+  try{
+    const users=JSON.parse(localStorage.getItem('collabo_users')||'[]');
+    found=!!users.find(u=>u.email===email);
+  }catch(e){}
+
+  // גם אם לא נמצא — לא נגלה (אבטחה). מדמים שליחת קוד.
+  resetEmail=email;
+  resetCode=Math.floor(100000+Math.random()*900000).toString();
+  console.log(`🔐 קוד איפוס ל-${email}: ${resetCode}`); // בפרודקשן — שלח אימייל
+
+  document.getElementById('forgot-s1').style.display='none';
+  document.getElementById('forgot-s2').style.display='block';
+  document.getElementById('forgot-sent-to').textContent=`קוד נשלח ל-${email} (לצורך demo: ${resetCode})`;
+  document.getElementById('reset-err').style.display='none';
+}
+function verifyAndReset(){
+  const code=document.getElementById('reset-code').value.trim();
+  const pass=document.getElementById('new-pass').value;
+  const pass2=document.getElementById('new-pass2').value;
+  const err=document.getElementById('reset-err');
+  err.style.display='none';
+
+  if(code!==resetCode){err.textContent='קוד שגוי, נסה שוב';err.style.display='block';return;}
+  if(pass.length<6){err.textContent='הסיסמה חייבת להכיל לפחות 6 תווים';err.style.display='block';return;}
+  if(pass!==pass2){err.textContent='הסיסמאות לא תואמות';err.style.display='block';return;}
+
+  // עדכן ב-localStorage
+  try{
+    const users=JSON.parse(localStorage.getItem('collabo_users')||'[]');
+    const idx=users.findIndex(u=>u.email===resetEmail);
+    if(idx!==-1){users[idx].password=pass;localStorage.setItem('collabo_users',JSON.stringify(users));}
+  }catch(e){}
+
+  // עדכן בשרת
+  fetch('/api/reset-password',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email:resetEmail,password:pass,code})
+  }).catch(()=>{});
+
+  document.getElementById('forgot-s2').style.display='none';
+  document.getElementById('forgot-s3').style.display='block';
+}
+function checkPassStrength2(val){
+  const bars=document.querySelectorAll('#pass-strength2 .ps-bar');
+  bars.forEach(b=>{b.className='ps-bar';});
+  let sc=0;
+  if(val.length>=6)sc++;if(val.length>=10)sc++;
+  if(/[A-Z]/.test(val)||/[0-9]/.test(val))sc++;
+  if(/[^A-Za-z0-9]/.test(val))sc++;
+  const cols=['w','w','m','s'];
+  for(let i=0;i<sc;i++)bars[i].classList.add(cols[Math.min(sc-1,3)]);
+}
+
+
+function switchAuthTab(tab){
+  const isLogin=tab==='login';
+  document.getElementById('auth-login').style.display=isLogin?'block':'none';
+  document.getElementById('auth-register').style.display=isLogin?'none':'block';
+  const tl=document.getElementById('tab-login'),tr=document.getElementById('tab-register');
+  tl.style.background=isLogin?'var(--ac)':'transparent';tl.style.color=isLogin?'#07070f':'var(--mu)';
+  tr.style.background=isLogin?'transparent':'var(--ac)';tr.style.color=isLogin?'var(--mu)':'#07070f';
+}
+function togglePass(id,btn){
+  const inp=document.getElementById(id);
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
+function checkPassStrength(val){
+  const bars=document.querySelectorAll('.ps-bar');
+  bars.forEach(b=>{b.className='ps-bar';});
+  let sc=0;
+  if(val.length>=6)sc++;if(val.length>=10)sc++;
+  if(/[A-Z]/.test(val)||/[0-9]/.test(val))sc++;
+  if(/[^A-Za-z0-9]/.test(val))sc++;
+  const cols=['w','w','m','s'];
+  for(let i=0;i<sc;i++)bars[i].classList.add(cols[Math.min(sc-1,3)]);
+}
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  err.style.display='none';
+  if(!email||!pass){err.textContent='נא למלא אימייל וסיסמה';err.style.display='block';return;}
+  // נסה שרת
+  fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})})
+    .then(r=>r.json()).then(data=>{
+      if(data.ok) enterApp(data.user);
+      else{err.textContent=data.error||'פרטים שגויים';err.style.display='block';}
+    }).catch(()=>{
+      // fallback localStorage
+      try{
+        const users=JSON.parse(localStorage.getItem('collabo_users')||'[]');
+        const user=users.find(u=>u.email===email&&u.password===pass);
+        if(user) enterApp(user);
+        else if(users.find(u=>u.email===email)){err.textContent='סיסמה שגויה';err.style.display='block';}
+        else{err.textContent='משתמש לא קיים — הרשם קודם';err.style.display='block';}
+      }catch(e){err.textContent='שגיאה, נסה שוב';err.style.display='block';}
+    });
+}
+function enterApp(user){
+  document.getElementById('onb').classList.add('hidden');
+  const app=document.getElementById('app');
+  app.style.cssText='display:flex;flex-direction:column;height:100vh';
+  try{
+    localStorage.setItem('collabo_current_email',user?.email||'');
+    localStorage.setItem('collabo_current_role',user?.role||role==='c'?'creator':'business');
+  }catch(e){}
+  // עדכן תצוגה לפי תפקיד
+  const isCreator=(user?.role==='creator'||role==='c');
+  applyRoleUI(isCreator);
+  initApp();
+  addNotif(`ברוך הבא${user?.name?' '+user.name:''}! 👋`,'כניסה בוצעה בהצלחה','var(--gr)');
+}
+
+function applyRoleUI(isCreator){
+  const discTitle=document.getElementById('T.disc-title');
+  const browseTitle=document.getElementById('T.browse-title');
+  const userAvatar=document.querySelector('.uav');
+  const sendCollab=document.getElementById('T.send-collab');
+  const saveCreator=document.getElementById('T.save-creator');
+
+  if(isCreator){
+    // יוצר — מחפש עסקים
+    if(discTitle) discTitle.innerHTML='מצא <span style="color:var(--ac)">מותגים</span>';
+    if(browseTitle) browseTitle.textContent='עיין במותגים';
+    if(userAvatar) userAvatar.textContent='📸';
+    // יוצר לא שולח הצעות — הוא מקבל אותן
+    if(sendCollab) sendCollab.style.display='none';
+    if(saveCreator) saveCreator.style.display='none';
+  } else {
+    // עסק — מחפש יוצרים
+    if(discTitle) discTitle.innerHTML='מצא <span style="color:var(--ac)">יוצרים</span>';
+    if(browseTitle) browseTitle.textContent='עיין ביוצרים';
+    if(userAvatar) userAvatar.textContent='🏢';
+    // עסק שולח הצעות ושומר יוצרים
+    if(sendCollab) sendCollab.style.display='block';
+    if(saveCreator) saveCreator.style.display='block';
+  }
+}
+
+function selRole(r){
+  role=r;
+  document.getElementById('rc-c').classList.toggle('sel',r==='c');
+  document.getElementById('rc-b').classList.toggle('sel',r==='b');
+  document.getElementById('rc-c').setAttribute('aria-pressed',r==='c');
+  document.getElementById('rc-b').setAttribute('aria-pressed',r==='b');
+}
+function step2(){if(!role)selRole('c');goS(role==='c'?'c2':'b2');}
+function goS(id){
+  document.querySelectorAll('.mstep').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('s'+id)||document.getElementById('sc'+id)||document.getElementById('sb'+id);
+  if(el)el.classList.add('active');
+}
+function tChip(el){el.classList.toggle('on');el.setAttribute('aria-pressed',el.classList.contains('on'));}
+function finish(){
+  const isCreator = role === 'c';
+  const name = isCreator
+    ? (document.getElementById('c-name').value.trim() || 'יוצר חדש')
+    : (document.getElementById('b-name').value.trim() || 'עסק חדש');
+  const email = document.getElementById('reg-email')?.value.trim() ||
+    (isCreator
+      ? (document.getElementById('c-ig').value.trim().replace('@','') + '@collabo.io')
+      : (name.toLowerCase().replace(/\s/g,'')+Math.floor(Math.random()*900+100)+'@collabo.io'));
+  const password = document.getElementById('reg-pass')?.value || '';
+  const pass2    = document.getElementById('reg-pass2')?.value || '';
+  const regErr   = document.getElementById('reg-err');
+
+  // ולידציה
+  if(regErr){
+    if(!email){ regErr.textContent='נא להזין אימייל'; regErr.style.display='block'; return; }
+    if(password.length < 6){ regErr.textContent='הסיסמה חייבת להכיל לפחות 6 תווים'; regErr.style.display='block'; return; }
+    if(password !== pass2){ regErr.textContent='הסיסמאות לא תואמות'; regErr.style.display='block'; return; }
+    regErr.style.display='none';
+  }
+
+  const city = isCreator
+    ? (citySelections['c'] || document.getElementById('c-city-search')?.value || '—')
+    : (citySelections['b'] || document.getElementById('b-city-search')?.value || '—');
+  const cats = isCreator
+    ? Array.from(document.querySelectorAll('#sc3 .chip.on')).map(c=>c.textContent).join(', ')
+    : Array.from(document.querySelectorAll('#sb3 .chip.on')).map(c=>c.textContent).join(', ');
+
+  const user = {
+    name, email, password,
+    role: isCreator ? 'creator' : 'business',
+    cats: cats || '—', city,
+    status: 'pending',
+    joined: new Date().toLocaleDateString('he-IL'),
+    color: isCreator ? 'rgba(0,207,255,0.15)' : 'rgba(255,215,0,0.15)',
+    textColor: isCreator ? '#00cfff' : '#ffd700',
+  };
+
+  // שמור בשרת, fallback ל-localStorage
+  fetch('/api/users', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(user)
+  }).catch(()=>{
+    try {
+      const existing = JSON.parse(localStorage.getItem('collabo_users') || '[]');
+      if(!existing.find(u=>u.email===email)){
+        existing.push({...user, id: Date.now()});
+        localStorage.setItem('collabo_users', JSON.stringify(existing));
+      }
+    } catch(e) {}
+  });
+
+  enterApp(user);
+}
+
+/* ══ NAV ══ */
+function showPg(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb[data-pg]').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  const btn=document.querySelector('[data-pg="'+name+'"]');
+  if(btn)btn.classList.add('on');
+  if(name==='messages')buildThreads();
+  closeNP();
+}
+function hideEl(id){document.getElementById(id).style.display='none';}
+
+/* ══ NOTIFICATIONS ══ */
+function addNotif(title,text,color){
+  NOTIFS.unshift({title,text,color,unread:true,time:'עכשיו'});
+  document.getElementById('ndot').style.display='block';
+  renderNotifs();
+}
+function renderNotifs(){
+  const nl=document.getElementById('nl');
+  if(!NOTIFS.length){nl.innerHTML='<div class="np-empty" id="T.nonotifs">'+t('T.nonotifs')+'</div>';return;}
+  nl.innerHTML=NOTIFS.map((n,i)=>`<div class="ni ${n.unread?'unread':''}" onclick="markN(${i})"><div style="font-size:18px;flex-shrink:0;color:${n.color}">●</div><div><div class="ni-text"><strong>${n.title}</strong><br>${n.text}</div><div class="ni-time">${n.time}</div></div></div>`).join('');
+}
+function markN(i){NOTIFS[i].unread=false;renderNotifs();chkNDot();}
+function clearN(){NOTIFS.forEach(n=>n.unread=false);renderNotifs();chkNDot();}
+function chkNDot(){document.getElementById('ndot').style.display=NOTIFS.some(n=>n.unread)?'block':'none';}
+function toggleNP(){document.getElementById('np').classList.toggle('open');}
+function closeNP(){document.getElementById('np').classList.remove('open');}
+document.addEventListener('click',e=>{
+  const np=document.getElementById('np'),nb=document.getElementById('notif-btn');
+  if(np.classList.contains('open')&&!np.contains(e.target)&&!nb.contains(e.target))closeNP();
+});
+
+/* ══ MATCHES ══ */
+function addMatch(c){
+  matches.push(c);
+  document.getElementById('match-badge').style.display='block';
+  document.getElementById('match-ndot').style.display='block';
+  buildMatches();
+  showToast(c.name);
+  addNotif('Match עם '+c.name+'! 💙','לחץ על הודעות להתחיל שיחה','var(--ac)');
+}
+function buildMatches(){
+  const g=document.getElementById('mgrid');
+  if(!matches.length){
+    g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--mu)"><div style="font-size:48px;margin-bottom:14px">💫</div><div style="font-family:var(--fn);font-size:16px;font-weight:700;margin-bottom:6px;color:var(--tx)">${t('T.matches-title')}</div><div style="font-size:12px">${t('T.matches-sub')}</div></div>`;
+    return;
+  }
+  g.innerHTML=matches.map((c,i)=>`<div class="mc-card" role="button" tabindex="0" aria-label="${c.name}" onclick="openChat(${i})"><div class="mc-hero" style="background:${c.bg}">${i===matches.length-1?'<div class="mc-new">חדש!</div>':''}<span style="font-size:40px">${c.emoji}</span></div><div class="mc-body"><div class="mc-name">${c.name}</div><div class="mc-sub">${c.cats[0]} · ${c.loc}</div><button class="mc-btn">${t('T.messages')} →</button></div></div>`).join('');
+}
+function showToast(name){
+  const t2=document.getElementById('toast');
+  document.getElementById('toast-name').textContent='Match עם '+name+'! 🎉';
+  t2.classList.add('show');
+  setTimeout(()=>{t2.classList.remove('show');t2.classList.add('hide');setTimeout(()=>t2.classList.remove('hide'),300);},2500);
+}
+function openChat(i){activeThr=i;showPg('messages');}
+
+/* ══ CARDS ══ */
+let cardIdx=0;
+function buildCards(){
+  const stack=document.getElementById('cstack');
+  const rem=document.getElementById('crem');
+  stack.innerHTML='';
+  const left=CREATORS.length-cardIdx;
+  if(left<=0){
+    stack.innerHTML=`<div style="width:320px;height:460px;border-radius:22px;border:1px solid var(--bd2);background:var(--sf);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--mu)" role="status"><div style="font-size:48px">🌟</div><div style="font-family:var(--fn);font-size:16px;font-weight:700;color:var(--tx)">${t('T.disc-title')}</div></div>`;
+    rem.textContent='';return;
+  }
+  const countLabel=left+' יוצרים';
+  rem.textContent=countLabel;
+  document.getElementById('T.disc-count').textContent=left+' '+t('T.sort-fol').replace('הכי ','');
+  CREATORS.slice(cardIdx,cardIdx+3).forEach((c,i)=>{
+    const cls=['c1','c2','c3'][i];
+    const el=document.createElement('div');
+    el.className='ccard '+cls;
+    el.setAttribute('role','article');
+    el.setAttribute('aria-label',c.name+', '+c.cats.join(', '));
+    el.innerHTML=`<div class="cmedia" style="background:${c.bg}"><div class="cemoji">${c.emoji}</div>${c.verified?'<div class="vbdg">✓ '+t('T.verified')+'</div>':''}</div><div class="verdict vlike" id="vl${i}">MATCH</div><div class="verdict vpass" id="vp${i}">PASS</div><div class="covl"><div class="cloc"><svg style="font-size:10px" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${c.loc}</div><div class="cname">${c.name}</div><div class="chandle">${c.handle}</div><div class="ccats">${c.cats.map(x=>'<span class="ccat">'+x+'</span>').join('')}</div><div class="cstats"><div class="cst"><div class="csv">${c.fol}</div><div class="csl">${t('T.fol-lbl')}</div></div><div class="cst"><div class="csv">${c.eng}</div><div class="csl">Eng.</div></div><div class="cst"><div class="csv">${c.rating}★</div><div class="csl">${t('T.rat-lbl')}</div></div></div><div class="cacts"><button class="ab ab-pass" onclick="swipe('pass')" aria-label="${t('T.decline')}">✕</button><button class="ab ab-view" onclick="openProfile(CREATORS[cardIdx])" aria-label="פרופיל"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button><button class="ab ab-save" onclick="swipe('save')" aria-label="${t('T.saved')}">🔖</button><button class="ab ab-like" onclick="swipe('like')" aria-label="Match">♥</button></div></div>`;
+    if(i===0)setupDrag(el);
+    stack.appendChild(el);
+  });
+}
+function setupDrag(card){
+  let sx,dragging=false;
+  card.dragged=false;
+  card.addEventListener('mousedown',e=>{sx=e.clientX;dragging=true;});
+  document.addEventListener('mousemove',e=>{
+    if(!dragging)return;
+    const dx=e.clientX-sx;
+    card.style.transform=`translate(${dx}px,${dx*.05}px) rotate(${dx*.06}deg)`;
+    card.style.transition='none';
+    const vl=card.querySelector('.vlike'),vp=card.querySelector('.vpass');
+    if(vl)vl.style.opacity=Math.max(0,dx/80);
+    if(vp)vp.style.opacity=Math.max(0,-dx/80);
+    if(Math.abs(dx)>5)card.dragged=true;
+  });
+  document.addEventListener('mouseup',e=>{
+    if(!dragging)return;
+    dragging=false;const dx=e.clientX-sx;
+    card.style.transition='transform .3s';
+    if(dx>100){swipe('like');return;}
+    if(dx<-100){swipe('pass');return;}
+    card.style.transform='';
+    const vl=card.querySelector('.vlike'),vp=card.querySelector('.vpass');
+    if(vl)vl.style.opacity=0;if(vp)vp.style.opacity=0;
+    setTimeout(()=>card.dragged=false,100);
+  });
+}
+function swipe(action){
+  const card=document.querySelector('.c1');if(!card)return;
+  const c=CREATORS[cardIdx];
+  if(action==='like'){card.classList.add('an-swr');addMatch(c);logAct('♥ '+c.name,'var(--ac)');}
+  else if(action==='save'){card.classList.add('an-swl');addSaved(c);logAct('🔖 '+c.name,'var(--ac2)');}
+  else{card.classList.add('an-swl');}
+  setTimeout(()=>{cardIdx=(cardIdx+1)%Math.max(1,CREATORS.length);buildCards();},370);
+}
+function addSaved(c){
+  const sl=document.getElementById('saved-list');
+  const em=sl.querySelector('div[style]');if(em)em.remove();
+  const d=document.createElement('div');d.className='svi';
+  d.innerHTML=`<div class="sv-av" style="background:${c.bg}">${c.emoji}</div><div><div class="sv-name">${c.name}</div><div class="sv-cat">${c.cats[0]}</div></div>`;
+  sl.prepend(d);
+}
+function logAct(txt,color){
+  const log=document.getElementById('act-log');
+  const em=log.querySelector('div[style]');if(em)em.remove();
+  const d=document.createElement('div');d.className='ali';
+  d.innerHTML=`<div class="adot" style="background:${color}"></div>${txt}`;
+  log.prepend(d);
+  if(log.children.length>6)log.lastChild.remove();
+}
+
+/* ══ FILTERS ══ */
+function togFilters(){
+  const fb=document.getElementById('fbar'),btn=document.getElementById('ftgl-btn');
+  const open=fb.classList.toggle('open');
+  btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);
+}
+
+/* ══ CREATORS GRID ══ */
+function buildCGrid(data){
+  const g=document.getElementById('cr-grid');
+  if(!data||!data.length){
+    g.style.display='block';
+    g.innerHTML=`<div style="text-align:center;padding:80px 20px;color:var(--mu)"><div style="font-size:40px;margin-bottom:14px">👤</div><div style="font-family:var(--fn);font-size:16px;font-weight:700;color:var(--tx)">אין יוצרים עדיין</div></div>`;
+    return;
+  }
+  g.style.display='grid';
+  g.innerHTML=data.map(c=>`<div class="ct" tabindex="0" role="button" aria-label="${c.name}, ${c.cats[0]}" onclick="openProfile(${JSON.stringify(c).replace(/"/g,'&quot;')})"><div class="th" style="background:${c.bg}">${c.verified?'<div class="tv">✓ '+t('T.verified')+'</div>':''}<span style="font-size:40px">${c.emoji}</span></div><div class="tb"><div class="t-name">${c.name}</div><div class="t-hdl">${c.handle} · ${c.loc}</div><div class="t-cats">${c.cats.map(x=>'<span class="t-cat">'+x+'</span>').join('')}</div><div class="t-stats"><svg style="font-size:12px" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg> <span>${c.fol}</span> · <span>${c.eng}</span></div><div class="t-foot"><span class="t-price">${c.price}</span><span class="t-rat">★ ${c.rating}</span></div></div></div>`).join('');
+}
+function filterC(q){buildCGrid(CREATORS.filter(c=>(c.name+c.handle+c.cats.join('')).toLowerCase().includes(q.toLowerCase())));}
+function sortC(by){
+  const d=[...CREATORS];
+  if(by==='followers')d.sort((a,b)=>parseInt(b.fol)-parseInt(a.fol));
+  else if(by==='engagement')d.sort((a,b)=>parseFloat(b.eng)-parseFloat(a.eng));
+  else if(by==='rating')d.sort((a,b)=>b.rating-a.rating);
+  else if(by==='price')d.sort((a,b)=>parseInt(a.price.replace(/\D/g,''))-parseInt(b.price.replace(/\D/g,'')));
+  buildCGrid(d);
+}
+
+/* ══ PROFILE ══ */
+function openProfile(c){
+  if(!c)return;
+  if(typeof c==='string')c=JSON.parse(c);
+  curCreator=c;
+  document.getElementById('pname').textContent=c.name;
+  document.getElementById('phdl').textContent=c.handle;
+  document.getElementById('ploc').textContent=c.loc+', Israel';
+  document.getElementById('pemoji').textContent=c.emoji;
+  document.getElementById('pav').textContent=c.emoji;
+  document.getElementById('phero').style.background=c.bg;
+  document.getElementById('ps-fol').textContent=c.fol;
+  document.getElementById('ps-eng').textContent=c.eng;
+  document.getElementById('ps-col').textContent=c.collabs||'—';
+  document.getElementById('ps-rat').textContent=(c.rating||'—')+'★';
+  document.getElementById('pbio').textContent=c.bio||'';
+  document.getElementById('pprice').textContent=c.priceRange||c.price||'—';
+  document.getElementById('pcats').innerHTML=(c.cats||[]).map(x=>`<span class="pcat">${x}</span>`).join('');
+  document.getElementById('psocials').innerHTML=(c.socials||[]).map(s=>`<div class="socrow"><span class="socicon">${s.icon}</span><span class="socname">${s.name}</span><span class="soccount">${s.count}</span></div>`).join('');
+  buildPortfolio(c);
+  document.getElementById('col-hist').innerHTML=(c.pastCollabs||[]).map(p=>`<div class="coli"><div class="col-logo" style="background:${p.logoBg}">${p.logo}</div><div class="col-info"><div class="col-brand">${p.brand}</div><div class="col-desc">${p.desc}</div></div><div class="col-reach">${p.reach}</div></div>`).join('');
+  document.getElementById('rev-list').innerHTML=c.review?`<div class="revi"><div class="rev-head"><div class="rev-av" style="background:rgba(0,207,255,.15)">${c.emoji}</div><div class="rev-brand">${c.review.from.split('·')[0].trim()}</div><div class="rev-stars">${c.review.stars}</div><div class="rev-date">${(c.review.from.split('·')[1]||'').trim()}</div></div><div class="rev-text">${c.review.text}</div></div>`:'';
+  showPg('profile');
+}
+function buildPortfolio(c){
+  const g=document.getElementById('port-grid');
+  g.innerHTML=(c.portfolio||[]).map(p=>`<div class="pi" role="img" aria-label="${p.type}"><div class="pi-bg" style="height:${p.h}px;background:${p.bg}">${p.emoji}</div><div class="pi-type">${p.type}</div></div>`).join('');
+}
+function shareProfile(){
+  if(navigator.share)navigator.share({title:'Collabo — '+(curCreator?.name||''),url:window.location.href});
+  else{navigator.clipboard&&navigator.clipboard.writeText(window.location.href);addNotif(t('T.share-profile'),'הקישור הועתק ללוח 📋','var(--gr)');}
+}
+function saveFromProfile(){if(curCreator)addSaved(curCreator);addNotif(t('T.save-creator'),(curCreator?.name||'')+' נשמר לרשימה','var(--ac2)');}
+function openOffer(){showPg('messages');setTimeout(()=>{ofFormOpen=false;togOForm();},300);}
+
+/* ══ MESSAGES ══ */
+function buildThreads(){
+  const list=document.getElementById('tlist');
+  if(!matches.length){
+    list.innerHTML=`<div style="padding:32px 16px;text-align:center;color:var(--mu);font-size:12px;line-height:1.7"><svg style="font-size:32px;display:block;margin-bottom:10px" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14"/></svg>${t('T.matches-title')}</div>`;
+    return;
+  }
+  list.innerHTML=matches.map((c,i)=>`<div class="thr ${i===activeThr?'on':''}" tabindex="0" role="button" aria-label="${c.name}" onclick="selThr(${i})"><div class="tav" style="background:${c.bg}">${c.emoji}</div><div class="ti"><div class="tn">${c.name}</div><div class="tp">${chatMsgs.length?chatMsgs[chatMsgs.length-1].txt.slice(0,30)+'...':'התחל שיחה'}</div></div><div class="tm"><div class="tt">עכשיו</div><div style="width:7px;height:7px;border-radius:50%;background:var(--gr)"></div></div></div>`).join('');
+  if(matches[activeThr]){
+    document.getElementById('ctav').textContent=matches[activeThr].emoji;
+    document.getElementById('ctname').textContent=matches[activeThr].name;
+  }
+  buildMsgs();
+}
+function selThr(i){activeThr=i;buildThreads();}
+function buildMsgs(){
+  const body=document.getElementById('mbody');
+  body.innerHTML=chatMsgs.map(m=>`<div class="mg"><div class="bbl ${m.from==='me'?'bbl-me':'bbl-them'}">${m.txt}</div><div class="mts ${m.from==='me'?'mts-m':'mts-t'}">${m.ts}</div>${m.from==='me'?'<div class="rr">✓✓</div>':''}</div>`).join('');
+  body.scrollTop=body.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('chat-in');
+  const txt=inp.value.trim();if(!txt)return;
+  const ts=new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  chatMsgs.push({from:'me',txt,ts});inp.value='';buildMsgs();
+  setTimeout(()=>{
+    const replies=['סבבה, בוא נסגור פרטים 📅','מעניין מאוד, ספר לי עוד 🙌','תשלח לי ברייף ואחזור עם הצעה 💪','נשמע מצוין! מתי מתחילים?'];
+    chatMsgs.push({from:'them',txt:replies[chatMsgs.length%replies.length],ts:new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})});
+    buildMsgs();
+    addNotif('הודעה חדשה',(matches[activeThr]?.name||'יוצר')+' ענה','var(--ac)');
+  },1200);
+}
+function togOForm(){
+  ofFormOpen=!ofFormOpen;
+  document.getElementById('oform-wrap').style.display=ofFormOpen?'block':'none';
+}
+function sendOffer(){
+  const title=document.getElementById('of-title').value||'קמפיין חדש';
+  const budget=document.getElementById('of-budget').value||'—';
+  const timeline=document.getElementById('of-timeline').value||'—';
+  const deliv=document.getElementById('of-deliv').value||'—';
+  const ts=new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  chatMsgs.push({from:'me',txt:`📋 ${t('T.new-offer')}: ${title}\n💰 ${t('T.of-budget')}: ${budget}\n📅 ${t('T.of-timeline')}: ${timeline}\n📦 ${t('T.of-deliv')}: ${deliv}`,ts});
+  document.getElementById('oform-wrap').style.display='none';ofFormOpen=false;
+  buildMsgs();
+  document.getElementById('obanner').style.display='block';
+  document.getElementById('ob-title').textContent=title;
+  document.getElementById('ob-det').textContent=`${t('T.of-budget')}: ${budget} · ${timeline} · ${deliv}`;
+}
+function acceptOffer(){
+  hideEl('obanner');
+  const ts=new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  chatMsgs.push({from:'me',txt:'✅ העסקה אושרה! מצפה לשיתוף פעולה 🎉',ts});
+  buildMsgs();addNotif('עסקה אושרה! 🎉','שיתוף פעולה חדש נחתם','var(--gr)');
+}
+
+/* ══ ANALYTICS ══ */
+function buildChart(){
+  const days=lang==='ar'?['أ','ث','ر','خ','ج','س','أ']:lang==='en'?['M','T','W','T','F','S','S']:['ב','ג','ד','ה','ו','ש','א'];
+  const vals=[280,410,360,520,490,780,610];
+  const max=Math.max(...vals);
+  const c=document.getElementById('bchart');
+  c.innerHTML=vals.map((v,i)=>`<div class="bcc"><div class="bct"><div class="bcf" style="height:${Math.round(v/max*100)}%;background:${v===max?'linear-gradient(to top,var(--ac),var(--ac2))':'var(--sf3)'}"></div></div><div class="bcl">${days[i]}</div></div>`).join('');
+}
+function buildTopCr(){
+  const el=document.getElementById('top-cr');
+  if(!CREATORS.length){el.innerHTML=`<div style="font-size:12px;color:var(--mu);text-align:center;padding:16px 0">אין יוצרים עדיין</div>`;return;}
+  el.innerHTML=CREATORS.slice(0,5).map((c,i)=>`<div class="tcr"><div class="tc-rk">${i+1}</div><div class="tc-av" style="background:${c.bg}">${c.emoji}</div><div style="flex:1"><div class="tc-nm">${c.name}</div><div class="tc-ct">${c.cats[0]}</div></div><div class="tc-st">${c.eng}</div></div>`).join('');
+}
+function setPer(el){document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));el.classList.add('on');buildChart();}
+
+/* ══ SETTINGS ══ */
+function checkPassStrength3(val){
+  const bars=document.querySelectorAll('#pass-strength3 .ps-bar');
+  bars.forEach(b=>{b.className='ps-bar';});
+  let sc=0;
+  if(val.length>=6)sc++;if(val.length>=10)sc++;
+  if(/[A-Z]/.test(val)||/[0-9]/.test(val))sc++;
+  if(/[^A-Za-z0-9]/.test(val))sc++;
+  const cols=['w','w','m','s'];
+  for(let i=0;i<sc;i++)bars[i].classList.add(cols[Math.min(sc-1,3)]);
+}
+function showChangePass(){
+  document.getElementById('change-pass-modal').style.display='flex';
+  ['cur-pass','chg-pass','chg-pass2'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('chg-err').style.display='none';
+}
+function closeChangePass(){document.getElementById('change-pass-modal').style.display='none';}
+function doChangePass(){
+  const cur=document.getElementById('cur-pass').value;
+  const nw=document.getElementById('chg-pass').value;
+  const nw2=document.getElementById('chg-pass2').value;
+  const err=document.getElementById('chg-err');
+  err.style.display='none';
+  if(!cur){err.textContent='נא להזין את הסיסמה הנוכחית';err.style.display='block';return;}
+  if(nw.length<6){err.textContent='הסיסמה החדשה חייבת להכיל לפחות 6 תווים';err.style.display='block';return;}
+  if(nw!==nw2){err.textContent='הסיסמאות לא תואמות';err.style.display='block';return;}
+
+  // נסה שרת
+  fetch('/api/change-password',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({currentPassword:cur,newPassword:nw})
+  }).then(r=>r.json()).then(data=>{
+    if(data.ok){closeChangePass();addNotif('סיסמה עודכנה ✓','הסיסמה שלך שונתה בהצלחה','var(--gr)');}
+    else{err.textContent=data.error||'סיסמה נוכחית שגויה';err.style.display='block';}
+  }).catch(()=>{
+    // fallback localStorage
+    try{
+      const users=JSON.parse(localStorage.getItem('collabo_users')||'[]');
+      // מצא לפי אימייל שמור
+      const email=localStorage.getItem('collabo_current_email')||'';
+      const idx=users.findIndex(u=>u.email===email);
+      if(idx!==-1&&users[idx].password===cur){
+        users[idx].password=nw;
+        localStorage.setItem('collabo_users',JSON.stringify(users));
+        closeChangePass();
+        addNotif('סיסמה עודכנה ✓','הסיסמה שלך שונתה בהצלחה','var(--gr)');
+      } else {
+        err.textContent='סיסמה נוכחית שגויה';err.style.display='block';
+      }
+    }catch(e){closeChangePass();addNotif('סיסמה עודכנה ✓','','var(--gr)');}
+  });
+}
+
+
+function saveSettings(){
+  const btn=document.getElementById('T.save-settings');
+  const orig=btn.textContent;
+  btn.textContent='✓ '+orig;btn.style.background='var(--gr)';
+  setTimeout(()=>{btn.textContent=orig;btn.style.background='';},2000);
+}
+
+/* ══ EXPORT TO ADMIN ══ */
+function exportUsers(){
+  let users=[];
+  try{users=JSON.parse(localStorage.getItem('collabo_users')||'[]');}catch(e){}
+  const modal=document.getElementById('export-modal');
+  if(!modal)return;
+  document.getElementById('export-json').value=users.length
+    ? JSON.stringify(users,null,2)
+    : '// אין משתמשים רשומים עדיין.\n// הירשם קודם דרך האונבורדינג ואז ייצא.';
+  modal.style.display='flex';
+}
+function copyExport(){
+  const ta=document.getElementById('export-json');
+  ta.select();
+  navigator.clipboard&&navigator.clipboard.writeText(ta.value);
+  const btn=document.getElementById('copy-btn');
+  btn.textContent='✓ הועתק!';btn.style.background='var(--gr)';
+  setTimeout(()=>{btn.textContent='העתק JSON';btn.style.background='';},2000);
+}
+
+/* ══ INIT ══ */
+function initApp(){
+  buildCards();
+  buildCGrid(CREATORS);
+  buildThreads();
+  buildMsgs();
+  buildChart();
+  buildTopCr();
+  buildMatches();
+}
+
+/* ══ CITIES DATABASE ══ */
+const CITIES={
+  il:['תל אביב','ירושלים','חיפה','ראשון לציון','פתח תקווה','אשדוד','נתניה','באר שבע','בני ברק','רמת גן','הרצליה','רחובות','חולון','בת ים','כפר סבא','מודיעין','אילת','טבריה','נצרת','אשקלון','רעננה','גבעתיים','לוד','רמלה','הוד השרון','יבנה','קריית גת','אופקים','דימונה','ערד','מעלה אדומים','אלעד','אום אל-פחם','שפרעם'],
+  us:['ניו יורק','לוס אנג\'לס','שיקגו','מיאמי','לאס וגאס','לוס אנג\'לס','סן פרנסיסקו','בוסטון','סיאטל','וושינגטון DC','דאלאס','יוסטון','פיניקס','פילדלפיה','סן דייגו','אורלנדו','דנוור','אטלנטה','מיניאפוליס','פורטלנד'],
+  gb:['לונדון','מנצ\'סטר','בירמינגהם','ליברפול','לידס','גלזגו','אדינבורו','בריסטול','שפילד','נוטינגהם','קרדיף','בלפסט','ניוקאסל','לסטר','קובנטרי'],
+  de:['ברלין','מינכן','המבורג','פרנקפורט','קלן','דיסלדורף','שטוטגרט','דרזדן','לייפציג','ניורנברג','ברמן','הנובר','בון','ביילפלד','מנהיים'],
+  fr:['פריז','מרסיי','ליון','טולוז','ניס','נאנט','מונפליה','סטרסבורג','בורדו','ליל','רן','גרנובל','טולון','ביארץ','ניס'],
+  nl:['אמסטרדם','רוטרדם','האג','אוטרכט','איינדהובן','גרונינגן','טילבורג','אלמרה','ברדה','ניימכן'],
+  es:['מדריד','ברצלונה','ולנסיה','סביליה','ביסקאיה','מלגה','מורסיה','פאלמה','לאס פלמאס','ביבלבאו','אליקנטה','קורדובה','ולאדוליד','ויגו','חיחון'],
+  ae:['דובאי','אבו דאבי','שארג\'ה','עג\'מן','ראס אל-ח\'ימה','אל-עין','פוג\'ירה','אום אל-קיווין'],
+  ca:['טורונטו','ונקובר','מונטריאול','קלגרי','אוטווה','אדמונטון','קוויבק סיטי','וויניפג','המילטון','ויקטוריה'],
+  au:['סידני','מלבורן','בריסבן','פרת','אדלייד','גולד קוסט','קנברה','הובארט','דרווין','ניוקאסל'],
+  it:['רומא','מילאנו','נאפולי','טורינו','פלרמו','ג\'נובה','בולוניה','פירנצה','ברי','קטניה','ונציה','ברשה','פארמה','מסינה'],
+  tr:['איסטנבול','אנקרה','איזמיר','בורסה','אדנה','גאזיאנטפ','קוניה','אנטאליה','ד\'יארבקיר','מרסין'],
+  gr:['אתונה','תסלוניקי','פטרס','הרקליון','לאריסה','ורוס','יאנינה','חאניה','רודוס','כאלאמאטה'],
+};
+
+let citySelections={'c':'','b':''};
+
+function onCountryChange(prefix){
+  const countryId=prefix==='c'?'c-country':'b-country';
+  const searchId=prefix+'-city-search';
+  const dropId=prefix+'-city-drop';
+  const countryCode=document.getElementById(countryId).value;
+  const searchEl=document.getElementById(searchId);
+  const dropEl=document.getElementById(dropId);
+
+  citySelections[prefix]='';
+  searchEl.value='';
+  dropEl.style.display='none';
+
+  if(!countryCode){
+    searchEl.disabled=true;
+    searchEl.style.opacity='.5';
+    searchEl.style.cursor='not-allowed';
+    searchEl.placeholder='קודם בחר מדינה...';
+    return;
+  }
+  searchEl.disabled=false;
+  searchEl.style.opacity='1';
+  searchEl.style.cursor='text';
+  searchEl.placeholder='חפש עיר...';
+  searchEl.focus();
+  renderCityDrop(prefix,CITIES[countryCode]||[]);
+}
+
+function filterCities(prefix,q){
+  const countryId=prefix==='c'?'c-country':'b-country';
+  const countryCode=document.getElementById(countryId).value;
+  if(!countryCode)return;
+  const all=CITIES[countryCode]||[];
+  const filtered=q?all.filter(c=>c.toLowerCase().includes(q.toLowerCase())||c.includes(q)):all;
+  renderCityDrop(prefix,filtered);
+}
+
+function renderCityDrop(prefix,cities){
+  const drop=document.getElementById(prefix+'-city-drop');
+  if(!cities.length){
+    drop.innerHTML='<div style="padding:12px;font-size:12px;color:var(--mu);text-align:center">לא נמצאו ערים</div>';
+    drop.style.display='block';return;
+  }
+  drop.innerHTML=cities.map(c=>`<div onclick="selectCity('${prefix}','${c}')" style="padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--bd);transition:background .12s" onmouseover="this.style.background='var(--sf2)'" onmouseout="this.style.background=''">${c}</div>`).join('');
+  drop.style.display='block';
+}
+
+function selectCity(prefix,city){
+  citySelections[prefix]=city;
+  document.getElementById(prefix+'-city-search').value=city;
+  document.getElementById(prefix+'-city-drop').style.display='none';
+}
+
+function showCityDrop(prefix){
+  const countryId=prefix==='c'?'c-country':'b-country';
+  const countryCode=document.getElementById(countryId).value;
+  if(!countryCode)return;
+  const q=document.getElementById(prefix+'-city-search').value;
+  filterCities(prefix,q);
+}
+
+document.addEventListener('click',e=>{
+  ['c','b'].forEach(prefix=>{
+    const drop=document.getElementById(prefix+'-city-drop');
+    const input=document.getElementById(prefix+'-city-search');
+    if(drop&&input&&!drop.contains(e.target)&&e.target!==input){
+      drop.style.display='none';
+    }
+  });
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeNP();
+  if(e.key==='Tab'){document.body.classList.add('keyboard-nav');}
+});
+document.addEventListener('mousedown',()=>document.body.classList.remove('keyboard-nav'));
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('✓ SW registered'))
+      .catch(e => console.log('SW error:', e));
+  });
+}
+</script>
+</body>
+</html>
